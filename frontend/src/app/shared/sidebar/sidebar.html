@@ -1,0 +1,15 @@
+<div class="bg-white p-4">
+  <h5 class="font-bold text-gray-900 mb-4">Categories</h5>
+  <ul class="space-y-2">
+    <li *ngFor="let category of categories" class="border-b border-gray-100 pb-2">
+      <a [routerLink]="category.route" 
+         [class]="isActiveCategory(category.route) ? 'text-white bg-brand font-medium px-3 py-2 rounded' : 'text-gray-700 hover:text-green-600'"
+         class="flex items-center justify-between block">
+        {{ category.name }}
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+        </svg>
+      </a>
+    </li>
+  </ul>
+</div> 

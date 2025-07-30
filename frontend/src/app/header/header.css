@@ -1,0 +1,13 @@
+/* Custom Brand Color */
+.bg-brand {
+  background-color: #32529d;
+}
+
+.hover\:text-brand:hover {
+  color: #32529d;
+}
+
+.text-brand {
+  color: #32529d;
+}
+

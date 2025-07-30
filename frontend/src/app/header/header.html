@@ -1,0 +1,176 @@
+<!-- Header Component -->
+<header>
+  <div class="bg-brand py-4 pt-3 pb-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <div class="w-1/4">
+          <a class="hidden lg:block" routerLink="/">
+            <div class="flex items-center">
+              <div class="w-10 h-10 bg-yellow-400 rounded flex items-center justify-center mr-3">
+                <span class="text-blue-800 font-bold text-lg">360</span>
+              </div>
+              <div>
+                <div class="font-bold text-2xl text-white">360LogzShop</div>
+                <div class="text-gray-300 text-sm">Daily Updated & Checked</div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="w-1/2 hidden lg:block"></div>
+        <div class="w-1/4 text-right hidden lg:block">
+          <div class="flex items-center justify-end">
+            <div class="mr-4">
+              <a routerLink="/login" class="text-white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </a>
+            </div>
+            <div>
+              <a class="text-white relative" (click)="toggleCart()" role="button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                  {{ cartItemCount }}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="border-b border-gray-200">
+  <nav class="bg-white py-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between my-4">
+        <div class="mr-3 hidden lg:block">
+          <button class="bg-brand text-white px-6 py-2 rounded font-bold flex items-center" type="button">
+            <span class="mr-1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </span>
+            360Logz
+          </button>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:block flex-1">
+          <ul class="flex items-center space-x-6">
+            <li><a class="text-gray-800 font-bold uppercase hover:text-blue-800" routerLink="/">Home</a></li>
+            <li class="relative group">
+              <a class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center" href="#">
+                Categories
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <ul class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block">
+                <li><a routerLink="/category/cc-cvv" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">CC & CVV</a></li>
+                <li><a routerLink="/category/bank-logs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">BANK LOGS</a></li>
+                <li><a routerLink="/category/stealth-accounts" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">STEALTH ACCOUNTS</a></li>
+                <li><a routerLink="/category/fullz" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">FULLZ</a></li>
+                <li><a routerLink="/category/fraud-guides" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">FRAUD GUIDES</a></li>
+                <li><a routerLink="/category/tools" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">TOOLS</a></li>
+                <li><a routerLink="/category/e-gift-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">E-GIFT CARDS</a></li>
+                <li><a routerLink="/category/deposit-checks" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">DEPOSIT CHECKS</a></li>
+                <li><a routerLink="/category/transfers" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">TRANSFERS</a></li>
+                <li><a routerLink="/category/clones" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">CLONES</a></li>
+                <li><a routerLink="/category/carded-products" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">CARDED PRODUCTS</a></li>
+                <li><a routerLink="/category/spamming" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">SPAMMING</a></li>
+                <li><a routerLink="/category/shake" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">SHAKEPAY LOG</a></li>
+                <li><a routerLink="/category/cashapp-log" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">CASHAPP LOG</a></li>
+                <li><a routerLink="/category/paypal-log" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">PAYPAL LOG</a></li>
+                <li><a routerLink="/category/linkable" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">LINKABLES</a></li>
+                <li><a routerLink="/category/bitcoin-log" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">BITCOIN LOG</a></li>
+              </ul>
+            </li>
+            <li><a class="text-gray-800 font-bold uppercase hover:text-blue-800" routerLink="/shop">Shop</a></li>
+            <li><a class="text-gray-800 font-bold uppercase hover:text-blue-800" routerLink="/blog">Blog</a></li>
+            <li class="relative group">
+              <a class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center" href="#">
+                Pages
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <ul class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block">
+                <li><a routerLink="/login" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Log In</a></li>
+                <li><a routerLink="/register" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Register</a></li>
+                <li><a routerLink="/cart" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Cart</a></li>
+                <li><a routerLink="/checkout" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Checkout</a></li>
+                <li><a routerLink="/cashout-clips" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Cashout Clips</a></li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center" href="#">
+                More Logs
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <ul class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block">
+                <li><a routerLink="/more-logs/usa-banks" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">USA Banks</a></li>
+                <li><a routerLink="/more-logs/uk-banks" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">UK Banks</a></li>
+                <li><a routerLink="/more-logs/canada-banks" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Canada Banks</a></li>
+                <li><hr class="my-1"></li>
+                <li><a routerLink="/more-logs/usa-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">USA Cards</a></li>
+                <li><a routerLink="/more-logs/uk-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">UK Cards</a></li>
+                <li><a routerLink="/more-logs/europe-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Europe Cards</a></li>
+                <li><a routerLink="/more-logs/africa-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Africa Cards</a></li>
+                <li><a routerLink="/more-logs/canada-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Canada Cards</a></li>
+                <li><a routerLink="/more-logs/australia-cards" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Australia Cards</a></li>
+                <li><hr class="my-1"></li>
+                <li><a routerLink="/more-logs/credit-union" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100">Credit Union</a></li>
+                <li><a routerLink="/more-logs/crypto-logs" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Crypto Logs</a></li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center" href="#">
+                Linkables
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <ul class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block">
+                <li><a routerLink="/linkables/cashapp" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">Cashapp</a></li>
+                <li><a routerLink="/linkables/paypal" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">PayPal</a></li>
+                <li><a routerLink="/linkables/venmo" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">Venmo</a></li>
+                <li><a routerLink="/linkables/apple" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">ApplePay</a></li>
+                <li><a routerLink="/linkables/googlepay" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase">GooglePay</a></li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center" href="#">
+                Transfers
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+              <ul class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block">
+                <li><a routerLink="/transfers/cashapp" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">Cashapp</a></li>
+                <li><a routerLink="/transfers/paypal" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">PayPal</a></li>
+                <li><a routerLink="/transfers/venmo" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">Venmo</a></li>
+                <li><a routerLink="/transfers/zelle" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase">Zelle</a></li>
+                <li><a routerLink="/transfers/googlepay" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase">GooglePay</a></li>
+              </ul>
+            </li>
+            <li><a class="text-gray-800 font-bold uppercase hover:text-blue-800" routerLink="/vouches">Vouches</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+
