@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '../services/toast.service';
@@ -31,6 +31,7 @@ export class ProductComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
     private toastService: ToastService
   ) {}
 
@@ -45,6 +46,11 @@ export class ProductComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  goBack() {
+    // Use browser history to go back to previous page
+    this.location.back();
   }
 
   loadProduct(productId: string) {
