@@ -1,0 +1,27 @@
+/* Login Component Styles */
+.bg-brand {
+  background-color: #32529d;
+}
+
+.text-brand {
+  color: #32529d;
+}
+
+.hover\:text-brand:hover {
+  color: #32529d;
+}
+
+.focus\:ring-brand:focus {
+  --tw-ring-color: #32529d;
+}
+
+.focus\:border-brand:focus {
+  border-color: #32529d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .max-w-md {
+    max-width: 90%;
+  }
+}
