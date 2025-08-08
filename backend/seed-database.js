@@ -71,25 +71,25 @@ async function createCategories() {
         { name: 'Tools', slug: 'tools', type: 'MAIN', order: 17 },
         { name: 'Transfers', slug: 'transfers', type: 'MAIN', order: 18 },
         
-        // LINKABLE categories
-        { name: 'Apple Pay', slug: 'applepay', type: 'LINKABLE', order: 19 },
-        { name: 'Cashapp', slug: 'cashapp', type: 'LINKABLE', order: 20 },
-        { name: 'Google Pay', slug: 'googlepay', type: 'LINKABLE', order: 21 },
-        { name: 'Paypal', slug: 'paypal', type: 'LINKABLE', order: 22 },
-        { name: 'Venmo', slug: 'venmo', type: 'LINKABLE', order: 23 },
+        // LINKABLES categories
+        { name: 'Apple Pay', slug: 'applepay', type: 'LINKABLES', order: 19 },
+        { name: 'Cashapp', slug: 'cashapp', type: 'LINKABLES', order: 20 },
+        { name: 'Google Pay', slug: 'googlepay', type: 'LINKABLES', order: 21 },
+        { name: 'Paypal', slug: 'paypal', type: 'LINKABLES', order: 22 },
+        { name: 'Venmo', slug: 'venmo', type: 'LINKABLES', order: 23 },
         
-        // MORELOGS categories
-        { name: 'Africa Cards', slug: 'africa-cards', type: 'MORELOGS', order: 24 },
-        { name: 'Australia Cards', slug: 'australia-cards', type: 'MORELOGS', order: 25 },
-        { name: 'Canada Banks', slug: 'canada-banks', type: 'MORELOGS', order: 26 },
-        { name: 'Canada Cards', slug: 'canada-cards', type: 'MORELOGS', order: 27 },
-        { name: 'Credit Unions', slug: 'credit-unions', type: 'MORELOGS', order: 28 },
-        { name: 'Crypto Logs', slug: 'crypto-logs', type: 'MORELOGS', order: 29 },
-        { name: 'Europe Cards', slug: 'europe-cards', type: 'MORELOGS', order: 30 },
-        { name: 'UK Banks', slug: 'uk-banks', type: 'MORELOGS', order: 31 },
-        { name: 'UK Cards', slug: 'uk-cards', type: 'MORELOGS', order: 32 },
-        { name: 'USA Banks', slug: 'usa-banks', type: 'MORELOGS', order: 33 },
-        { name: 'USA Cards', slug: 'usa-cards', type: 'MORELOGS', order: 34 },
+        // MORE_LOGS categories
+        { name: 'Africa Cards', slug: 'africa-cards', type: 'MORE_LOGS', order: 24 },
+        { name: 'Australia Cards', slug: 'australia-cards', type: 'MORE_LOGS', order: 25 },
+        { name: 'Canada Banks', slug: 'canada-banks', type: 'MORE_LOGS', order: 26 },
+        { name: 'Canada Cards', slug: 'canada-cards', type: 'MORE_LOGS', order: 27 },
+        { name: 'Credit Unions', slug: 'credit-unions', type: 'MORE_LOGS', order: 28 },
+        { name: 'Crypto Logs', slug: 'crypto-logs', type: 'MORE_LOGS', order: 29 },
+        { name: 'Europe Cards', slug: 'europe-cards', type: 'MORE_LOGS', order: 30 },
+        { name: 'UK Banks', slug: 'uk-banks', type: 'MORE_LOGS', order: 31 },
+        { name: 'UK Cards', slug: 'uk-cards', type: 'MORE_LOGS', order: 32 },
+        { name: 'USA Banks', slug: 'usa-banks', type: 'MORE_LOGS', order: 33 },
+        { name: 'USA Cards', slug: 'usa-cards', type: 'MORE_LOGS', order: 34 },
         
         // TRANSFERS categories
         { name: 'International Transfers', slug: 'international-transfers', type: 'TRANSFERS', order: 35 },
