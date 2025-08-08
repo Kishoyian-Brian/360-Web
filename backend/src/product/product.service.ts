@@ -75,16 +75,28 @@ export class ProductService {
   async createProduct(createProductDto: CreateProductDto): Promise<ProductResponseDto> {
     // Check if category exists by slug or ID
     let category;
-    if (createProductDto.categoryId.includes('-')) {
-      // If it contains hyphens, treat as slug
+    
+    // First try to find by ID
+    category = await this.prisma.category.findUnique({
+      where: { id: createProductDto.categoryId },
+    });
+    
+    // If not found by ID, try by slug
+    if (!category) {
       category = await this.prisma.category.findUnique({
         where: { slug: createProductDto.categoryId },
       });
-    } else {
-      // Otherwise treat as ID
-      category = await this.prisma.category.findUnique({
-        where: { id: createProductDto.categoryId },
+    }
+    
+    // If still not found, try case-insensitive slug search
+    if (!category) {
+      const allCategories = await this.prisma.category.findMany({
+        where: { isActive: true },
       });
+      
+      category = allCategories.find(cat => 
+        cat.slug.toLowerCase() === createProductDto.categoryId.toLowerCase()
+      );
     }
 
     if (!category) {
