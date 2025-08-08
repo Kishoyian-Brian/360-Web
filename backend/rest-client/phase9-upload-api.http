@@ -1,0 +1,206 @@
+### Phase 9: File Upload API Testing
+### Cloudinary Integration for Image and Video Uploads
+
+### ========================================
+### 1. UPLOAD IMAGE ENDPOINTS
+### ========================================
+
+### Upload image to Cloudinary
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test-image.jpg"
+Content-Type: image/jpeg
+
+< ./test-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/products
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Upload image with transformation
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="product-image.jpg"
+Content-Type: image/jpeg
+
+< ./product-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/products
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="transformation"
+
+w_800,h_600,c_fill,q_auto
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### 2. UPLOAD VIDEO ENDPOINTS
+### ========================================
+
+### Upload video to Cloudinary
+POST {{baseUrl}}/api/upload/video
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="product-video.mp4"
+Content-Type: video/mp4
+
+< ./product-video.mp4
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+video
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/videos
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### 3. FILE MANAGEMENT ENDPOINTS
+### ========================================
+
+### Get file URL with transformation
+GET {{baseUrl}}/api/upload/{{publicId}}/url
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "transformation": "w_400,h_300,c_fill,q_auto"
+}
+
+### Optimize image
+POST {{baseUrl}}/api/upload/{{publicId}}/optimize
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "eager": [
+    { "width": 800, "height": 600, "crop": "fill", "quality": "auto" },
+    { "width": 400, "height": 300, "crop": "fill", "quality": "auto" }
+  ]
+}
+
+### Delete file from Cloudinary
+DELETE {{baseUrl}}/api/upload/{{publicId}}
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### 4. TEST SCENARIOS
+### ========================================
+
+### Test 1: Upload product image
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="product-1.jpg"
+Content-Type: image/jpeg
+
+< ./test-images/product-1.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/products
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 2: Upload blog image
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="blog-header.jpg"
+Content-Type: image/jpeg
+
+< ./test-images/blog-header.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/blog
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 3: Upload category banner
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="category-banner.jpg"
+Content-Type: image/jpeg
+
+< ./test-images/category-banner.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="type"
+
+image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="folder"
+
+360-web/categories
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### 5. ERROR TESTING
+### ========================================
+
+### Test unauthorized access (should fail)
+POST {{baseUrl}}/api/upload/image
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test invalid file type (should fail)
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+< ./test.txt
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test file too large (should fail)
+POST {{baseUrl}}/api/upload/image
+Authorization: Bearer {{adminToken}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="large-image.jpg"
+Content-Type: image/jpeg
+
+< ./large-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW-- 

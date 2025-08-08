@@ -1,0 +1,246 @@
+### Vouch API Testing
+### Base URL: http://localhost:3000
+
+### ========================================
+### 1. SEEDING ENDPOINTS (Admin Only)
+### ========================================
+
+### Seed Vouches with Sample Data
+POST {{baseUrl}}/api/vouches/seed
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+### Clear All Vouches
+DELETE {{baseUrl}}/api/vouches/seed/clear
+Authorization: Bearer {{adminToken}}
+
+### Get Seed Statistics
+GET {{baseUrl}}/api/vouches/seed/stats
+
+### ========================================
+### 2. PUBLIC ENDPOINTS
+### ========================================
+
+### Get All Vouches (with pagination)
+GET {{baseUrl}}/api/vouches?page=1&limit=10
+
+### Get Vouches with Filtering
+GET {{baseUrl}}/api/vouches?rating=5&isVerified=true&status=APPROVED
+
+### Get Vouches with Search
+GET {{baseUrl}}/api/vouches?search=amazing
+
+### Get Vouches by Rating Only
+GET {{baseUrl}}/api/vouches?rating=4
+
+### Get Vouches by Verification Status
+GET {{baseUrl}}/api/vouches?isVerified=true
+
+### Get Vouches by Status
+GET {{baseUrl}}/api/vouches?status=APPROVED
+
+### Get Vouch Statistics
+GET {{baseUrl}}/api/vouches/stats
+
+### Get Single Vouch by ID
+GET {{baseUrl}}/api/vouches/{{vouchId}}
+
+### ========================================
+### 3. ADMIN ENDPOINTS (Require Authentication)
+### ========================================
+
+### Create New Vouch
+POST {{baseUrl}}/api/vouches
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "avatarSeed": "newuser",
+  "rating": 4,
+  "reviewText": "This is a new test vouch from the API",
+  "reviewImage": "images/test-image.jpg",
+  "isVerified": false,
+  "status": "PENDING"
+}
+
+### Create Another Test Vouch
+POST {{baseUrl}}/api/vouches
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "avatarSeed": "testuser",
+  "rating": 5,
+  "reviewText": "Excellent service! Highly recommended!",
+  "reviewImage": "images/excellent-service.jpg",
+  "isVerified": true,
+  "status": "APPROVED"
+}
+
+### Update Vouch
+PATCH {{baseUrl}}/api/vouches/{{vouchId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "reviewText": "Updated review text - even better than before!",
+  "isVerified": true
+}
+
+### Approve Vouch
+PATCH {{baseUrl}}/api/vouches/{{vouchId}}/approve
+Authorization: Bearer {{adminToken}}
+
+### Reject Vouch
+PATCH {{baseUrl}}/api/vouches/{{vouchId}}/reject
+Authorization: Bearer {{adminToken}}
+
+### Toggle Verification Status
+PATCH {{baseUrl}}/api/vouches/{{vouchId}}/toggle-verification
+Authorization: Bearer {{adminToken}}
+
+### Delete Vouch
+DELETE {{baseUrl}}/api/vouches/{{vouchId}}
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### 4. AUTHENTICATION (Get Admin Token)
+### ========================================
+
+### Login as Admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "vouchadmin",
+  "password": "admin123"
+}
+
+### Register New Admin (if needed)
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newadmin",
+  "password": "admin123",
+  "email": "newadmin@test.com",
+  "role": "ADMIN"
+}
+
+### ========================================
+### 5. TESTING SCENARIOS
+### ========================================
+
+### Scenario 1: Complete Vouch Workflow
+# 1. Create a new vouch
+POST {{baseUrl}}/api/vouches
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "workflowtest",
+  "avatarSeed": "workflowtest",
+  "rating": 3,
+  "reviewText": "Initial review - needs improvement",
+  "isVerified": false,
+  "status": "PENDING"
+}
+
+# 2. Approve the vouch
+PATCH {{baseUrl}}/api/vouches/{{newVouchId}}/approve
+Authorization: Bearer {{adminToken}}
+
+# 3. Toggle verification
+PATCH {{baseUrl}}/api/vouches/{{newVouchId}}/toggle-verification
+Authorization: Bearer {{adminToken}}
+
+# 4. Update rating
+PATCH {{baseUrl}}/api/vouches/{{newVouchId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "reviewText": "Updated review - excellent service!"
+}
+
+### Scenario 2: Filtering and Search
+# Get all 5-star verified vouches
+GET {{baseUrl}}/api/vouches?rating=5&isVerified=true&status=APPROVED
+
+# Search for specific terms
+GET {{baseUrl}}/api/vouches?search=vendor
+GET {{baseUrl}}/api/vouches?search=service
+GET {{baseUrl}}/api/vouches?search=amazing
+
+# Get paginated results
+GET {{baseUrl}}/api/vouches?page=1&limit=5
+GET {{baseUrl}}/api/vouches?page=2&limit=5
+
+### Scenario 3: Statistics
+# Get overall statistics
+GET {{baseUrl}}/api/vouches/stats
+
+# Get statistics after operations
+GET {{baseUrl}}/api/vouches/seed/stats
+
+### ========================================
+### 6. ERROR TESTING
+### ========================================
+
+### Test Invalid Token
+GET {{baseUrl}}/api/vouches
+Authorization: Bearer invalid_token
+
+### Test Unauthorized Access
+POST {{baseUrl}}/api/vouches
+Content-Type: application/json
+
+{
+  "username": "test",
+  "rating": 5
+}
+
+### Test Invalid Vouch ID
+GET {{baseUrl}}/api/vouches/invalid-id
+
+### Test Invalid Rating
+POST {{baseUrl}}/api/vouches
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "username": "test",
+  "avatarSeed": "test",
+  "rating": 6,
+  "reviewText": "Invalid rating test"
+}
+
+### ========================================
+### 7. ENVIRONMENT VARIABLES
+### ========================================
+
+# Copy this to http-client.env.json:
+# {
+#   "baseUrl": "http://localhost:3000",
+#   "adminToken": "your-admin-jwt-token-here",
+#   "vouchId": "example-vouch-id",
+#   "newVouchId": "newly-created-vouch-id"
+# }
+
+### ========================================
+### 8. USAGE INSTRUCTIONS
+### ========================================
+
+# 1. First, get an admin token by running the login request
+# 2. Copy the access_token from the response
+# 3. Update the adminToken variable in http-client.env.json
+# 4. Run the seeding request to populate sample data
+# 5. Test the public endpoints
+# 6. Test the admin endpoints with the token
+
+# Note: Replace {{vouchId}} with actual vouch IDs from responses
+# Note: The server must be running on localhost:3000 

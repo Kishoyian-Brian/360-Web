@@ -1,0 +1,120 @@
+<!-- Blog Page Content -->
+<main>
+  <!-- Blog Header Section -->
+  <section class="mt-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+        <p class="text-lg text-gray-600">
+          Latest tutorials, guides, and insights about carding methods and
+          procedures
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Articles Grid -->
+  <section class="mb-16">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Blog Article Cards -->
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
+          *ngFor="let article of articles">
+          <!-- Article Image -->
+          <div class="relative overflow-hidden group">
+            <img [src]="getArticleImage(article)" [alt]="getArticleAltText(article)"
+              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+              (click)="viewArticle(article)" />
+            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
+            </div>
+          </div>
+
+          <!-- Article Content -->
+          <div class="p-6">
+            <!-- Category Tag -->
+            <div class="mb-3">
+              <span
+                class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">
+                {{ article.category?.name || 'Uncategorized' }}
+              </span>
+            </div>
+
+            <!-- Article Title -->
+            <h2
+              class="text-xl font-bold text-gray-900 mb-4 leading-tight cursor-pointer hover:text-blue-600 transition-colors duration-200"
+              (click)="viewArticle(article)">
+              {{ article.title }}
+            </h2>
+
+            <!-- Article Meta -->
+            <div class="flex justify-between items-center text-sm text-gray-500">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                {{ formatDate(article.publishedAt || article.createdAt) }}
+              </span>
+              <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Read time:
+                <span class="font-semibold text-gray-700 ml-1">{{ getReadTime(article) }}</span>
+              </span>
+            </div>
+
+            <!-- Read More Button -->
+            <div class="mt-4">
+              <button
+                class="w-full bg-brand text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 font-semibold"
+                (click)="viewArticle(article)">
+                Read Article
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center mt-12">
+        <nav class="flex items-center space-x-2">
+          <!-- Previous Button -->
+          <button
+            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === 1" (click)="previousPage()">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+
+          <!-- Page Numbers -->
+          <div class="flex space-x-1">
+            <button *ngFor="let page of pageNumbers" class="px-3 py-2 rounded-md transition-colors duration-200"
+              [class]="page === currentPage ? 'bg-brand text-white' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
+              (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          </div>
+
+          <!-- Next Button -->
+          <button
+            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === totalPages" (click)="nextPage()">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Section -->
+ 
+</main>

@@ -1,0 +1,62 @@
+/* Cart Component Custom Styles */
+
+.cart-item-hover {
+  transition: all 0.2s ease;
+}
+
+.cart-item-hover:hover {
+  background-color: #f9fafb;
+}
+
+/* Custom scrollbar for cart items */
+.cart-items-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.cart-items-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items-container::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Animation for quantity changes */
+.quantity-change {
+  animation: pulse 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Sticky order summary */
+.order-summary-sticky {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 1024px) {
+  .order-summary-sticky {
+    position: static;
+  }
+} 

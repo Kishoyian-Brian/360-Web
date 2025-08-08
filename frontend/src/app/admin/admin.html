@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - 360Logz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-50">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="bg-gray-900 text-white w-64 flex-shrink-0 transition-all duration-300"
+      [class.w-16]="isSidebarCollapsed">
+      <!-- Sidebar Header -->
+      <div class="p-4 border-b border-gray-700">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3" *ngIf="!isSidebarCollapsed">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <i class="fas fa-shield-alt text-white text-sm"></i>
+            </div>
+            <span class="font-bold text-lg">Admin</span>
+          </div>
+          <button (click)="toggleSidebar()" class="text-gray-400 hover:text-white">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-6">
+        <div class="px-4 space-y-2">
+          <!-- Dashboard -->
+          <a (click)="navigateTo('dashboard'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'dashboard'" [class.text-white]="currentSection === 'dashboard'">
+            <i class="fas fa-tachometer-alt w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Dashboard</span>
+          </a>
+
+          <!-- Products -->
+          <a (click)="navigateTo('products'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'products'" [class.text-white]="currentSection === 'products'">
+            <i class="fas fa-box w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Products</span>
+          </a>
+
+          <!-- Orders -->
+          <a (click)="navigateTo('orders'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'orders'" [class.text-white]="currentSection === 'orders'">
+            <i class="fas fa-shopping-cart w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Orders</span>
+          </a>
+
+          <!-- Videos -->
+          <a (click)="navigateTo('videos'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'videos'" [class.text-white]="currentSection === 'videos'">
+            <i class="fas fa-video w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Videos</span>
+          </a>
+
+          <!-- Blog -->
+          <a (click)="navigateTo('blog'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'blog'" [class.text-white]="currentSection === 'blog'">
+            <i class="fas fa-blog w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Blog</span>
+          </a>
+
+          <!-- Vouches -->
+          <a (click)="navigateTo('vouches'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'vouches'" [class.text-white]="currentSection === 'vouches'">
+            <i class="fas fa-star w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Vouches</span>
+          </a>
+
+          <!-- Users -->
+          <a (click)="navigateTo('users'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'users'" [class.text-white]="currentSection === 'users'">
+            <i class="fas fa-users w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Users</span>
+          </a>
+
+          <!-- Analytics -->
+          <a (click)="navigateTo('analytics'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'analytics'" [class.text-white]="currentSection === 'analytics'">
+            <i class="fas fa-chart-bar w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Analytics</span>
+          </a>
+
+          <!-- Settings -->
+          <a (click)="navigateTo('settings'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'settings'" [class.text-white]="currentSection === 'settings'">
+            <i class="fas fa-cog w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Settings</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="absolute bottom-0 w-full p-4 border-t border-gray-700">
+        <button (click)="logout(); $event.preventDefault()"
+          class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors w-full cursor-pointer">
+          <i class="fas fa-sign-out-alt w-5 h-5"></i>
+          <span class="ml-3" *ngIf="!isSidebarCollapsed">Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Header -->
+      <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="flex items-center justify-between px-6 py-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p class="text-gray-600">Welcome back, Admin</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <button class="p-2 text-gray-400 hover:text-gray-600">
+              <i class="fas fa-bell"></i>
+            </button>
+            <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="flex-1 overflow-y-auto bg-gray-50 p-6">
+        <!-- Dashboard Section -->
+        <div *ngIf="currentSection === 'dashboard'">
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                  <i class="fas fa-dollar-sign text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Total Revenue
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    ${{ orderStats?.totalRevenue?.toFixed(2) || '0.00' }}
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">
+                  <i class="fas fa-arrow-up"></i> 12.5%
+                </span>
+                <span class="text-gray-600 text-sm">from last month</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                  <i class="fas fa-shopping-cart text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Total Orders
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ orderStats?.totalOrders || 0 }}
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">
+                  <i class="fas fa-arrow-up"></i> 8.2%
+                </span>
+                <span class="text-gray-600 text-sm">from last month</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                  <i class="fas fa-users text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">Total Users</p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ users.length }}
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">
+                  <i class="fas fa-arrow-up"></i> 15.3%
+                </span>
+                <span class="text-gray-600 text-sm">from last month</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                  <i class="fas fa-box text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Total Products
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ products.length }}
+                  </p>
+                </div>
+              </div>
+              <div class="mt-4">
+                <span class="text-green-600 text-sm font-medium">
+                  <i class="fas fa-arrow-up"></i> 5.7%
+                </span>
+                <span class="text-gray-600 text-sm">from last month</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Status Summary -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                  <i class="fas fa-clock text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Pending Orders
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ orderStats?.pendingOrders || 0 }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                  <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Completed Orders
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ orderStats?.completedOrders || 0 }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center">
+                <div class="p-3 rounded-full bg-red-100 text-red-600">
+                  <i class="fas fa-times-circle text-xl"></i>
+                </div>
+                <div class="ml-4">
+                  <p class="text-sm font-medium text-gray-600">
+                    Cancelled Orders
+                  </p>
+                  <p class="text-2xl font-bold text-gray-900">
+                    {{ orderStats?.cancelledOrders || 0 }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg shadow">
+              <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                  Recent Orders
+                </h3>
+              </div>
+              <div class="p-6">
+                <div *ngIf="orders.length === 0" class="text-center py-4">
+                  <p class="text-gray-600">No orders found</p>
+                </div>
+                <div *ngIf="orders.length > 0" class="space-y-4">
+                  <div *ngFor="let order of orders.slice(0, 5)" class="flex items-center justify-between">
+                    <div>
+                      <p class="font-medium text-gray-900">
+                        {{ order.orderNumber }}
+                      </p>
+                      <p class="text-sm text-gray-600">
+                        {{ order.user?.username || 'Unknown' }} - ${{
+                        order.totalAmount.toFixed(2) }}
+                      </p>
+                    </div>
+                    <span class="px-2 py-1 text-xs font-medium rounded-full"
+                      [ngClass]="getOrderStatusBadgeClass(order.status)">
+                      {{ order.status }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow">
+              <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                  Quick Actions
+                </h3>
+              </div>
+              <div class="p-6">
+                <div class="space-y-3">
+                  <button (click)="navigateTo('products'); $event.preventDefault()"
+                    class="w-full flex items-center px-4 py-3 text-left text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fas fa-plus-circle text-blue-600 mr-3"></i>
+                    <span>Add New Product</span>
+                  </button>
+                  <button (click)="navigateTo('orders'); $event.preventDefault()"
+                    class="w-full flex items-center px-4 py-3 text-left text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fas fa-eye text-green-600 mr-3"></i>
+                    <span>View All Orders</span>
+                  </button>
+                  <button (click)="navigateTo('users'); $event.preventDefault()"
+                    class="w-full flex items-center px-4 py-3 text-left text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fas fa-users text-purple-600 mr-3"></i>
+                    <span>Manage Users</span>
+                  </button>
+                  <button (click)="navigateTo('analytics'); $event.preventDefault()"
+                    class="w-full flex items-center px-4 py-3 text-left text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                    <i class="fas fa-chart-bar text-yellow-600 mr-3"></i>
+                    <span>View Analytics</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Section -->
+        <div *ngIf="currentSection === 'products'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Product Management
+                </h2>
+                <button (click)="showAddProductForm = true"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Product
+                </button>
+              </div>
+            </div>
+
+            <!-- Add Product Form -->
+            <div *ngIf="showAddProductForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Add New Product
+              </h3>
+              <form (ngSubmit)="addProduct()" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+                    <input type="text" [(ngModel)]="productForm.name" name="name" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                    <select [(ngModel)]="productForm.categoryId" name="categoryId" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of categories" [value]="category.id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+                    <input type="number" [(ngModel)]="productForm.price" name="price" required min="0" step="0.01"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Stock Quantity *</label>
+                    <input type="number" [(ngModel)]="productForm.stockQuantity" name="stockQuantity" required min="0"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Type *</label>
+                    <select [(ngModel)]="productForm.productType" name="productType" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Product Type</option>
+                      <option *ngFor="let type of productTypeOptions" [value]="type.value">
+                        {{ type.label }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
+                    <input type="file" (change)="onFileSelected($event)" accept="image/*"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div *ngIf="selectedFile" class="mt-2 text-sm text-gray-600">
+                      Selected: {{ selectedFile.name }}
+                    </div>
+                    <div *ngIf="uploadProgress > 0 && uploadProgress < 100" class="mt-2">
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" [style.width.%]="uploadProgress"></div>
+                      </div>
+                      <p class="text-sm text-gray-600 mt-1">
+                        Uploading: {{ uploadProgress }}%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                  <textarea [(ngModel)]="productForm.description" name="description" required rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                  <button type="button" (click)="resetProductForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoading"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoading ? 'Adding...' : 'Add Product' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Products Table -->
+            <div class="p-6">
+              <div *ngIf="isLoading" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading products...</p>
+              </div>
+
+              <div *ngIf="!isLoading && products.length === 0" class="text-center py-8">
+                <p class="text-gray-600">No products found</p>
+              </div>
+
+              <div *ngIf="!isLoading && products.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Product
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Price
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Stock
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let product of products">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img *ngIf="product.images && product.images.length > 0" [src]="product.images[0]"
+                              alt="Product" class="h-10 w-10 rounded-lg object-cover" />
+                            <div *ngIf="!product.images || product.images.length === 0"
+                              class="h-10 w-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                              <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              {{ product.name }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              {{ product.description | slice:0:50 }}...
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ product.category?.name || 'N/A' }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">${{ product.price.toFixed(2) }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ product.stockQuantity }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="product.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                          {{ product.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button (click)="deleteProduct(product.id)" class="text-red-600 hover:text-red-900">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div *ngIf="currentSection === 'orders'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Order Management
+                </h2>
+                <div class="flex space-x-3">
+                  <input type="text" [(ngModel)]="orderFilters.orderNumber" (input)="onOrderSearch()"
+                    placeholder="Search by order number..."
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <select [(ngModel)]="orderFilters.status" (change)="onOrderFilter()"
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option *ngFor="let option of orderStatusOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                  <select [(ngModel)]="orderFilters.paymentStatus" (change)="onOrderFilter()"
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option *ngFor="let option of paymentStatusOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                  <button (click)="clearOrderFilters()"
+                    class="px-3 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm">
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div *ngIf="isLoadingOrders" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading orders...</p>
+              </div>
+
+              <div *ngIf="!isLoadingOrders && orders.length === 0" class="text-center py-8">
+                <p class="text-gray-600">No orders found</p>
+              </div>
+
+              <div *ngIf="!isLoadingOrders && orders.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Order Details
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Customer
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Payment
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let order of orders">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                              <i class="fas fa-shopping-cart text-blue-600"></i>
+                            </div>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              {{ order.orderNumber }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              {{ getOrderItemsCount(order) }} items
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">
+                          {{ order.user?.username || 'N/A' }}
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          {{ order.user?.email || 'N/A' }}
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">
+                          ${{ order.totalAmount.toFixed(2) }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <select #statusSelect [value]="order.status"
+                          (change)="updateOrderStatus(order.id, statusSelect.value)"
+                          class="px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500">
+                          <option *ngFor="let option of orderStatusOptions.slice(1)" [value]="option.value">
+                            {{ option.label }}
+                          </option>
+                        </select>
+                        <br />
+                        <span class="mt-1 inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="getOrderStatusBadgeClass(order.status)">
+                          {{ order.status }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">
+                          {{ order.paymentMethod }}
+                        </div>
+                        <select #paymentStatusSelect [value]="order.paymentStatus"
+                          (change)="updatePaymentStatus(order.id, paymentStatusSelect.value)"
+                          class="mt-1 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500">
+                          <option *ngFor="let option of paymentStatusOptions.slice(1)" [value]="option.value">
+                            {{ option.label }}
+                          </option>
+                        </select>
+                        <br />
+                        <span class="mt-1 inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="getPaymentStatusBadgeClass(order.paymentStatus)">
+                          {{ order.paymentStatus }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">
+                          {{ formatDate(order.createdAt) }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3" title="View Details">
+                          <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="text-green-600 hover:text-green-900 mr-3" title="Print Invoice">
+                          <i class="fas fa-print"></i>
+                        </button>
+                        <button (click)="deleteOrder(order.id)" class="text-red-600 hover:text-red-900"
+                          title="Delete Order">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Videos Section -->
+        <div *ngIf="currentSection === 'videos'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Video Management
+                </h2>
+                <button (click)="showAddVideoForm = true"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Video
+                </button>
+              </div>
+            </div>
+
+            <!-- Add Video Form -->
+            <div *ngIf="showAddVideoForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Add New Video
+              </h3>
+              <form (ngSubmit)="addVideo()" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Video Title *</label>
+                    <input type="text" [(ngModel)]="videoForm.title" name="videoTitle" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                    <select [(ngModel)]="videoForm.category" name="videoCategory" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of videoCategories" [value]="category.value">
+                        {{ category.label }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                    <select [(ngModel)]="videoForm.platform" name="videoPlatform"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Platform</option>
+                      <option *ngFor="let platform of videoPlatforms" [value]="platform.value">
+                        {{ platform.label }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select [(ngModel)]="videoForm.isActive" name="videoStatus"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option [value]="true">Active</option>
+                      <option [value]="false">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <textarea [(ngModel)]="videoForm.description" name="videoDescription" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Video File</label>
+                    <input type="file" (change)="onVideoFileSelected($event)" accept="video/*"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div *ngIf="selectedVideoFile" class="mt-2 text-sm text-gray-600">
+                      Selected: {{ selectedVideoFile.name }}
+                    </div>
+                    <div *ngIf="videoUploadProgress > 0 && videoUploadProgress < 100" class="mt-2">
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" [style.width.%]="videoUploadProgress"></div>
+                      </div>
+                      <p class="text-sm text-gray-600 mt-1">
+                        Uploading video: {{ videoUploadProgress }}%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">YouTube URL (Alternative)</label>
+                    <input type="url" [(ngModel)]="videoForm.videoUrl" name="videoUrl" 
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p class="text-xs text-gray-500 mt-1">Enter YouTube URL instead of uploading a file</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Thumbnail Image</label>
+                    <input type="file" (change)="onThumbnailFileSelected($event)" accept="image/*"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div *ngIf="selectedThumbnailFile" class="mt-2 text-sm text-gray-600">
+                      Selected: {{ selectedThumbnailFile.name }}
+                    </div>
+                    <div *ngIf="thumbnailUploadProgress > 0 && thumbnailUploadProgress < 100" class="mt-2">
+                      <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" [style.width.%]="thumbnailUploadProgress"></div>
+                      </div>
+                      <p class="text-sm text-gray-600 mt-1">
+                        Uploading thumbnail: {{ thumbnailUploadProgress }}%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select [(ngModel)]="videoForm.isActive" name="videoStatus"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option [value]="true">Active</option>
+                      <option [value]="false">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <p class="text-sm text-blue-700">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    You can upload a video file, provide a YouTube URL, upload a thumbnail image, or any combination. At least one video source (file or URL) is required.
+                  </p>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                  <button type="button" (click)="resetVideoForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoading"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoading ? 'Adding...' : 'Add Video' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Videos Table -->
+            <div class="p-6">
+              <div *ngIf="isLoadingVideos" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading videos...</p>
+              </div>
+
+              <div *ngIf="!isLoadingVideos && videos.length === 0" class="text-center py-8">
+                <p class="text-gray-600">No videos found</p>
+              </div>
+
+              <div *ngIf="!isLoadingVideos && videos.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Video
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Title
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Platform
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Views
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let video of videos">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex-shrink-0 h-16 w-24">
+                          <img *ngIf="video.thumbnailUrl" [src]="video.thumbnailUrl" [alt]="video.title"
+                            class="h-16 w-24 object-cover rounded" />
+                          <div *ngIf="!video.thumbnailUrl"
+                            class="h-16 w-24 bg-gray-200 rounded flex items-center justify-center">
+                            <i class="fas fa-video text-gray-400"></i>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">
+                          {{ video.title }}
+                        </div>
+                        <div class="text-sm text-gray-500">
+                          {{ video.description }}
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                          {{ video.category }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ video.platform }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <button (click)="toggleVideoStatus(video.id, !video.isActive)"
+                          class="px-2 py-1 text-xs rounded transition-colors"
+                          [ngClass]="video.isActive ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'">
+                          {{ video.isActive ? 'Active' : 'Inactive' }}
+                        </button>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {{ video.views || 0 }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button (click)="deleteVideo(video.id)" class="text-red-600 hover:text-red-900">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users Section -->
+        <div *ngIf="currentSection === 'users'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  User Management
+                </h2>
+                <div class="flex space-x-3">
+                  <input type="text" [(ngModel)]="searchTerm" (input)="onUserSearch()" placeholder="Search users..."
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <select [(ngModel)]="selectedStatus" (change)="onStatusFilter()"
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option *ngFor="let option of statusOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <div *ngIf="isLoadingUsers" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading users...</p>
+              </div>
+
+              <div *ngIf="!isLoadingUsers && users.length === 0" class="text-center py-8">
+                <p class="text-gray-600">No users found</p>
+              </div>
+
+              <div *ngIf="!isLoadingUsers && users.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Role
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Country
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Joined
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Last Login
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let user of users">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
+                              <i class="fas fa-user text-gray-400"></i>
+                            </div>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                              {{ getFullName(user) }}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                              @{{ user.username }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ user.email }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="getRoleBadgeClass(user.role)">
+                          {{ user.role }}
+                        </span>
+                        <br />
+                        <select #roleSelect [value]="user.role" (change)="updateUserRole(user.id, roleSelect.value)"
+                          class="mt-1 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          [disabled]="user.role === 'SUPER_ADMIN'">
+                          <option *ngFor="let option of roleOptions.slice(1)" [value]="option.value">
+                            {{ option.label }}
+                          </option>
+                        </select>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="getStatusBadgeClass(user.isActive)">
+                          {{ user.isActive ? 'Active' : 'Suspended' }}
+                        </span>
+                        <br />
+                        <button class="mt-1 px-2 py-1 text-xs rounded transition-colors"
+                          [ngClass]="user.isActive ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'"
+                          (click)="toggleUserStatus(user.id, !user.isActive)" [disabled]="user.role === 'SUPER_ADMIN'">
+                          {{ user.isActive ? 'Suspend' : 'Activate' }}
+                        </button>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ user.country || 'N/A' }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ user.createdAt | date:'short' }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ user.lastLogin ? (user.lastLogin | date:'short')
+                          : 'Never' }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button (click)="deleteUser(user.id)" class="text-red-600 hover:text-red-900"
+                          [disabled]="user.role === 'SUPER_ADMIN'">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog Section -->
+        <div *ngIf="currentSection === 'blog'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Blog Management
+                </h2>
+                <button (click)="showAddBlogPost()"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Blog Post
+                </button>
+              </div>
+            </div>
+
+            <!-- Add Blog Post Form -->
+            <div *ngIf="showAddBlogPostForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Add New Blog Post
+              </h3>
+              <form (ngSubmit)="addBlogPost()">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                    <input type="text" [(ngModel)]="blogPostForm.title" name="blogTitle" required
+                      (input)="generateSlug()"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
+                    <input type="text" [(ngModel)]="blogPostForm.slug" name="blogSlug" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select [(ngModel)]="blogPostForm.status" name="blogStatus"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option *ngFor="let status of blogStatusOptions" [value]="status.value">
+                        {{ status.label }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select [(ngModel)]="blogPostForm.categoryId" name="blogCategory"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of blogCategories" [value]="category.id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- BLOG POST FORM IMAGE UPLOAD (replace Featured Image URL input) -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Featured Image *</label>
+                    <input type="file" accept="image/*" (change)="onBlogImageFileSelected($event)" />
+                    <div *ngIf="blogImageUploadProgress > 0 && blogImageUploadProgress < 100"
+                      class="mt-2 text-xs text-blue-600">
+                      Uploading: {{ blogImageUploadProgress }}%
+                    </div>
+                    <div *ngIf="blogPostForm.featuredImage" class="mt-2">
+                      <img [src]="blogPostForm.featuredImage" alt="Featured image preview"
+                        class="h-24 rounded border" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Published Date</label>
+                    <input type="date" [(ngModel)]="blogPostForm.publishedAt" name="blogPublishedAt"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+                  <textarea [(ngModel)]="blogPostForm.excerpt" name="blogExcerpt" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Content *</label>
+                  <textarea [(ngModel)]="blogPostForm.content" name="blogContent" required rows="10"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
+                    <input type="text" [(ngModel)]="blogPostForm.metaTitle" name="blogMetaTitle"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                    <input type="text" [(ngModel)]="blogPostForm.metaDescription" name="blogMetaDescription"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="flex items-center">
+                    <input type="checkbox" [(ngModel)]="blogPostForm.isFeatured" name="blogFeatured"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <span class="ml-2 text-sm text-gray-700">Featured Post</span>
+                  </label>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                  <button type="button" (click)="showAddBlogPostForm = false; resetBlogPostForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoadingBlogPosts"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoadingBlogPosts ? 'Adding...' : 'Add Blog Post' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Edit Blog Post Form -->
+            <div *ngIf="showEditBlogPostForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Edit Blog Post
+              </h3>
+              <form (ngSubmit)="updateBlogPost()">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+                    <input type="text" [(ngModel)]="blogPostForm.title" name="editBlogTitle" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
+                    <input type="text" [(ngModel)]="blogPostForm.slug" name="editBlogSlug" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select [(ngModel)]="blogPostForm.status" name="editBlogStatus"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option *ngFor="let status of blogStatusOptions" [value]="status.value">
+                        {{ status.label }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select [(ngModel)]="blogPostForm.categoryId" name="editBlogCategory"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option value="">Select Category</option>
+                      <option *ngFor="let category of blogCategories" [value]="category.id">
+                        {{ category.name }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Featured Image URL</label>
+                    <input type="url" [(ngModel)]="blogPostForm.featuredImage" name="editBlogImage"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Published Date</label>
+                    <input type="date" [(ngModel)]="blogPostForm.publishedAt" name="editBlogPublishedAt"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+                  <textarea [(ngModel)]="blogPostForm.excerpt" name="editBlogExcerpt" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="mt-4">
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Content *</label>
+                  <textarea [(ngModel)]="blogPostForm.content" name="editBlogContent" required rows="10"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
+                    <input type="text" [(ngModel)]="blogPostForm.metaTitle" name="editBlogMetaTitle"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                    <input type="text" [(ngModel)]="blogPostForm.metaDescription" name="editBlogMetaDescription"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="flex items-center">
+                    <input type="checkbox" [(ngModel)]="blogPostForm.isFeatured" name="editBlogFeatured"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <span class="ml-2 text-sm text-gray-700">Featured Post</span>
+                  </label>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                  <button type="button"
+                    (click)="showEditBlogPostForm = false; selectedBlogPost = null; resetBlogPostForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoadingBlogPosts"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoadingBlogPosts ? 'Updating...' : 'Update Blog Post' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Blog Posts List -->
+            <div class="p-6">
+              <div *ngIf="isLoadingBlogPosts" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading blog posts...</p>
+              </div>
+
+              <div *ngIf="!isLoadingBlogPosts && blogPosts.length === 0" class="text-center py-8">
+                <p class="text-gray-600">No blog posts found</p>
+              </div>
+
+              <div *ngIf="!isLoadingBlogPosts && blogPosts.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Post
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Author
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Views
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Published
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let post of blogPosts">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div class="flex-shrink-0 h-10 w-10">
+                            <img *ngIf="post.featuredImage" [src]="post.featuredImage" alt="Blog post"
+                              class="h-10 w-10 rounded-lg object-cover" />
+                            <div *ngIf="!post.featuredImage"
+                              class="h-10 w-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                              <i class="fas fa-file-alt text-gray-400"></i>
+                            </div>
+                          </div>
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">{{ post.title }}</div>
+                            <div class="text-sm text-gray-500">{{ post.category?.name || 'No Category' }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ post.author?.firstName }} {{ post.author?.lastName
+                          }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full"
+                          [ngClass]="getBlogStatusBadgeClass(post.status)">
+                          {{ post.status }}
+                        </span>
+                        <button (click)="toggleBlogPostStatus(post)"
+                          class="ml-2 px-2 py-1 text-xs rounded transition-colors"
+                          [ngClass]="post.status === 'PUBLISHED' ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200'">
+                          {{ post.status === 'PUBLISHED' ? 'Unpublish' : 'Publish' }}
+                        </button>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ post.viewCount }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-900">{{ formatBlogDate(post.createdAt) }}</span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button (click)="showEditBlogPost(post)" class="text-blue-600 hover:text-blue-900 mr-3">
+                          <i class="fas fa-edit"></i>
+                        </button>
+                        <button (click)="deleteBlogPost(post.id)" class="text-red-600 hover:text-red-900">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div *ngIf="currentSection === 'analytics'">
+          <!-- Analytics Header -->
+          <div class="bg-white rounded-lg shadow mb-6">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Analytics Dashboard
+                </h2>
+                <div class="flex space-x-3">
+                  <select [(ngModel)]="selectedTimeRange" (change)="onTimeRangeChange()"
+                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option *ngFor="let option of timeRangeOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                  <button (click)="exportAnalytics()"
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-download mr-2"></i>Export
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="isLoadingAnalytics" class="text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p class="mt-4 text-gray-600">Loading analytics data...</p>
+          </div>
+
+          <!-- Analytics Content -->
+          <div *ngIf="!isLoadingAnalytics && analytics" class="space-y-6">
+            <!-- Key Performance Indicators -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <!-- Revenue KPI -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-dollar-sign text-xl"></i>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">
+                      Total Revenue
+                    </p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      ${{ analytics.revenue?.current?.toFixed(2) || '0.00' }}
+                    </p>
+                    <div class="flex items-center mt-1">
+                      <span class="text-sm" [ngClass]="getRevenueGrowth() >= 0 ? 'text-green-600' : 'text-red-600'">
+                        <i class="fas" [ngClass]="getRevenueGrowth() >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+                        {{ getRevenueGrowth().toFixed(1) }}%
+                      </span>
+                      <span class="text-sm text-gray-600 ml-1">vs previous period</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Orders KPI -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">
+                      Total Orders
+                    </p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ analytics.orders?.current || 0 }}
+                    </p>
+                    <div class="flex items-center mt-1">
+                      <span class="text-sm" [ngClass]="getOrderGrowth() >= 0 ? 'text-green-600' : 'text-red-600'">
+                        <i class="fas" [ngClass]="getOrderGrowth() >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+                        {{ getOrderGrowth().toFixed(1) }}%
+                      </span>
+                      <span class="text-sm text-gray-600 ml-1">vs previous period</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Users KPI -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-users text-xl"></i>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">
+                      Total Users
+                    </p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ analytics.users?.current || 0 }}
+                    </p>
+                    <div class="flex items-center mt-1">
+                      <span class="text-sm" [ngClass]="getUserGrowth() >= 0 ? 'text-green-600' : 'text-red-600'">
+                        <i class="fas" [ngClass]="getUserGrowth() >= 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+                        {{ getUserGrowth().toFixed(1) }}%
+                      </span>
+                      <span class="text-sm text-gray-600 ml-1">vs previous period</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Average Order Value KPI -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                  <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-chart-line text-xl"></i>
+                  </div>
+                  <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">
+                      Avg Order Value
+                    </p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      ${{ getAverageOrderValue().toFixed(2) }}
+                    </p>
+                    <div class="flex items-center mt-1">
+                      <span class="text-sm text-gray-600">Conversion Rate: {{ getConversionRate().toFixed(1)
+                        }}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Metrics -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Profit & Performance -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Business Performance
+                </h3>
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Profit Margin</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getProfitMargin().toFixed(1) }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Customer Retention Rate</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getCustomerRetentionRate().toFixed(1) }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Customer Lifetime Value</span>
+                    <span class="text-sm font-medium text-gray-900">${{ getCustomerLifetimeValue().toFixed(2) }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Churn Rate</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getChurnRate().toFixed(1) }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Refund Rate</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getRefundRate().toFixed(1) }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Customer Satisfaction -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Customer Satisfaction
+                </h3>
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Satisfaction Score</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getCustomerSatisfactionScore().toFixed(1)
+                      }}/10</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Avg Response Time</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getAverageResponseTime() }} hours</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Support Tickets</span>
+                    <span class="text-sm font-medium text-gray-900">{{ analytics.supportTickets || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Resolved Tickets</span>
+                    <span class="text-sm font-medium text-gray-900">{{ analytics.resolvedTickets || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Resolution Rate</span>
+                    <span class="text-sm font-medium text-gray-900">
+                      {{ analytics.supportTickets > 0 ?
+                      ((analytics.resolvedTickets / analytics.supportTickets)
+                      * 100).toFixed(1) : 0 }}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top Products & Categories -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Top Products -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Top Products
+                </h3>
+                <div class="space-y-3">
+                  <div *ngFor="let product of getTopProducts(); let i = index"
+                    class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <span class="text-sm font-medium text-gray-900 mr-2">{{ i + 1 }}.</span>
+                      <span class="text-sm text-gray-600">{{ product.name }}</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">${{ product.revenue?.toFixed(2) || '0.00' }}</span>
+                  </div>
+                  <div *ngIf="getTopProducts().length === 0" class="text-center py-4">
+                    <p class="text-gray-500 text-sm">
+                      No product data available
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Categories -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Top Categories
+                </h3>
+                <div class="space-y-3">
+                  <div *ngFor="let category of getTopCategories(); let i = index"
+                    class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <span class="text-sm font-medium text-gray-900 mr-2">{{ i + 1 }}.</span>
+                      <span class="text-sm text-gray-600">{{ category.name }}</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">{{ category.orders || 0 }} orders</span>
+                  </div>
+                  <div *ngIf="getTopCategories().length === 0" class="text-center py-4">
+                    <p class="text-gray-500 text-sm">
+                      No category data available
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order Status & Payment Methods -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Order Status Breakdown -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Order Status Breakdown
+                </h3>
+                <div class="space-y-3">
+                  <div *ngFor="let status of getOrderStatusBreakdown()" class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <div class="w-3 h-3 rounded-full mr-3" [ngClass]="{
+                          'bg-green-500': status.status === 'COMPLETED',
+                          'bg-yellow-500': status.status === 'PENDING',
+                          'bg-blue-500': status.status === 'PROCESSING',
+                          'bg-red-500': status.status === 'CANCELLED'
+                        }"></div>
+                      <span class="text-sm text-gray-600">{{ status.status }}</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-900">{{ status.count }}</span>
+                  </div>
+                  <div *ngIf="getOrderStatusBreakdown().length === 0" class="text-center py-4">
+                    <p class="text-gray-500 text-sm">
+                      No order status data available
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Payment Method Breakdown -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Payment Methods
+                </h3>
+                <div class="space-y-3">
+                  <div *ngFor="let method of getPaymentMethodBreakdown()" class="flex items-center justify-between">
+                    <span class="text-sm text-gray-600">{{ method.method }}</span>
+                    <span class="text-sm font-medium text-gray-900">{{ method.count }} ({{ method.percentage?.toFixed(1)
+                      }}%)</span>
+                  </div>
+                  <div *ngIf="getPaymentMethodBreakdown().length === 0" class="text-center py-4">
+                    <p class="text-gray-500 text-sm">
+                      No payment method data available
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-lg shadow p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                Recent Activity
+              </h3>
+              <div class="space-y-3">
+                <div *ngFor="let activity of getRecentActivity()" class="flex items-center space-x-3">
+                  <div class="flex-shrink-0">
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center" [ngClass]="{
+                        'bg-green-100 text-green-600': activity.type === 'order',
+                        'bg-blue-100 text-blue-600': activity.type === 'user',
+                        'bg-yellow-100 text-yellow-600': activity.type === 'product'
+                      }">
+                      <i class="fas" [ngClass]="{
+                          'fa-shopping-cart': activity.type === 'order',
+                          'fa-user': activity.type === 'user',
+                          'fa-box': activity.type === 'product'
+                        }"></i>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm text-gray-900">
+                      {{ activity.message }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      {{ activity.timestamp | date:'short' }}
+                    </p>
+                  </div>
+                </div>
+                <div *ngIf="getRecentActivity().length === 0" class="text-center py-4">
+                  <p class="text-gray-500 text-sm">No recent activity</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- System Health -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  System Health
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Server Status</span>
+                    <span class="text-sm font-medium text-green-600">Online</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Database</span>
+                    <span class="text-sm font-medium text-green-600">Connected</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Storage</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSystemHealth().storage || '0' }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Memory</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSystemHealth().memory || '0' }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">CPU</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSystemHealth().cpu || '0' }}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Security Metrics -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Security
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Failed Logins</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSecurityMetrics().failedLogins || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Suspicious Activity</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSecurityMetrics().suspiciousActivity || 0
+                      }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Blocked IPs</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSecurityMetrics().blockedIPs || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">SSL Status</span>
+                    <span class="text-sm font-medium text-green-600">Valid</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Last Backup</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSecurityMetrics().lastBackup || 'N/A'
+                      }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Marketing Metrics -->
+              <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                  Marketing
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Email Opens</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getEmailMarketingMetrics().opens || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Click Rate</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getEmailMarketingMetrics().clickRate || 0
+                      }}%</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Social Followers</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSocialMediaMetrics().followers || 0 }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">SEO Ranking</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getSEOmetrics().ranking || 'N/A' }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600">Traffic Sources</span>
+                    <span class="text-sm font-medium text-gray-900">{{ getTrafficSources().length || 0 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- No Analytics Data -->
+          <div *ngIf="!isLoadingAnalytics && !analytics" class="text-center py-12">
+            <div class="text-gray-500">
+              <i class="fas fa-chart-bar text-4xl mb-4"></i>
+              <p class="text-lg font-medium">No Analytics Data Available</p>
+              <p class="text-sm">
+                Analytics data will appear here once you have activity in your
+                system.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div *ngIf="currentSection === 'settings'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <h2 class="text-xl font-semibold text-gray-900">Settings</h2>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-600">Settings will be implemented here.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vouches Section -->
+        <div *ngIf="currentSection === 'vouches'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-900">Vouch Management</h2>
+                <button (click)="showAddVouch()"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Vouch
+                </button>
+              </div>
+            </div>
+
+            <!-- Vouch Statistics -->
+            <div *ngIf="vouchStats" class="p-6 border-b border-gray-200 bg-gray-50">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-blue-100 rounded-lg">
+                      <i class="fas fa-star text-blue-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Total Vouches</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ vouchStats.totalVouches }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-green-100 rounded-lg">
+                      <i class="fas fa-check text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Approved</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ vouchStats.approvedVouches }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-purple-100 rounded-lg">
+                      <i class="fas fa-shield-alt text-purple-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Verified</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ vouchStats.verifiedVouches }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-yellow-100 rounded-lg">
+                      <i class="fas fa-star-half-alt text-yellow-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Avg Rating</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ vouchStats.averageRating.toFixed(1) }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Vouch Form -->
+            <div *ngIf="showAddVouchForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Add New Vouch</h3>
+              <form (ngSubmit)="addVouch()" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Username *</label>
+                    <input type="text" [(ngModel)]="vouchForm.username" name="vouchUsername" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Avatar Seed</label>
+                    <input type="text" [(ngModel)]="vouchForm.avatarSeed" name="vouchAvatarSeed"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating *</label>
+                    <select [(ngModel)]="vouchForm.rating" name="vouchRating" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option *ngFor="let rating of ratingOptions" [value]="rating.value">
+                        {{ rating.label }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Review Image URL</label>
+                    <input type="url" [(ngModel)]="vouchForm.reviewImage" name="vouchReviewImage"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <div class="flex items-center mt-2 space-x-2">
+                      <input type="file" accept="image/*" (change)="onVouchImageFileSelected($event)" />
+                      <button type="button" (click)="uploadVouchImage()" [disabled]="!vouchImageFile"
+                        class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Upload</button>
+                      <span *ngIf="vouchImageFile">{{ vouchImageFile.name }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Review Text *</label>
+                  <textarea [(ngModel)]="vouchForm.reviewText" name="vouchReviewText" required rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" [(ngModel)]="vouchForm.isVerified" name="vouchVerified"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <span class="ml-2 text-sm text-gray-700">Verified Purchase</span>
+                  </label>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                  <button type="button" (click)="showAddVouchForm = false; resetVouchForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoadingVouches"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoadingVouches ? 'Adding...' : 'Add Vouch' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Edit Vouch Form -->
+            <div *ngIf="showEditVouchForm" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Edit Vouch</h3>
+              <form (ngSubmit)="updateVouch()" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Username *</label>
+                    <input type="text" [(ngModel)]="vouchForm.username" name="editVouchUsername" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Avatar Seed</label>
+                    <input type="text" [(ngModel)]="vouchForm.avatarSeed" name="editVouchAvatarSeed"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Rating *</label>
+                    <select [(ngModel)]="vouchForm.rating" name="editVouchRating" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                      <option *ngFor="let rating of ratingOptions" [value]="rating.value">
+                        {{ rating.label }}
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Review Image URL</label>
+                    <input type="url" [(ngModel)]="vouchForm.reviewImage" name="editVouchReviewImage"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Review Text *</label>
+                  <textarea [(ngModel)]="vouchForm.reviewText" name="editVouchReviewText" required rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <div>
+                  <label class="flex items-center">
+                    <input type="checkbox" [(ngModel)]="vouchForm.isVerified" name="editVouchVerified"
+                      class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <span class="ml-2 text-sm text-gray-700">Verified Purchase</span>
+                  </label>
+                </div>
+
+                <div class="flex justify-end space-x-3">
+                  <button type="button" (click)="showEditVouchForm = false; selectedVouch = null; resetVouchForm()"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" [disabled]="isLoadingVouches"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+                    {{ isLoadingVouches ? 'Updating...' : 'Update Vouch' }}
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Vouches List -->
+            <div class="p-6">
+              <!-- Loading State -->
+              <div *ngIf="isLoadingVouches" class="flex justify-center items-center py-8">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span class="ml-3 text-gray-600">Loading vouches...</span>
+              </div>
+
+              <!-- Vouches Table -->
+              <div *ngIf="!isLoadingVouches && vouches.length > 0" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Rating
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Review
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                    <tr *ngFor="let vouch of vouches">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <img [src]="getVouchAvatarUrl(vouch.avatarSeed)" [alt]="vouch.username"
+                            class="h-10 w-10 rounded-full" />
+                          <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">{{ vouch.username }}</div>
+                            <div class="text-sm text-gray-500">
+                              <span [ngClass]="getVouchVerifiedBadgeClass(vouch.isVerified)"
+                                class="px-2 py-1 text-xs rounded-full">
+                                {{ vouch.isVerified ? 'Verified' : 'Unverified' }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                          <div class="flex items-center space-x-1">
+                            <i *ngFor="let star of getVouchRatingStars(vouch.rating).filled"
+                              class="fas fa-star text-yellow-400 text-sm"></i>
+                            <i *ngFor="let star of getVouchRatingStars(vouch.rating).empty"
+                              class="far fa-star text-gray-300 text-sm"></i>
+                          </div>
+                          <span class="ml-2 text-sm text-gray-600">({{ vouch.rating }})</span>
+                        </div>
+                      </td>
+                      <td class="px-6 py-4">
+                        <div class="text-sm text-gray-900 max-w-xs truncate">{{ vouch.reviewText }}</div>
+                        <div *ngIf="vouch.reviewImage" class="mt-1">
+                          <img [src]="vouch.reviewImage" alt="Review image" class="h-8 w-8 rounded object-cover" />
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span [ngClass]="getVouchStatusBadgeClass(vouch.status)" class="px-2 py-1 text-xs rounded-full">
+                          {{ vouch.status }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ formatVouchDate(vouch.createdAt) }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div class="flex space-x-2">
+                          <button (click)="showEditVouch(vouch)" class="text-blue-600 hover:text-blue-900" title="Edit">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button *ngIf="vouch.status === 'PENDING'" (click)="approveVouch(vouch.id)"
+                            class="text-green-600 hover:text-green-900" title="Approve">
+                            <i class="fas fa-check"></i>
+                          </button>
+                          <button *ngIf="vouch.status === 'PENDING'" (click)="rejectVouch(vouch.id)"
+                            class="text-red-600 hover:text-red-900" title="Reject">
+                            <i class="fas fa-times"></i>
+                          </button>
+                          <button (click)="toggleVouchVerification(vouch.id)"
+                            class="text-purple-600 hover:text-purple-900"
+                            [title]="vouch.isVerified ? 'Unverify' : 'Verify'">
+                            <i class="fas fa-shield-alt"></i>
+                          </button>
+                          <button (click)="deleteVouch(vouch.id)" class="text-red-600 hover:text-red-900"
+                            title="Delete">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty State -->
+              <div *ngIf="!isLoadingVouches && vouches.length === 0" class="text-center py-8">
+                <div class="text-gray-500">
+                  <i class="fas fa-star text-4xl mb-4"></i>
+                  <p class="text-lg font-medium">No Vouches Available</p>
+                  <p class="text-sm">Start by adding your first vouch.</p>
+                </div>
+              </div>
+
+              <!-- Pagination -->
+              <div *ngIf="totalVouchPages > 1" class="flex justify-center mt-6">
+                <nav class="flex items-center space-x-1">
+                  <button (click)="onVouchPageChange(currentVouchPage - 1)" [disabled]="currentVouchPage === 1"
+                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Previous
+                  </button>
+                  <ng-container *ngFor="let page of getVouchPageNumbers()">
+                    <button (click)="onVouchPageChange(page)"
+                      [class]="page === currentVouchPage 
+                        ? 'px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md' 
+                        : 'px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50'">
+                      {{ page }}
+                    </button>
+                  </ng-container>
+                  <button (click)="onVouchPageChange(currentVouchPage + 1)"
+                    [disabled]="currentVouchPage === totalVouchPages"
+                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                  </button>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

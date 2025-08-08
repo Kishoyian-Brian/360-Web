@@ -1,0 +1,45 @@
+### Quick Vouch API Tests
+### Make sure server is running on localhost:3000
+
+### 1. Get all vouches (public)
+GET http://localhost:3000/api/vouches?page=1&limit=5
+
+### 2. Get vouch statistics (public)
+GET http://localhost:3000/api/vouches/stats
+
+### 3. Search vouches (public)
+GET http://localhost:3000/api/vouches?search=amazing
+
+### 4. Filter by rating (public)
+GET http://localhost:3000/api/vouches?rating=5&isVerified=true
+
+### 5. Get single vouch (replace with actual ID)
+GET http://localhost:3000/api/vouches/cmdv6wtwq000aa52b7cakx8in
+
+### 6. Login to get admin token
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "vouchadmin",
+  "password": "admin123"
+}
+
+### 7. Seed vouches (admin only - use token from step 6)
+POST http://localhost:3000/api/vouches/seed
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+### 8. Create new vouch (admin only - use token from step 6)
+POST http://localhost:3000/api/vouches
+Authorization: Bearer YOUR_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "username": "quicktest",
+  "avatarSeed": "quicktest",
+  "rating": 4,
+  "reviewText": "Quick test vouch from API",
+  "isVerified": false,
+  "status": "PENDING"
+} 

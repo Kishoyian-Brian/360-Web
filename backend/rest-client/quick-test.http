@@ -1,0 +1,45 @@
+### Quick User API Tests
+### Make sure your backend is running on http://localhost:3000
+
+### 1. Register a new user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### 2. Login to get token
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### 3. Get user profile (replace TOKEN with actual token)
+GET http://localhost:3000/api/users/profile/me
+Authorization: Bearer TOKEN
+
+### 4. Get all users (admin only - replace ADMIN_TOKEN)
+GET http://localhost:3000/api/users
+Authorization: Bearer ADMIN_TOKEN
+
+### 5. Create user (admin only - replace ADMIN_TOKEN)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer ADMIN_TOKEN
+
+{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "password": "password123",
+  "role": "USER",
+  "firstName": "New",
+  "lastName": "User"
+} 

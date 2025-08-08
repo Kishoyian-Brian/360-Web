@@ -1,0 +1,28 @@
+/* Additional custom styles for admin dashboard */
+.sidebar-menu a.active {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* Smooth transitions */
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #374151;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #6b7280;
+    border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}

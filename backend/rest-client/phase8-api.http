@@ -1,0 +1,289 @@
+### Phase 8: Essential Backend Integration API Testing
+### Cart, Order, Payment, and Analytics APIs
+
+### ========================================
+### 1. CART API ENDPOINTS
+### ========================================
+
+### Add item to cart
+POST {{baseUrl}}/api/cart/add
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "productId": "{{productId}}",
+  "quantity": 2
+}
+
+### Get user cart
+GET {{baseUrl}}/api/cart
+Authorization: Bearer {{userToken}}
+
+### Update cart item quantity
+PATCH {{baseUrl}}/api/cart/{{cartItemId}}
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Remove item from cart
+DELETE {{baseUrl}}/api/cart/{{cartItemId}}
+Authorization: Bearer {{userToken}}
+
+### Clear entire cart
+DELETE {{baseUrl}}/api/cart
+Authorization: Bearer {{userToken}}
+
+### Get cart item count
+GET {{baseUrl}}/api/cart/count
+Authorization: Bearer {{userToken}}
+
+### ========================================
+### 2. ORDER API ENDPOINTS
+### ========================================
+
+### Create order from cart
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "paymentMethod": "CREDIT_CARD",
+  "shippingAddress": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "country": "USA",
+    "phone": "+1234567890"
+  }
+}
+
+### Get user orders
+GET {{baseUrl}}/api/orders?page=1&limit=10
+Authorization: Bearer {{userToken}}
+
+### Get all orders (admin only)
+GET {{baseUrl}}/api/orders?page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+### Get order by ID
+GET {{baseUrl}}/api/orders/{{orderId}}
+Authorization: Bearer {{userToken}}
+
+### Get order statistics (admin only)
+GET {{baseUrl}}/api/orders/stats
+Authorization: Bearer {{adminToken}}
+
+### Update order status (admin only)
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### Update payment status (admin only)
+PATCH {{baseUrl}}/api/orders/{{orderId}}/payment-status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "paymentStatus": "COMPLETED"
+}
+
+### ========================================
+### 3. PAYMENT API ENDPOINTS
+### ========================================
+
+### Process payment for order
+POST {{baseUrl}}/api/payments
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "orderId": "{{orderId}}",
+  "amount": 250.00,
+  "method": "CREDIT_CARD",
+  "gateway": "stripe"
+}
+
+### Get payment by order ID
+GET {{baseUrl}}/api/payments/order/{{orderId}}
+Authorization: Bearer {{userToken}}
+
+### Get payment by ID
+GET {{baseUrl}}/api/payments/{{paymentId}}
+Authorization: Bearer {{userToken}}
+
+### Get payment statistics (admin only)
+GET {{baseUrl}}/api/payments/stats
+Authorization: Bearer {{adminToken}}
+
+### Update payment status (admin only)
+PATCH {{baseUrl}}/api/payments/{{paymentId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### ========================================
+### 4. ANALYTICS API ENDPOINTS (Admin Only)
+### ========================================
+
+### Get dashboard statistics
+GET {{baseUrl}}/api/analytics/dashboard
+Authorization: Bearer {{adminToken}}
+
+### Get revenue statistics
+GET {{baseUrl}}/api/analytics/revenue
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### 5. AUTHENTICATION (Get Tokens)
+### ========================================
+
+### Login as regular user
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### Login as admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "vouchadmin",
+  "password": "admin123"
+}
+
+### Register new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "password123",
+  "email": "newuser@test.com"
+}
+
+### ========================================
+### 6. TESTING SCENARIOS
+### ========================================
+
+### Scenario 1: Complete Shopping Flow
+# 1. Add items to cart
+POST {{baseUrl}}/api/cart/add
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "productId": "{{productId1}}",
+  "quantity": 1
+}
+
+# 2. Add another item
+POST {{baseUrl}}/api/cart/add
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "productId": "{{productId2}}",
+  "quantity": 2
+}
+
+# 3. Check cart
+GET {{baseUrl}}/api/cart
+Authorization: Bearer {{userToken}}
+
+# 4. Create order
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "paymentMethod": "CREDIT_CARD",
+  "shippingAddress": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "country": "USA",
+    "phone": "+1234567890"
+  }
+}
+
+# 5. Process payment
+POST {{baseUrl}}/api/payments
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "orderId": "{{newOrderId}}",
+  "amount": 500.00,
+  "method": "CREDIT_CARD"
+}
+
+### Scenario 2: Admin Management
+# 1. Get all orders
+GET {{baseUrl}}/api/orders?page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+# 2. Get dashboard stats
+GET {{baseUrl}}/api/analytics/dashboard
+Authorization: Bearer {{adminToken}}
+
+# 3. Update order status
+PATCH {{baseUrl}}/api/orders/{{orderId}}/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "status": "COMPLETED"
+}
+
+### ========================================
+### 7. ENVIRONMENT VARIABLES
+### ========================================
+
+# Copy this to http-client.env.json:
+# {
+#   "baseUrl": "http://localhost:3000",
+#   "userToken": "your-user-jwt-token-here",
+#   "adminToken": "your-admin-jwt-token-here",
+#   "productId": "example-product-id",
+#   "productId1": "first-product-id",
+#   "productId2": "second-product-id",
+#   "cartItemId": "example-cart-item-id",
+#   "orderId": "example-order-id",
+#   "newOrderId": "newly-created-order-id",
+#   "paymentId": "example-payment-id"
+# }
+
+### ========================================
+### 8. USAGE INSTRUCTIONS
+### ========================================
+
+# 1. First, get tokens by running the login requests
+# 2. Copy the access_token from responses to http-client.env.json
+# 3. Get some product IDs from the products API
+# 4. Test the cart functionality
+# 5. Test order creation and management
+# 6. Test payment processing
+# 7. Test analytics (admin only)
+
+# Note: Replace placeholder IDs with actual IDs from responses
+# Note: The server must be running on localhost:3000 

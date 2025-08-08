@@ -1,0 +1,281 @@
+### Category Management API Tests
+### Base URL: http://localhost:3000/api
+
+### ========================================
+### SEEDING ENDPOINTS (Admin Only)
+### ========================================
+
+### 1. Seed all categories (Admin only)
+POST http://localhost:3000/api/categories/seed/all
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+### 2. Seed categories by type (Admin only)
+POST http://localhost:3000/api/categories/seed/MAIN
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+
+POST http://localhost:3000/api/categories/seed/MORE_LOGS
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+
+POST http://localhost:3000/api/categories/seed/LINKABLES
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+###
+
+POST http://localhost:3000/api/categories/seed/TRANSFERS
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+### 3. Get complete category structure
+GET http://localhost:3000/api/categories/structure
+
+### ========================================
+### PUBLIC ENDPOINTS (No Authentication Required)
+### ========================================
+
+### 4. Get all categories
+GET http://localhost:3000/api/categories
+
+### 5. Get categories with filtering
+GET http://localhost:3000/api/categories?type=MAIN&page=1&limit=10
+
+### 6. Get categories by search
+GET http://localhost:3000/api/categories?search=bank&page=1&limit=5
+
+### 7. Get category by ID
+GET http://localhost:3000/api/categories/{{categoryId}}
+
+### ========================================
+### ADMIN ENDPOINTS (Require Authentication)
+### ========================================
+
+### 8. Create a new category (Admin only)
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "PayPal",
+  "slug": "paypal",
+  "description": "PayPal linkables and transfers",
+  "type": "LINKABLES",
+  "order": 2
+}
+
+### 9. Create main category
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Linkables",
+  "slug": "linkables",
+  "description": "All linkable products",
+  "type": "MAIN",
+  "order": 3
+}
+
+### 10. Create subcategory
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Venmo",
+  "slug": "venmo",
+  "description": "Venmo linkables",
+  "type": "LINKABLES",
+  "parentId": "{{parentCategoryId}}",
+  "order": 1
+}
+
+### 11. Update category (Admin only)
+PUT http://localhost:3000/api/categories/{{categoryId}}
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Updated Bank Logs",
+  "description": "Updated description for bank logs",
+  "order": 5
+}
+
+### 12. Delete category (Admin only)
+DELETE http://localhost:3000/api/categories/{{categoryId}}
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### TEST DATA CREATION
+### ========================================
+
+### 13. Create MAIN categories
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Tools",
+  "slug": "tools",
+  "description": "Various tools and utilities",
+  "type": "MAIN",
+  "order": 4
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Clips",
+  "slug": "clips",
+  "description": "Video clips and tutorials",
+  "type": "MAIN",
+  "order": 5
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Clones",
+  "slug": "clones",
+  "description": "Clone cards and services",
+  "type": "MAIN",
+  "order": 6
+}
+
+### 14. Create MORE_LOGS categories
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "USA Banks",
+  "slug": "usa-banks",
+  "description": "USA bank logs",
+  "type": "MORE_LOGS",
+  "order": 1
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "USA Cards",
+  "slug": "usa-cards",
+  "description": "USA credit cards",
+  "type": "MORE_LOGS",
+  "order": 2
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Europe Cards",
+  "slug": "europe-cards",
+  "description": "European credit cards",
+  "type": "MORE_LOGS",
+  "order": 3
+}
+
+### 15. Create TRANSFERS categories
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "PayPal Transfers",
+  "slug": "paypal-transfers",
+  "description": "PayPal transfer services",
+  "type": "TRANSFERS",
+  "order": 1
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Venmo Transfers",
+  "slug": "venmo-transfers",
+  "description": "Venmo transfer services",
+  "type": "TRANSFERS",
+  "order": 2
+}
+
+###
+
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Zelle Transfers",
+  "slug": "zelle-transfers",
+  "description": "Zelle transfer services",
+  "type": "TRANSFERS",
+  "order": 3
+}
+
+### ========================================
+### ERROR TESTING
+### ========================================
+
+### 16. Test duplicate slug (should fail)
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Duplicate Bank Logs",
+  "slug": "bank-logs",
+  "description": "This should fail due to duplicate slug",
+  "type": "MAIN",
+  "order": 1
+}
+
+### 17. Test invalid category type (should fail)
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Invalid Type",
+  "slug": "invalid-type",
+  "description": "This should fail due to invalid type",
+  "type": "INVALID_TYPE",
+  "order": 1
+}
+
+### 18. Test unauthorized access (should fail)
+POST http://localhost:3000/api/categories
+Content-Type: application/json
+
+{
+  "name": "Unauthorized",
+  "slug": "unauthorized",
+  "description": "This should fail due to no authentication",
+  "type": "MAIN",
+  "order": 1
+} 

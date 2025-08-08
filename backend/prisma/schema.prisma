@@ -1,0 +1,482 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+    USER
+    ADMIN
+    SUPER_ADMIN
+}
+
+enum ProductType {
+    // Main Categories (18 types)
+    BANK_LOG
+    BITCOIN_LOG
+    CARDED
+    CARDED_PRODUCT
+    CASHAPP_LOG
+    CC_CVV
+    CLIP
+    CLONE
+    DEPOSIT_CHECK
+    E_GIFT_CARD
+    FRAUD_CARD
+    FULLZ
+    LINKABLE
+    PAYPAL_LOG
+    SHAKE
+    STEALTH_ACCOUNT
+    TOOL
+    TRANSFER
+
+    // More Logs (11 types)
+    USA_BANK
+    USA_CARD
+    UK_BANK
+    UK_CARD
+    EUROPE_CARD
+    CANADA_BANK
+    CANADA_CARD
+    AFRICA_CARD
+    AUSTRALIA_CARD
+    CREDIT_UNION
+    CRYPTO_LOG
+}
+
+enum CategoryType {
+    MAIN
+    MORE_LOGS
+    LINKABLES
+    TRANSFERS
+}
+
+enum OrderStatus {
+    PENDING
+    PAID
+    COMPLETED
+    CANCELLED
+    REFUNDED
+}
+
+enum PaymentStatus {
+    PENDING
+    COMPLETED
+    FAILED
+    REFUNDED
+}
+
+enum PaymentMethod {
+    CREDIT_CARD
+    DEBIT_CARD
+    BANK_TRANSFER
+    CRYPTO
+    CASH
+}
+
+model User {
+    id       String   @id @default(cuid())
+    username String   @unique
+    email    String?  @unique
+    password String
+    role     UserRole @default(USER)
+    isActive Boolean  @default(true)
+
+    // Profile fields
+    firstName String?
+    lastName  String?
+    phone     String?
+    country   String?
+
+    // Timestamps
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    lastLogin DateTime?
+
+    // Relations
+    orders       Order[]
+    blogPosts    BlogPost[]    @relation("UserBlogPosts")
+    blogComments BlogComment[] @relation("UserBlogComments")
+    carts        Cart[]
+    Payment      Payment[]
+
+    @@map("users")
+}
+
+model Category {
+    id          String       @id @default(cuid())
+    name        String
+    slug        String       @unique
+    description String?
+    type        CategoryType
+    parentId    String? // For subcategories
+    isActive    Boolean      @default(true)
+    order       Int          @default(0)
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    parent              Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+    children            Category[] @relation("CategoryHierarchy")
+    products            Product[]  @relation("CategoryProducts")
+    subcategoryProducts Product[]  @relation("ProductSubcategory")
+
+    @@map("categories")
+}
+
+model Product {
+    id            String   @id @default(cuid())
+    name          String
+    description   String
+    price         Float
+    categoryId    String
+    subcategoryId String?
+    images        String[] // URLs
+    stockQuantity Int      @default(0)
+    isActive      Boolean  @default(true)
+    isFeatured    Boolean  @default(false)
+
+    // Product type
+    productType ProductType
+
+    // Bank Log specific fields
+    bankName     String?
+    balance      Float?
+    country      String?
+    verification String?
+
+    // Card specific fields
+    cardType String?
+    bank     String?
+    cvv      Boolean?
+
+    // Linkable specific fields
+    platform        String?
+    linkableBalance Float?
+
+    // Transfer specific fields
+    amount           Float?
+    speed            String?
+    transferPlatform String?
+
+    // Additional fields for other product types
+    accountType      String?
+    lastActivity     String?
+    transferType     String?
+    fees             Float?
+    toolType         String?
+    features         String?
+    compatibility    String?
+    duration         Int?
+    format           String?
+    quality          String?
+    walletAddress    String?
+    transactionCount Int?
+    riskLevel        String?
+    checkAmount      Float?
+    giftCardValue    Float?
+    giftCardCode     String?
+    personalInfo     Boolean?
+    financialInfo    Boolean?
+    contactInfo      Boolean?
+    securityFeatures String?
+    shakeType        String?
+    shakeAmount      Float?
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    category    Category    @relation("CategoryProducts", fields: [categoryId], references: [id])
+    subcategory Category?   @relation("ProductSubcategory", fields: [subcategoryId], references: [id])
+    videos      Video[]
+    orderItems  OrderItem[]
+    carts       Cart[]
+
+    @@map("products")
+}
+
+model Video {
+    id           String  @id @default(cuid())
+    title        String
+    description  String?
+    videoUrl     String?
+    thumbnailUrl String?
+    duration     Int? // in seconds
+    category     String?
+    platform     String?
+    productId    String?
+    isActive     Boolean @default(true)
+    views        Int     @default(0)
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    product Product? @relation(fields: [productId], references: [id])
+
+    @@map("videos")
+}
+
+model Order {
+    id            String        @id @default(cuid())
+    orderNumber   String        @unique
+    userId        String
+    totalAmount   Float
+    status        OrderStatus   @default(PENDING)
+    paymentMethod String?
+    paymentStatus PaymentStatus @default(PENDING)
+
+    // Shipping address
+    shippingAddress Json? // Store as JSON object
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    user    User        @relation(fields: [userId], references: [id])
+    items   OrderItem[]
+    payment Payment?
+
+    @@map("orders")
+}
+
+model OrderItem {
+    id        String @id @default(cuid())
+    orderId   String
+    productId String
+    name      String
+    price     Float
+    quantity  Int
+
+    // Relations
+    order   Order   @relation(fields: [orderId], references: [id])
+    product Product @relation(fields: [productId], references: [id])
+
+    @@map("order_items")
+}
+
+// Analytics and tracking
+model Analytics {
+    id        String   @id @default(cuid())
+    type      String // 'page_view', 'product_view', 'order', etc.
+    data      Json // Store analytics data as JSON
+    userId    String?
+    timestamp DateTime @default(now())
+
+    @@map("analytics")
+}
+
+// Blog System Models
+model BlogPost {
+    id              String         @id @default(cuid())
+    title           String
+    slug            String         @unique
+    content         String         @db.Text
+    excerpt         String?        @db.Text
+    status          BlogPostStatus @default(DRAFT)
+    featuredImage   String?
+    metaTitle       String?
+    metaDescription String?        @db.Text
+    keywords        String?
+    viewCount       Int            @default(0)
+    isFeatured      Boolean        @default(false)
+    publishedAt     DateTime?
+
+    // Relations
+    authorId   String
+    author     User          @relation("UserBlogPosts", fields: [authorId], references: [id])
+    categoryId String?
+    category   BlogCategory? @relation(fields: [categoryId], references: [id])
+    comments   BlogComment[]
+    tags       BlogPostTag[]
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("blog_posts")
+}
+
+model BlogCategory {
+    id          String  @id @default(cuid())
+    name        String
+    slug        String  @unique
+    description String? @db.Text
+    parentId    String? // For hierarchical categories
+    order       Int     @default(0)
+    isActive    Boolean @default(true)
+
+    // Relations
+    parent   BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+    children BlogCategory[] @relation("CategoryHierarchy")
+    posts    BlogPost[]
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("blog_categories")
+}
+
+model BlogTag {
+    id          String  @id @default(cuid())
+    name        String
+    slug        String  @unique
+    description String? @db.Text
+
+    // Relations
+    posts BlogPostTag[]
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("blog_tags")
+}
+
+model BlogPostTag {
+    id     String @id @default(cuid())
+    postId String
+    tagId  String
+
+    // Relations
+    post BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+    tag  BlogTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, tagId])
+    @@map("blog_post_tags")
+}
+
+model BlogComment {
+    id       String        @id @default(cuid())
+    content  String        @db.Text
+    status   CommentStatus @default(PENDING)
+    parentId String? // For threaded comments
+
+    // Relations
+    postId  String
+    post    BlogPost      @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId  String
+    user    User          @relation("UserBlogComments", fields: [userId], references: [id])
+    parent  BlogComment?  @relation("CommentThread", fields: [parentId], references: [id])
+    replies BlogComment[] @relation("CommentThread")
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("blog_comments")
+}
+
+// Blog Enums
+enum BlogPostStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum CommentStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    SPAM
+}
+
+// Static Pages Model
+model StaticPage {
+    id              String           @id @default(cuid())
+    title           String
+    slug            String           @unique
+    content         String           @db.Text
+    metaTitle       String?
+    metaDescription String?          @db.Text
+    status          StaticPageStatus @default(PUBLISHED)
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("static_pages")
+}
+
+// Static Page Enums
+enum StaticPageStatus {
+    DRAFT
+    PUBLISHED
+}
+
+enum VouchStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model Vouch {
+    id          String      @id @default(cuid())
+    username    String      @db.VarChar(100)
+    avatarSeed  String      @db.VarChar(100)
+    rating      Int         @db.SmallInt
+    reviewText  String      @db.Text
+    reviewImage String?
+    isVerified  Boolean     @default(false)
+    status      VouchStatus @default(PENDING)
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("vouches")
+}
+
+model Cart {
+    id        String @id @default(cuid())
+    userId    String
+    productId String
+    quantity  Int    @default(1)
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, productId])
+    @@map("carts")
+}
+
+model Payment {
+    id            String        @id @default(cuid())
+    orderId       String        @unique
+    amount        Float
+    method        PaymentMethod
+    status        PaymentStatus @default(PENDING)
+    transactionId String?       @unique
+    gateway       String? // Payment gateway used
+    metadata      Json? // Store additional payment data
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    order  Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    User   User?   @relation(fields: [userId], references: [id])
+    userId String?
+
+    @@map("payments")
+}

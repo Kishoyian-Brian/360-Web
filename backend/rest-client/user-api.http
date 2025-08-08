@@ -1,0 +1,266 @@
+### User Management API Tests
+### Base URL: http://localhost:3000/api
+
+### ========================================
+### AUTHENTICATION ENDPOINTS
+### ========================================
+
+### 1. Register a new user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "password123",
+  "firstName": "Test",
+  "lastName": "User",
+  "phone": "+1234567890",
+  "country": "USA"
+}
+
+### 2. Login to get JWT token
+# @name login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "password123"
+}
+
+### 3. Login as admin (you'll need to create this user first)
+# @name adminLogin
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### ========================================
+### USER MANAGEMENT ENDPOINTS (ADMIN ONLY)
+### ========================================
+
+### 4. Create a new user (Admin only)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "password": "password123",
+  "role": "USER",
+  "firstName": "New",
+  "lastName": "User",
+  "phone": "+1234567891",
+  "country": "Canada"
+}
+
+### 5. Get all users with pagination (Admin only)
+GET http://localhost:3000/api/users?page=1&limit=10&search=&role=&isActive=
+Authorization: Bearer {{adminToken}}
+
+### 6. Get all users with search filter (Admin only)
+GET http://localhost:3000/api/users?search=test&page=1&limit=5
+Authorization: Bearer {{adminToken}}
+
+### 7. Get all users filtered by role (Admin only)
+GET http://localhost:3000/api/users?role=USER&page=1&limit=10
+Authorization: Bearer {{adminToken}}
+
+### 8. Get user by ID (Admin only)
+GET http://localhost:3000/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+### 9. Update user (Admin only)
+PUT http://localhost:3000/api/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "firstName": "Updated",
+  "lastName": "Name",
+  "phone": "+1234567899",
+  "country": "UK",
+  "isActive": true
+}
+
+### 10. Delete user (Admin only)
+DELETE http://localhost:3000/api/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### USER PROFILE ENDPOINTS (AUTHENTICATED)
+### ========================================
+
+### 11. Get current user profile
+GET http://localhost:3000/api/users/profile/me
+Authorization: Bearer {{userToken}}
+
+### 12. Update current user profile
+PUT http://localhost:3000/api/users/profile/me
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "firstName": "Updated",
+  "lastName": "Profile",
+  "phone": "+1234567898",
+  "country": "Australia"
+}
+
+### ========================================
+### PASSWORD MANAGEMENT ENDPOINTS
+### ========================================
+
+### 13. Change password
+POST http://localhost:3000/api/users/change-password
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "currentPassword": "password123",
+  "newPassword": "newpassword123",
+  "confirmPassword": "newpassword123"
+}
+
+### 14. Request password reset
+POST http://localhost:3000/api/users/request-password-reset
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com"
+}
+
+### 15. Reset password with token
+POST http://localhost:3000/api/users/reset-password
+Content-Type: application/json
+
+{
+  "token": "reset_token_here",
+  "newPassword": "resetpassword123",
+  "confirmPassword": "resetpassword123"
+}
+
+### ========================================
+### AUTHENTICATION REFRESH
+### ========================================
+
+### 16. Refresh JWT token
+POST http://localhost:3000/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 17. Logout
+POST http://localhost:3000/api/auth/logout
+Authorization: Bearer {{userToken}}
+
+### ========================================
+### TEST DATA CREATION
+### ========================================
+
+### 18. Create multiple test users (Admin only)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "role": "USER",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+1234567892",
+  "country": "USA"
+}
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "jane_smith",
+  "email": "jane@example.com",
+  "password": "password123",
+  "role": "ADMIN",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "phone": "+1234567893",
+  "country": "Canada"
+}
+
+###
+
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "bob_wilson",
+  "email": "bob@example.com",
+  "password": "password123",
+  "role": "USER",
+  "firstName": "Bob",
+  "lastName": "Wilson",
+  "phone": "+1234567894",
+  "country": "UK"
+}
+
+### ========================================
+### ERROR TESTING
+### ========================================
+
+### 19. Test duplicate username (should fail)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "testuser",
+  "email": "duplicate@example.com",
+  "password": "password123",
+  "role": "USER"
+}
+
+### 20. Test duplicate email (should fail)
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "username": "duplicateuser",
+  "email": "testuser@example.com",
+  "password": "password123",
+  "role": "USER"
+}
+
+### 21. Test invalid password change (should fail)
+POST http://localhost:3000/api/users/change-password
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "currentPassword": "wrongpassword",
+  "newPassword": "newpassword123",
+  "confirmPassword": "newpassword123"
+}
+
+### 22. Test password mismatch (should fail)
+POST http://localhost:3000/api/users/change-password
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "currentPassword": "password123",
+  "newPassword": "newpassword123",
+  "confirmPassword": "differentpassword"
+} 

@@ -1,0 +1,271 @@
+### Product Management API Tests
+### Base URL: http://localhost:3000/api
+
+### ========================================
+### ADMIN ENDPOINTS (Require Authentication)
+### ========================================
+
+### 1. Create a new product (Admin only)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Premium Chase Bank Log",
+  "description": "High-quality Chase bank log with full access and verified balance",
+  "price": 299.99,
+  "categoryId": "{{bankLogsCategoryId}}",
+  "productType": "BANK_LOG",
+  "stockQuantity": 5,
+  "isActive": true,
+  "images": ["https://example.com/bank-log-1.jpg"],
+  "bankName": "Chase Bank",
+  "balance": 5000.00,
+  "country": "USA",
+  "verification": "Verified"
+}
+
+### 2. Create Bitcoin Log product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Bitcoin Wallet Log",
+  "description": "Bitcoin wallet with transaction history",
+  "price": 199.99,
+  "categoryId": "{{bitcoinLogCategoryId}}",
+  "productType": "BITCOIN_LOG",
+  "stockQuantity": 3,
+  "isActive": true,
+  "images": ["https://example.com/bitcoin-wallet.jpg"],
+  "walletAddress": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+  "balance": 0.5,
+  "transactionCount": 25
+}
+
+### 3. Create PayPal Transfer product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "PayPal Transfer Service",
+  "description": "Fast PayPal transfer service",
+  "price": 50.00,
+  "categoryId": "{{paypalTransferCategoryId}}",
+  "productType": "TRANSFER",
+  "stockQuantity": 10,
+  "isActive": true,
+  "images": ["https://example.com/paypal-transfer.jpg"],
+  "amount": 500.00,
+  "speed": "Instant",
+  "transferPlatform": "PayPal",
+  "transferType": "P2P",
+  "fees": 5.00
+}
+
+### 4. Create CashApp Linkable product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "CashApp Linkable Account",
+  "description": "Verified CashApp account with balance",
+  "price": 150.00,
+  "categoryId": "{{cashappLinkableCategoryId}}",
+  "productType": "LINKABLE",
+  "stockQuantity": 8,
+  "isActive": true,
+  "images": ["https://example.com/cashapp-account.jpg"],
+  "platform": "CashApp",
+  "linkableBalance": 750.00
+}
+
+### 5. Update product (Admin only)
+PUT http://localhost:3000/api/products/{{productId}}
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Updated Premium Chase Bank Log",
+  "description": "Updated description for Chase bank log",
+  "price": 349.99,
+  "stockQuantity": 3
+}
+
+### 6. Update stock quantity (Admin only)
+PUT http://localhost:3000/api/products/{{productId}}/stock
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "quantity": 10
+}
+
+### 7. Delete product (Admin only)
+DELETE http://localhost:3000/api/products/{{productId}}
+Authorization: Bearer {{adminToken}}
+
+### ========================================
+### PUBLIC ENDPOINTS (No Authentication Required)
+### ========================================
+
+### 8. Get all products with filtering
+GET http://localhost:3000/api/products?page=1&limit=10&sortBy=createdAt&sortOrder=desc
+
+### 9. Get products by category
+GET http://localhost:3000/api/products?categorySlug=bank-logs&page=1&limit=5
+
+### 10. Get products by type
+GET http://localhost:3000/api/products?productType=BANK_LOG&page=1&limit=5
+
+### 11. Search products
+GET http://localhost:3000/api/products?search=chase&page=1&limit=5
+
+### 12. Filter by price range
+GET http://localhost:3000/api/products?minPrice=100&maxPrice=500&page=1&limit=10
+
+### 13. Filter by active status and stock
+GET http://localhost:3000/api/products?isActive=true&inStock=true&page=1&limit=10
+
+### 14. Get product by ID
+GET http://localhost:3000/api/products/{{productId}}
+
+### 15. Get products by category slug
+GET http://localhost:3000/api/products/category/bank-logs?limit=5
+
+### 16. Get products by product type
+GET http://localhost:3000/api/products/type/BANK_LOG?limit=5
+
+### 17. Search products by query
+GET http://localhost:3000/api/products/search/chase?limit=5
+
+### 18. Get featured products
+GET http://localhost:3000/api/products/featured/featured?limit=10
+
+### ========================================
+### SHOP ENDPOINTS (Public Catalog)
+### ========================================
+
+### 19. Get all products for shop
+GET http://localhost:3000/api/products/shop/all?page=1&limit=20&sortBy=createdAt&sortOrder=desc
+
+### 20. Get shop products by category
+GET http://localhost:3000/api/products/shop/all?categorySlug=bank-logs&page=1&limit=10
+
+### 21. Get shop products by type
+GET http://localhost:3000/api/products/shop/all?productType=BANK_LOG&page=1&limit=10
+
+### 22. Search shop products
+GET http://localhost:3000/api/products/shop/all?search=premium&page=1&limit=10
+
+### ========================================
+### TEST DATA CREATION
+### ========================================
+
+### 23. Create multiple test products for different categories
+
+### Bank Log Product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Wells Fargo Bank Log",
+  "description": "Premium Wells Fargo bank log with high balance",
+  "price": 399.99,
+  "categoryId": "{{bankLogsCategoryId}}",
+  "productType": "BANK_LOG",
+  "stockQuantity": 2,
+  "isActive": true,
+  "images": ["https://example.com/wells-fargo.jpg"],
+  "bankName": "Wells Fargo",
+  "balance": 8500.00,
+  "country": "USA",
+  "verification": "Verified"
+}
+
+### Card Product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Visa Credit Card",
+  "description": "Premium Visa credit card with high limit",
+  "price": 250.00,
+  "categoryId": "{{ccCvvCategoryId}}",
+  "productType": "CC_CVV",
+  "stockQuantity": 15,
+  "isActive": true,
+  "images": ["https://example.com/visa-card.jpg"],
+  "cardType": "Visa",
+  "bank": "Bank of America",
+  "cvv": true
+}
+
+### Tool Product
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Carding Tool Pro",
+  "description": "Professional carding tool with advanced features",
+  "price": 199.99,
+  "categoryId": "{{toolsCategoryId}}",
+  "productType": "TOOL",
+  "stockQuantity": 20,
+  "isActive": true,
+  "images": ["https://example.com/carding-tool.jpg"],
+  "toolType": "Carding Tool",
+  "features": "Auto-fill, BIN Check, Address Generator",
+  "compatibility": "Windows, Mac, Linux"
+}
+
+### ========================================
+### ERROR TESTING
+### ========================================
+
+### 24. Test invalid category ID (should fail)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Invalid Category Product",
+  "description": "This should fail due to invalid category",
+  "price": 100.00,
+  "categoryId": "invalid-category-id",
+  "productType": "BANK_LOG",
+  "stockQuantity": 1
+}
+
+### 25. Test invalid product type for category (should fail)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "name": "Invalid Type Product",
+  "description": "This should fail due to invalid product type for category",
+  "price": 100.00,
+  "categoryId": "{{bankLogsCategoryId}}",
+  "productType": "LINKABLE",
+  "stockQuantity": 1
+}
+
+### 26. Test unauthorized access (should fail)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Unauthorized Product",
+  "description": "This should fail due to no authentication",
+  "price": 100.00,
+  "categoryId": "{{bankLogsCategoryId}}",
+  "productType": "BANK_LOG",
+  "stockQuantity": 1
+} 

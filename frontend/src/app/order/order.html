@@ -1,0 +1,388 @@
+<!-- Order History Page Content -->
+<main class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Order History</h1>
+      <p class="text-gray-600 mt-2">View and manage your past orders</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Search -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Search Orders</label
+          >
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+            placeholder="Search by order ID or item name..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          />
+        </div>
+
+        <!-- Status Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Status</label
+          >
+          <select
+            [(ngModel)]="statusFilter"
+            (change)="applyFilters()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          >
+            <option value="">All Statuses</option>
+            <option value="pending">Pending Payment</option>
+            <option value="paid">Payment Received</option>
+            <option value="processing">Processing Order</option>
+            <option value="completed">Order Completed</option>
+            <option value="cancelled">Order Cancelled</option>
+          </select>
+        </div>
+
+        <!-- Date Filter -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >Date</label
+          >
+          <input
+            type="date"
+            [(ngModel)]="dateFilter"
+            (change)="applyFilters()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+          />
+        </div>
+
+        <!-- Clear Filters -->
+        <div class="flex items-end">
+          <button
+            (click)="clearFilters()"
+            class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors"
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"
+      ></div>
+    </div>
+
+    <!-- Orders List -->
+    <div *ngIf="!isLoading" class="space-y-6">
+      <!-- Results Summary -->
+      <div class="flex justify-between items-center">
+        <p class="text-gray-600">
+          Showing {{ getCurrentPageOrders().length }} of {{
+          filteredOrders.length }} orders
+        </p>
+        <p class="text-gray-600">Page {{ currentPage }} of {{ totalPages }}</p>
+      </div>
+
+      <!-- Orders Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div
+          *ngFor="let order of getCurrentPageOrders()"
+          class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+          (click)="selectOrder(order)"
+        >
+          <!-- Order Header -->
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="font-semibold text-gray-900">{{ order.id }}</h3>
+              <p class="text-sm text-gray-600">
+                {{ order.createdAt | date:'medium' }}
+              </p>
+            </div>
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium"
+              [class]="getStatusColor(order.status)"
+            >
+              {{ getStatusText(order.status) }}
+            </span>
+          </div>
+
+          <!-- Order Items Preview -->
+          <div class="mb-4">
+            <div class="flex items-center space-x-2 mb-2">
+              <span class="text-sm font-medium text-gray-700">Items:</span>
+              <span class="text-sm text-gray-600"
+                >{{ order.items.length }} items</span
+              >
+            </div>
+            <div class="flex space-x-2">
+              <img
+                *ngFor="let item of order.items.slice(0, 3)"
+                [src]="item.image"
+                [alt]="item.name"
+                class="w-12 h-12 object-cover rounded border"
+              />
+              <div
+                *ngIf="order.items.length > 3"
+                class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600"
+              >
+                +{{ order.items.length - 3 }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Total -->
+          <div class="flex justify-between items-center">
+            <span class="text-lg font-semibold text-brand"
+              >${{ order.total.toFixed(2) }}</span
+            >
+            <button
+              (click)="copyOrderId(order.id); $event.stopPropagation()"
+              class="text-sm text-brand hover:text-brand/80"
+            >
+              Copy ID
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Orders Message -->
+      <div *ngIf="filteredOrders.length === 0" class="text-center py-12">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No orders found</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Try adjusting your search or filter criteria.
+        </p>
+        <div class="mt-6">
+          <button
+            (click)="goToShop()"
+            class="bg-brand text-white px-4 py-2 rounded-md hover:bg-brand/90 transition-colors"
+          >
+            Start Shopping
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="flex justify-center mt-8">
+        <nav class="flex items-center space-x-2">
+          <!-- Previous Button -->
+          <button
+            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === 1"
+            (click)="goToPage(currentPage - 1)"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+
+          <!-- Page Numbers -->
+          <div class="flex space-x-1">
+            <button
+              *ngFor="let page of getPageNumbers()"
+              class="px-3 py-2 rounded-md transition-colors duration-200"
+              [class]="page === currentPage ? 'bg-brand text-white' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <!-- Next Button -->
+          <button
+            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === totalPages"
+            (click)="goToPage(currentPage + 1)"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div
+    *ngIf="selectedOrder"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+  >
+    <div
+      class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+    >
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center p-6 border-b">
+        <h2 class="text-xl font-semibold text-gray-900">Order Details</h2>
+        <button
+          (click)="closeOrderDetails()"
+          class="text-gray-400 hover:text-gray-600"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-6">
+        <!-- Order Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <h3 class="font-medium text-gray-900 mb-2">Order Information</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Order ID:</span>
+                <span class="font-medium">{{ selectedOrder.id }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Status:</span>
+                <span
+                  class="px-2 py-1 rounded-full text-xs font-medium"
+                  [class]="getStatusColor(selectedOrder.status)"
+                >
+                  {{ getStatusText(selectedOrder.status) }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Created:</span>
+                <span class="font-medium"
+                  >{{ selectedOrder.createdAt | date:'medium' }}</span
+                >
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Updated:</span>
+                <span class="font-medium"
+                  >{{ selectedOrder.updatedAt | date:'medium' }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-medium text-gray-900 mb-2">Payment Information</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Total Amount:</span>
+                <span class="font-medium text-brand"
+                  >${{ selectedOrder.total.toFixed(2) }}</span
+                >
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Bitcoin Address:</span>
+                <span class="font-mono text-xs"
+                  >{{ selectedOrder.bitcoinAddress }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="mb-6">
+          <h3 class="font-medium text-gray-900 mb-4">Order Items</h3>
+          <div class="space-y-4">
+            <div
+              *ngFor="let item of selectedOrder.items"
+              class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg"
+            >
+              <img
+                [src]="item.image"
+                [alt]="item.name"
+                class="w-16 h-16 object-cover rounded"
+              />
+              <div class="flex-1">
+                <h4 class="font-medium text-gray-900">{{ item.name }}</h4>
+                <p class="text-sm text-gray-600">
+                  Quantity: {{ item.quantity }}
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="font-semibold text-gray-900">
+                  ${{ (item.price * item.quantity).toFixed(2) }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  ${{ item.price.toFixed(2) }} each
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Proof -->
+        <div *ngIf="selectedOrder.paymentProof" class="mb-6">
+          <h3 class="font-medium text-gray-900 mb-4">Payment Proof</h3>
+          <img
+            [src]="selectedOrder.paymentProof"
+            alt="Payment proof"
+            class="max-w-md rounded-lg border"
+          />
+        </div>
+
+        <!-- Notes -->
+        <div *ngIf="selectedOrder.notes" class="mb-6">
+          <h3 class="font-medium text-gray-900 mb-2">Notes</h3>
+          <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+            {{ selectedOrder.notes }}
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end space-x-3 pt-6 border-t">
+          <button
+            (click)="downloadInvoice(selectedOrder)"
+            class="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            Download Invoice
+          </button>
+          <button
+            (click)="reorder(selectedOrder)"
+            class="px-4 py-2 bg-brand text-white rounded-md hover:bg-brand/90 transition-colors"
+          >
+            Reorder
+          </button>
+          <button
+            (click)="contactSupport(selectedOrder)"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Contact Support
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

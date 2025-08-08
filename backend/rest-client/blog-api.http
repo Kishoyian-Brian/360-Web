@@ -1,0 +1,121 @@
+### Blog API Testing
+
+# Variables
+@baseUrl = http://localhost:3000/api
+@authToken = {{login.response.body.access_token}}
+
+### Login to get auth token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Create Blog Category (Admin)
+POST {{baseUrl}}/blog/categories
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Tutorials",
+  "slug": "tutorials",
+  "description": "Educational content and tutorials"
+}
+
+### Create Blog Tag (Admin)
+POST {{baseUrl}}/blog/tags
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "Banking",
+  "slug": "banking",
+  "description": "Banking related content"
+}
+
+### Create Blog Post (Admin)
+POST {{baseUrl}}/blog/posts
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "How to Use Bank Logs Safely",
+  "slug": "how-to-use-bank-logs-safely",
+  "content": "<h1>Introduction</h1><p>This is a comprehensive guide on how to use bank logs safely and securely. Bank logs are sensitive financial information that must be handled with extreme care.</p><h2>Safety Guidelines</h2><ul><li>Always use secure connections</li><li>Never share credentials</li><li>Use trusted platforms only</li></ul>",
+  "excerpt": "Learn the best practices for using bank logs safely and securely with our comprehensive guide.",
+  "status": "PUBLISHED",
+  "featuredImage": "https://example.com/bank-logs-guide.jpg",
+  "metaTitle": "Bank Logs Safety Guide - 360LogzShop",
+  "metaDescription": "Learn how to use bank logs safely with our comprehensive guide. Best practices and security tips.",
+  "keywords": "bank logs, safety, guide, tutorial, security",
+  "isFeatured": true,
+  "categoryId": "{{createCategory.response.body.id}}",
+  "tagIds": ["{{createTag.response.body.id}}"],
+  "publishedAt": "2024-01-01T00:00:00.000Z"
+}
+
+### Get All Blog Posts (Public)
+GET {{baseUrl}}/blog/posts?page=1&limit=10&status=PUBLISHED
+
+### Get Blog Post by ID (Public)
+GET {{baseUrl}}/blog/posts/{{createPost.response.body.id}}
+
+### Get Blog Post by Slug (Public)
+GET {{baseUrl}}/blog/posts/slug/how-to-use-bank-logs-safely
+
+### Search Blog Posts (Public)
+GET {{baseUrl}}/blog/search?q=bank&page=1&limit=5
+
+### Get Blog Posts by Category (Public)
+GET {{baseUrl}}/blog/category/tutorials?page=1&limit=5
+
+### Get Blog Posts by Tag (Public)
+GET {{baseUrl}}/blog/tag/banking?page=1&limit=5
+
+### Get Featured Blog Posts (Public)
+GET {{baseUrl}}/blog/posts/featured/featured?limit=5
+
+### Get Popular Blog Posts (Public)
+GET {{baseUrl}}/blog/posts/popular/popular?limit=5
+
+### Get All Blog Categories (Public)
+GET {{baseUrl}}/blog/categories
+
+### Get All Blog Tags (Public)
+GET {{baseUrl}}/blog/tags
+
+### Add Comment to Blog Post (Authenticated)
+POST {{baseUrl}}/blog/posts/{{createPost.response.body.id}}/comments
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "content": "This is a very helpful guide! Thank you for sharing these safety tips."
+}
+
+### Get Comments for Blog Post (Public)
+GET {{baseUrl}}/blog/posts/{{createPost.response.body.id}}/comments
+
+### Update Blog Post (Admin)
+PUT {{baseUrl}}/blog/posts/{{createPost.response.body.id}}
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated: How to Use Bank Logs Safely",
+  "excerpt": "Updated excerpt with more information about security.",
+  "isFeatured": false
+}
+
+### Delete Blog Post (Admin)
+DELETE {{baseUrl}}/blog/posts/{{createPost.response.body.id}}
+Authorization: Bearer {{authToken}}
+
+### Test Blog Post Filtering
+GET {{baseUrl}}/blog/posts?search=bank&status=PUBLISHED&isFeatured=true&page=1&limit=5&sortBy=viewCount&sortOrder=desc
+
+### Test Blog Post Date Filtering
+GET {{baseUrl}}/blog/posts?year=2024&month=1&page=1&limit=5

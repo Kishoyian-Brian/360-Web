@@ -1,0 +1,107 @@
+<!-- Category Page Content -->
+<main>
+  <!-- Notice Banner -->
+  <section class="my-0 lg:my-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="mb-2">
+        <div class="mt-4 mb-0">
+          <div class="bg-brand text-white p-3 overflow-hidden">
+            <div class="animate-marquee whitespace-nowrap">
+              <span>
+                NOTICE: All orders and payments must be made through our website
+                or to our telegram support
+                <a
+                  href="https://t.me/charley_707"
+                  target="_blank"
+                  class="text-gray-300"
+                  >@charley_707</a
+                >
+                ONLY. Avoid paying to any third-party user claiming to represent
+                us.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Header -->
+      <div class="mb-0">
+        <div class="flex justify-between items-center bg-gray-100 p-4 rounded">
+          <h1 class="text-2xl font-bold text-gray-900 text-center w-full">
+            FULLZ
+          </h1>
+          <a
+            href="/cashout-clips"
+            class="bg-brand text-white px-2 py-1 rounded text-sm font-medium"
+          >
+            CASHOUT VIDEOS
+          </a>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Sidebar Navigation -->
+        <aside class="lg:col-span-1 -mt-20">
+          <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="lg:col-span-3 mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Product Cards -->
+            <div
+              class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
+              *ngFor="let product of products"
+            >
+              <div class="p-0">
+                <div class="relative">
+                  <span
+                    class="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded"
+                    >{{ "Complete" }}</span
+                  >
+                  <span
+                    class="absolute top-2 right-2 bg-gray-600 text-white text-xs px-2 py-1 rounded"
+                    >{{ "25" }} Data Points</span
+                  >
+                  <img
+                    [src]="product.image"
+                    [alt]="product.alt"
+                    class="w-full h-36 object-contain mb-3 cursor-pointer"
+                    (click)="viewProduct(product)"
+                  />
+                </div>
+                <div class="bg-gray-50 p-4 rounded">
+                  <div class="text-sm mb-1">
+                    <small class="text-gray-600">{{ product.category }}</small>
+                  </div>
+                  <h3
+                    class="text-base font-medium text-gray-900 mb-2 cursor-pointer"
+                    (click)="viewProduct(product)"
+                  >
+                    {{ product.name }}
+                  </h3>
+                  <div class="text-sm text-orange-600 mb-2">
+                    <strong>{{ "USA" }}</strong>
+                  </div>
+                  <div class="text-xs text-gray-500 mb-2">
+                    <span
+                      *ngFor="let item of []; let last = last"
+                    >
+                      {{ item }}{{ !last ? ' • ' : '' }}
+                    </span>
+                  </div>
+                  <div class="flex justify-center items-center">
+                    <span class="text-gray-900 font-bold"
+                      >${{ product.price.toFixed(2) }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

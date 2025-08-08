@@ -1,0 +1,896 @@
+<!-- Header Component -->
+<header>
+  <div class="bg-brand py-4 pt-3 pb-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between">
+        <!-- Mobile Logo -->
+        <div class="lg:hidden">
+          <a href="https://t.me/legitsauce_methods" target="_blank" rel="noopener noreferrer">
+            <div class="flex items-center">
+              <div
+                class="w-8 h-8 bg-yellow-400 rounded flex items-center justify-center"
+              >
+                <img src="https://i.pinimg.com/736x/16/ef/29/16ef29479eea4687d442988fd5377192.jpg" alt="">
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Desktop Logo -->
+        <div class="w-1/4 hidden lg:block">
+          <a href="https://t.me/legitsauce_methods" target="_blank" rel="noopener noreferrer">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-yellow-400 rounded flex items-center justify-center mr-3"
+              >
+                <img src="https://i.pinimg.com/736x/16/ef/29/16ef29479eea4687d442988fd5377192.jpg" alt="">
+              </div>
+              <div>
+                <div class="font-bold text-2xl text-white">WILLIAM SMITH EMPIRE</div>
+                <div class="text-gray-300 text-sm">Daily Updated & Checked</div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="w-1/2 hidden lg:block"></div>
+
+        <!-- Mobile Header Icons -->
+        <div class="lg:hidden flex items-center space-x-3">
+          <!-- Mobile User Icon -->
+          <a
+            routerLink="/login"
+            (click)="onLoginClick()"
+            class="text-white"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+
+          <!-- Mobile Cart Icon -->
+          <a *ngIf="!isAdmin" routerLink="/cart" class="text-white relative" role="button">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+              ></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span
+              class="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold"
+            >
+              {{ cartItemCount }}
+            </span>
+          </a>
+
+          <!-- Mobile Menu Button -->
+          <button
+            (click)="toggleMobileMenu()"
+            class="text-white p-2"
+            aria-label="Toggle mobile menu"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Desktop Navigation Icons -->
+        <div class="w-1/4 text-right hidden lg:block">
+          <div class="flex items-center justify-end">
+            <div class="mr-4">
+              <a
+                routerLink="/login"
+                (click)="onLoginClick()"
+                class="text-white"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </a>
+            </div>
+            <div>
+              <a *ngIf="!isAdmin" routerLink="/cart" class="text-white relative" role="button">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+                  ></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span
+                  class="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold"
+                >
+                  {{ cartItemCount }}
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Side Navigation -->
+<div 
+  *ngIf="isMobileMenuOpen" 
+  class="fixed inset-0 z-50 lg:hidden"
+  (click)="closeMobileMenu()"
+  style="display: block !important;"
+>
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black bg-opacity-50" style="display: block !important;"></div>
+  
+  <!-- Side Menu -->
+  <div 
+    class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300"
+    (click)="$event.stopPropagation()"
+    style="display: block !important; transform: translateX(0) !important;"
+  >
+    <!-- Mobile Menu Header -->
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <div class="flex items-center">
+        <div class="w-8 h-8 bg-yellow-400 rounded flex items-center justify-center mr-2">
+          <img src="https://i.pinimg.com/736x/16/ef/29/16ef29479eea4687d442988fd5377192.jpg" alt="">
+        </div>
+        <span class="font-bold text-lg text-gray-900">Menu</span>
+      </div>
+      <button
+        (click)="closeMobileMenu()"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Items -->
+    <nav class="p-4">
+      <ul class="space-y-2">
+        <li>
+          <a routerLink="/" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Home
+          </a>
+        </li>
+        <li>
+          <a routerLink="/blog" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Blog
+          </a>
+        </li>
+        <li>
+          <a routerLink="/voucher" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Vouches
+          </a>
+        </li>
+        <li>
+          <a *ngIf="!isAdmin" routerLink="/cart" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded flex items-center justify-between">
+            <span>Cart</span>
+            <span class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              {{ cartItemCount }}
+            </span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/login" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Login
+          </a>
+        </li>
+        
+        <!-- Categories Section -->
+        <li class="pt-4">
+          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Categories</div>
+        </li>
+        <li>
+          <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            CC & CVV
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Bank Logs
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Stealth Accounts
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Fullz
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Fraud Guides
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/tools" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Tools
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            E-Gift Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Deposit Checks
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Transfers
+          </a>
+        </li>
+        <li>
+          <a routerLink="/category/clones" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Clones
+          </a>
+        </li>
+        
+        <!-- More Logs Section -->
+        <li class="pt-4">
+          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">More Logs</div>
+        </li>
+        <li>
+          <a routerLink="/more-logs/usa-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            USA Banks
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/uk-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            UK Banks
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/canada-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Canada Banks
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/usa-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            USA Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/uk-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            UK Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/europe-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Europe Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/africa-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Africa Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/canada-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Canada Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/australia-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Australia Cards
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/credit-union" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Credit Union
+          </a>
+        </li>
+        <li>
+          <a routerLink="/more-logs/crypto-logs" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Crypto Logs
+          </a>
+        </li>
+        
+        <!-- Linkables Section -->
+        <li class="pt-4">
+          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Linkables</div>
+        </li>
+        <li>
+          <a routerLink="/linkable/cashapp" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            CashApp
+          </a>
+        </li>
+        <li>
+          <a routerLink="/linkable/paypal" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            PayPal
+          </a>
+        </li>
+        <li>
+          <a routerLink="/linkable/venmo" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Venmo
+          </a>
+        </li>
+        <li>
+          <a routerLink="/linkable/applepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            ApplePay
+          </a>
+        </li>
+        <li>
+          <a routerLink="/linkable/googlepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            GooglePay
+          </a>
+        </li>
+        
+        <!-- Transfers Section -->
+        <li class="pt-4">
+          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Transfers</div>
+        </li>
+        <li>
+          <a routerLink="/transfers/cashapp" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            CashApp
+          </a>
+        </li>
+        <li>
+          <a routerLink="/transfers/paypal" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            PayPal
+          </a>
+        </li>
+        <li>
+          <a routerLink="/transfers/venmo" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Venmo
+          </a>
+        </li>
+        <li>
+          <a routerLink="/transfers/zelle" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Zelle
+          </a>
+        </li>
+        <li>
+          <a routerLink="/transfers/googlepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            GooglePay
+          </a>
+        </li>
+        
+        <!-- User Actions -->
+        <li class="pt-4 border-t border-gray-200">
+          <a routerLink="/login" (click)="closeMobileMenu(); onLoginClick()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Login
+          </a>
+        </li>
+        <li>
+          <a routerLink="/cart" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
+            Cart ({{ cartItemCount }})
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<div class="border-b border-gray-200">
+  <nav class="bg-white py-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between my-2">
+        <div class="mr-3 hidden lg:block">
+          <button
+            class="bg-brand text-white px-6 py-2 rounded font-bold flex items-center"
+            type="button"
+          >
+            <span class="mr-1">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+              >
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </span>
+            360Logz
+          </button>
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:block flex-1">
+          <ul class="flex items-center space-x-6">
+            <li>
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                routerLink="/"
+                >Home</a
+              >
+            </li>
+           
+            <li class="relative group">
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                href="#"
+              >
+                Categories
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+              <ul
+                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+              >
+                <li>
+                  <a
+                    routerLink="/category/cc-cvv"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >CC & CVV</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/bank-logs"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >BANK LOGS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/stealth-accounts"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >STEALTH ACCOUNTS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/fullz"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >FULLZ</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/fraud-guides"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >FRAUD GUIDES</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/tools"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >TOOLS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/e-gift-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >E-GIFT CARDS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/deposit-checks"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >DEPOSIT CHECKS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/transfers"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >TRANSFERS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/clones"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >CLONES</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/carded-products"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >CARDED PRODUCTS</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/spamming"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >SPAMMING</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/shake"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >SHAKEPAY LOG</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/cashapp-log"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >CASHAPP LOG</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/paypal-log"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >PAYPAL LOG</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/linkable"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >LINKABLES</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/category/bitcoin-log"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >BITCOIN LOG</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                routerLink="/shop"
+                >Shop</a
+              >
+            </li>
+            <li>
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                routerLink="/blog"
+                >Blog</a
+              >
+            </li>
+            <li class="relative group">
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                href="#"
+              >
+                Pages
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+              <ul
+                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+              >
+                <li>
+                  <a
+                    routerLink="/login"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Log In</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/register"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Register</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/cart"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Cart</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/checkout"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Checkout</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/cashout-clips"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >Cashout Clips</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                href="#"
+              >
+                More Logs
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+              <ul
+                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+              >
+                <li>
+                  <a
+                    routerLink="/more-logs/usa-banks"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >USA Banks</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/uk-banks"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >UK Banks</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/canada-banks"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Canada Banks</a
+                  >
+                </li>
+                <li><hr class="my-1" /></li>
+                <li>
+                  <a
+                    routerLink="/more-logs/usa-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >USA Cards</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/uk-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >UK Cards</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/europe-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Europe Cards</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/africa-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Africa Cards</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/canada-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Canada Cards</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/australia-cards"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Australia Cards</a
+                  >
+                </li>
+                <li><hr class="my-1" /></li>
+                <li>
+                  <a
+                    routerLink="/more-logs/credit-union"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    >Credit Union</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/more-logs/crypto-logs"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    >Crypto Logs</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                href="#"
+              >
+                Linkables
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+              <ul
+                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+              >
+                <li>
+                  <a
+                    routerLink="/linkable/cashapp"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >Cashapp</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/linkable/paypal"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >PayPal</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/linkable/venmo"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >Venmo</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/linkable/applepay"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >ApplePay</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/linkable/googlepay"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase"
+                    >GooglePay</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="relative group">
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                href="#"
+              >
+                Transfers
+                <svg
+                  class="w-4 h-4 ml-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </a>
+              <ul
+                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+              >
+                <li>
+                  <a
+                    routerLink="/transfers/cashapp"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >Cashapp</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/transfers/paypal"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >PayPal</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/transfers/venmo"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >Venmo</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/transfers/zelle"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    >Zelle</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/transfers/googlepay"
+                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase"
+                    >GooglePay</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a
+                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                routerLink="/voucher"
+                >Vouches</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

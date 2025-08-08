@@ -1,0 +1,82 @@
+<main>
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Notice Banner -->
+    <div class="bg-brand text-white p-4 mb-6 rounded">
+      <marquee
+        >NOTICE: All orders must be made through our website or telegram support
+        @charley_707 ONLY</marquee
+      >
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Sidebar -->
+      <aside class="lg:col-span-1 -mt-4">
+        <app-sidebar></app-sidebar>
+      </aside>
+
+      <!-- Product Grid -->
+      <div class="lg:col-span-3">
+        <!-- Header Section -->
+        <div
+          class="mb-8 bg-gray-100 p-4 rounded flex items-center justify-between"
+        >
+          <h1 class="text-3xl font-bold text-gray-900 uppercase">
+            Apple Pay Transfers
+          </h1>
+          <button
+            class="bg-brand text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition-colors duration-200"
+          >
+            CASHOUT VIDEOS
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            *ngFor="let product of products"
+            class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
+          >
+            <!-- Product Image -->
+            <div class="relative">
+              <img
+                [src]="product.image"
+                [alt]="product.alt"
+                class="w-full h-48 object-cover cursor-pointer"
+                (click)="viewProduct(product)"
+              />
+              <span
+                class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                >Sale</span
+              >
+            </div>
+            <!-- Product Info -->
+            <div class="bg-gray-100 p-4 flex-1 flex flex-col">
+              <div class="text-sm text-gray-600 mb-1">
+                {{ product.category }}
+              </div>
+              <h3
+                class="text-lg font-semibold text-gray-900 mb-2 cursor-pointer hover:text-brand transition-colors duration-200"
+                (click)="viewProduct(product)"
+              >
+                {{ product.name }}
+              </h3>
+              <div class="text-sm text-gray-600 mb-2">
+                <span *ngIf="product.amount"
+                  ><strong>Amount:</strong> {{ product.amount }}</span
+                >
+                <span *ngIf="product.speed" class="ml-2"
+                  ><strong>Speed:</strong> {{ product.speed }}</span
+                >
+              </div>
+              <div class="flex justify-end items-center mt-auto">
+                <span class="text-xl font-bold text-gray-900"
+                  >${{ product.price.toFixed(2) }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,30 @@
+### Test Delete User Endpoint
+
+# First, login as admin to get a token
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+###
+
+# Get all users to see available users
+GET http://localhost:3000/api/users
+Authorization: Bearer {{auth_token}}
+
+###
+
+# Delete a specific user (replace USER_ID with actual user ID)
+DELETE http://localhost:3000/api/users/USER_ID
+Authorization: Bearer {{auth_token}}
+
+###
+
+# Test deleting a user that doesn't exist
+DELETE http://localhost:3000/api/users/nonexistent-id
+Authorization: Bearer {{auth_token}}
+
+### 

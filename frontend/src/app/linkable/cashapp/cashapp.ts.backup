@@ -1,0 +1,110 @@
+import { Component, OnInit } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { SidebarComponent } from '../../shared/sidebar/sidebar';
+import { ProductService, Product } from '../../service/product/product.service';
+import { ToastService } from '../../services/toast.service';
+
+@Component({
+  selector: 'app-cashapp',
+  imports: [RouterModule, CommonModule, SidebarComponent],
+  templateUrl: './cashapp.html',
+  styleUrl: './cashapp.css'
+})
+export class Cashapp implements OnInit {
+  products: Product[] = [];
+  loading = false;
+  currentPage = 1;
+  pageSize = 20;
+  total = 0;
+  totalPages = 0;
+
+  constructor(
+    private router: Router,
+    private productService: ProductService,
+    private toastService: ToastService
+  ) {}
+
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.loading = true;
+    
+    // Load products from Cashapp Linkables category
+    const filters = { 
+      categoryId: 'cashapp-linkables', // This should match the category ID in your backend
+      isActive: true 
+    };
+
+    this.productService.getProducts(this.currentPage, this.pageSize, filters).subscribe({
+      next: (response) => {
+        this.products = response.products;
+        this.total = response.total;
+        this.totalPages = response.totalPages;
+        this.loading = false;
+        console.log('Loaded Cashapp Linkables products from backend:', response.products);
+        console.log('Total products:', response.total);
+      },
+      error: (error) => {
+        console.error('Error loading Cashapp Linkables products:', error);
+        this.toastService.error('Failed to load products');
+        this.loading = false;
+      }
+    });
+  }
+
+  // View product details - navigate to product page
+  viewProduct(product: Product) {
+    console.log('Viewing product:', product);
+    // Navigate to product details page with product ID
+    this.router.navigate(['/product', product.id]);
+  }
+
+  // Pagination methods
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadProducts();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadProducts();
+    }
+  }
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadProducts();
+    }
+  }
+
+  getProductImage(product: Product): string {
+    return product.image || 'https://via.placeholder.com/300x200/cccccc/666666?text=No+Image';
+  }
+
+  getProductPrice(product: Product): string {
+    return `$${product.price.toFixed(2)}`;
+  }
+
+  isInStock(product: Product): boolean {
+    return product.stockQuantity > 0;
+  }
+
+  getStockStatus(product: Product): string {
+    if (product.stockQuantity > 10) return 'In Stock';
+    if (product.stockQuantity > 0) return `Only ${product.stockQuantity} left`;
+    return 'Out of Stock';
+  }
+
+  getStockStatusClass(product: Product): string {
+    if (product.stockQuantity > 10) return 'text-green-600';
+    if (product.stockQuantity > 0) return 'text-yellow-600';
+    return 'text-red-600';
+  }
+}

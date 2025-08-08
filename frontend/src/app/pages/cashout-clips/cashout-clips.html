@@ -1,0 +1,100 @@
+<!-- Cashout Clips Page Content -->
+<div class="min-h-screen bg-gray-100">
+  <!-- Notice Banner -->
+  <div class="bg-brand text-white text-center py-3 px-4">
+    <p class="text-sm">
+      NOTICE: All orders and payments must be made through our website
+      or to our telegram support
+      <a
+        href="https://t.me/Charlie_7O"
+        target="_blank"
+        class="text-gray-300 hover:text-white"
+        >@Charlie_7O</a
+      >
+      ONLY. Avoid paying to any third-party user claiming to represent
+      us.
+    </p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-8">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div>
+      <p class="mt-2 text-gray-600">Loading videos...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="text-center py-8">
+      <p class="text-red-600">Failed to load videos. Please try again later.</p>
+    </div>
+
+    <!-- Videos Grid -->
+    <div *ngIf="!loading && !error" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+      <div *ngFor="let video of videos" class="space-y-2 w-full max-w-sm">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden w-full">
+          <!-- Video Container -->
+          <div class="relative">
+            <!-- YouTube Video (if videoUrl contains youtube) -->
+            <div *ngIf="isYouTubeUrl(video.videoUrl)" class="w-full h-[550px] relative">
+              <iframe 
+                [src]="getYouTubeEmbedUrl(video.videoUrl)"
+                class="w-full h-full"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+              <!-- YouTube Play Button Overlay -->
+              <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <button class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg">
+                  <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Regular Video (if not YouTube) -->
+            <div class="relative">
+              <video 
+                *ngIf="!isYouTubeUrl(video.videoUrl)"
+                [src]="video.videoUrl" 
+                preload="metadata"
+                class="w-full h-[550px] object-cover cursor-pointer"
+                (click)="playVideo(video, $event)"
+                #videoPlayer
+                muted
+                loop
+                playsinline
+                (loadeddata)="onVideoLoaded($event, video)"
+              >
+                Your browser does not support the video tag.
+              </video>
+              
+              <!-- Play/Pause Button Overlay for Regular Videos -->
+              <div *ngIf="!isYouTubeUrl(video.videoUrl)" class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                <button (click)="playVideo(video, $event)" class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg">
+                  <!-- Play Icon (when paused) -->
+                  <svg *ngIf="!isVideoPlaying(video.id)" class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                  <!-- Pause Icon (when playing) -->
+                  <svg *ngIf="isVideoPlaying(video.id)" class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Category Information Below Card -->
+        <div class="mt-3 text-center">
+          <span class="inline-block text-gray-800 text-lg font-medium px-3 py-2 rounded">
+            {{ video.category }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

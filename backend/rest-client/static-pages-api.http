@@ -1,0 +1,101 @@
+### Static Pages API Testing
+
+@baseUrl = http://localhost:3000/api
+
+### Login to get admin token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin3",
+  "password": "admin123"
+}
+
+### Create Terms of Service Page
+POST {{baseUrl}}/pages
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "Terms of Service",
+  "slug": "terms",
+  "content": "<h1>Terms of Service</h1><p>Welcome to 360LogzShop. By using our services, you agree to these terms and conditions.</p><h2>1. Service Description</h2><p>We provide digital products and services related to financial tools and resources.</p><h2>2. User Responsibilities</h2><p>Users are responsible for complying with all applicable laws and regulations.</p>",
+  "metaTitle": "Terms of Service - 360LogzShop",
+  "metaDescription": "Read our terms of service and conditions for using 360LogzShop services."
+}
+
+### Create Privacy Policy Page
+POST {{baseUrl}}/pages
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "Privacy Policy",
+  "slug": "privacy",
+  "content": "<h1>Privacy Policy</h1><p>This privacy policy describes how 360LogzShop collects, uses, and protects your information.</p><h2>1. Information We Collect</h2><p>We collect information you provide when you register, make purchases, or contact us.</p><h2>2. How We Use Your Information</h2><p>We use your information to provide services, process payments, and communicate with you.</p>",
+  "metaTitle": "Privacy Policy - 360LogzShop",
+  "metaDescription": "Learn how we collect, use, and protect your personal information."
+}
+
+### Create FAQ Page
+POST {{baseUrl}}/pages
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "FAQ",
+  "slug": "faq",
+  "content": "<h1>Frequently Asked Questions</h1><h2>1. How do I place an order?</h2><p>You can place an order by browsing our products and adding them to your cart.</p><h2>2. What payment methods do you accept?</h2><p>We accept various payment methods including cryptocurrency and digital payments.</p><h2>3. How long does delivery take?</h2><p>Digital products are delivered instantly after payment confirmation.</p>",
+  "metaTitle": "FAQ - 360LogzShop",
+  "metaDescription": "Find answers to frequently asked questions about our services."
+}
+
+### Create Contact Page
+POST {{baseUrl}}/pages
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "Contact Us",
+  "slug": "contact",
+  "content": "<h1>Contact Us</h1><p>Get in touch with our support team for any questions or assistance.</p><h2>Support Channels</h2><ul><li><strong>Telegram:</strong> @charley_707</li><li><strong>Email:</strong> support@360logzshop.com</li><li><strong>Response Time:</strong> Within 24 hours</li></ul><h2>Business Hours</h2><p>Monday - Sunday: 24/7 Support</p>",
+  "metaTitle": "Contact Us - 360LogzShop",
+  "metaDescription": "Get in touch with our support team for assistance and inquiries."
+}
+
+### Create About Page
+POST {{baseUrl}}/pages
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "About Us",
+  "slug": "about",
+  "content": "<h1>About 360LogzShop</h1><p>We are a leading provider of digital financial tools and resources, serving customers worldwide with secure and reliable services.</p><h2>Our Mission</h2><p>To provide high-quality digital products and exceptional customer service to our global community.</p><h2>Why Choose Us</h2><ul><li>Secure and reliable services</li><li>24/7 customer support</li><li>Fast delivery</li><li>Competitive pricing</li></ul>",
+  "metaTitle": "About Us - 360LogzShop",
+  "metaDescription": "Learn about 360LogzShop, our mission, and why customers choose our services."
+}
+
+### Get All Pages (Public)
+GET {{baseUrl}}/pages
+
+### Get Page by Slug (Public)
+GET {{baseUrl}}/pages/slug/terms
+
+### Get Page by ID (Public)
+GET {{baseUrl}}/pages/{{pageId}}
+
+### Update Page (Admin)
+PUT {{baseUrl}}/pages/{{pageId}}
+Authorization: Bearer {{login.response.body.access_token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Terms of Service",
+  "content": "<h1>Updated Terms of Service</h1><p>Updated content with new terms and conditions.</p>"
+}
+
+### Delete Page (Admin)
+DELETE {{baseUrl}}/pages/{{pageId}}
+Authorization: Bearer {{login.response.body.access_token}} 

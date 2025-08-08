@@ -1,0 +1,69 @@
+### Email API Tests
+
+# Variables
+@baseUrl = http://localhost:3000/api
+@adminToken = {{login.response.body.access_token}}
+
+### Login as Admin
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Send Welcome Email
+POST {{baseUrl}}/email/welcome
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "to": "test@example.com",
+  "username": "testuser"
+}
+
+### Send Password Reset Email
+POST {{baseUrl}}/email/password-reset
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "to": "test@example.com",
+  "resetToken": "reset-token-12345"
+}
+
+### Send Order Confirmation Email
+POST {{baseUrl}}/email/order-confirmation
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "to": "customer@example.com",
+  "orderData": {
+    "orderNumber": "ORD-2024-001",
+    "createdAt": "2024-01-15T10:30:00Z",
+    "paymentMethod": "Credit Card",
+    "totalAmount": 299.99
+  }
+}
+
+### Send Admin Notification Email
+POST {{baseUrl}}/email/admin-notification
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "orderData": {
+    "orderNumber": "ORD-2024-001",
+    "user": {
+      "username": "john_doe",
+      "email": "john@example.com"
+    },
+    "createdAt": "2024-01-15T10:30:00Z",
+    "paymentMethod": "Credit Card",
+    "status": "Pending",
+    "totalAmount": 299.99
+  }
+} 
