@@ -29,7 +29,7 @@ export interface CategoryFilters {
   providedIn: 'root'
 })
 export class CategoryService {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = 'https://three60-web-uxsl.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 

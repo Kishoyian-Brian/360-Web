@@ -89,7 +89,7 @@ export interface OrderStats {
   providedIn: 'root'
 })
 export class AdminService {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = 'https://three60-web-uxsl.onrender.com/api';
 
   constructor(
     private http: HttpClient,

@@ -37,7 +37,7 @@ export interface UpdateCartItemRequest {
   providedIn: 'root'
 })
 export class CartService {
-  private readonly API_URL = 'http://localhost:3000/api';
+  private readonly API_URL = 'https://three60-web-uxsl.onrender.com/api';
   private cartSubject = new BehaviorSubject<Cart | null>(null);
   public cart$ = this.cartSubject.asObservable();
   private readonly GUEST_CART_KEY = 'guest_cart';

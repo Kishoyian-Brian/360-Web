@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://three60-web-jr7c.onrender.com/api'
+  apiUrl: 'https://three60-web-uxsl.onrender.com/api'
 };

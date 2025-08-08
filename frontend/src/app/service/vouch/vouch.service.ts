@@ -68,7 +68,7 @@ export interface VouchStats {
     providedIn: 'root'
 })
 export class VouchService {
-    private readonly API_URL = 'http://localhost:3000/api/vouches';
+    private readonly API_URL = 'https://three60-web-uxsl.onrender.com/api/vouches';
 
     constructor(
         private http: HttpClient,
