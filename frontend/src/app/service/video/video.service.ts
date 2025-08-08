@@ -27,7 +27,7 @@ export interface VideoResponse {
   providedIn: 'root'
 })
 export class VideoService {
-  private apiUrl = 'https://three60-web-uxsl.onrender.com/api/videos';
+  private apiUrl = 'https://three60-web-o0f3.onrender.com/api/videos';
 
   constructor(private http: HttpClient) {}
 

@@ -57,7 +57,7 @@ export interface OrdersResponse {
   providedIn: 'root'
 })
 export class OrderService {
-  private readonly API_URL = 'https://three60-web-uxsl.onrender.com/api';
+  private readonly API_URL = 'https://three60-web-o0f3.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 

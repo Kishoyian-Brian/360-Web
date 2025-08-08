@@ -418,7 +418,7 @@ export class Admin implements OnInit {
   // Product Management Methods
   loadProducts() {
     this.isLoading = true;
-          this.http.get('https://three60-web-uxsl.onrender.com/api/products', {
+          this.http.get('https://three60-web-o0f3.onrender.com/api/products', {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
@@ -460,7 +460,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('https://three60-web-uxsl.onrender.com/api/upload/image', formData, {
+      this.http.post('https://three60-web-o0f3.onrender.com/api/upload/image', formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -539,7 +539,7 @@ export class Admin implements OnInit {
 
       console.log('Sending product data to backend:', productData);
 
-      this.http.post('https://three60-web-uxsl.onrender.com/api/products', productData, {
+      this.http.post('https://three60-web-o0f3.onrender.com/api/products', productData, {
         headers: this.authService.getAuthHeaders()
       }).subscribe({
         next: (response) => {
@@ -583,7 +583,7 @@ export class Admin implements OnInit {
 
   deleteProduct(productId: string) {
     if (confirm('Are you sure you want to delete this product?')) {
-      this.http.delete(`https://three60-web-uxsl.onrender.com/api/products/${productId}`, {
+      this.http.delete(`https://three60-web-o0f3.onrender.com/api/products/${productId}`, {
         headers: this.authService.getAuthHeaders()
       }).subscribe({
         next: (response) => {
@@ -822,7 +822,7 @@ export class Admin implements OnInit {
   // Video Management Methods
   loadVideos() {
     this.isLoadingVideos = true;
-          this.http.get('https://three60-web-uxsl.onrender.com/api/videos', {
+          this.http.get('https://three60-web-o0f3.onrender.com/api/videos', {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
@@ -864,7 +864,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('https://three60-web-uxsl.onrender.com/api/upload/video', formData, {
+      this.http.post('https://three60-web-o0f3.onrender.com/api/upload/video', formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -905,7 +905,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('https://three60-web-uxsl.onrender.com/api/upload/image', formData, {
+      this.http.post('https://three60-web-o0f3.onrender.com/api/upload/image', formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -1021,7 +1021,7 @@ export class Admin implements OnInit {
       videoData.thumbnailUrl = this.videoForm.thumbnailUrl;
     }
 
-          this.http.post('https://three60-web-uxsl.onrender.com/api/videos', videoData, {
+          this.http.post('https://three60-web-o0f3.onrender.com/api/videos', videoData, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response) => {
@@ -1058,7 +1058,7 @@ export class Admin implements OnInit {
 
   deleteVideo(videoId: string) {
     if (confirm('Are you sure you want to delete this video?')) {
-      this.http.delete(`https://three60-web-uxsl.onrender.com/api/videos/${videoId}`, {
+      this.http.delete(`https://three60-web-o0f3.onrender.com/api/videos/${videoId}`, {
         headers: this.authService.getAuthHeaders()
       }).subscribe({
         next: (response) => {
@@ -1074,7 +1074,7 @@ export class Admin implements OnInit {
   }
 
   toggleVideoStatus(videoId: string, isActive: boolean) {
-    this.http.patch(`https://three60-web-uxsl.onrender.com/api/videos/${videoId}/status`,
+    this.http.patch(`https://three60-web-o0f3.onrender.com/api/videos/${videoId}/status`,
       { isActive },
       { headers: this.authService.getAuthHeaders() }
     ).subscribe({
@@ -1094,7 +1094,7 @@ export class Admin implements OnInit {
     this.isLoadingAnalytics = true;
     const params = { timeRange: this.selectedTimeRange };
 
-          this.http.get('https://three60-web-uxsl.onrender.com/api/analytics/dashboard', {
+          this.http.get('https://three60-web-o0f3.onrender.com/api/analytics/dashboard', {
       headers: this.authService.getAuthHeaders(),
       params
     }).subscribe({
@@ -1267,7 +1267,7 @@ export class Admin implements OnInit {
   }
 
   exportAnalytics() {
-          this.http.get('https://three60-web-uxsl.onrender.com/api/analytics/export', {
+          this.http.get('https://three60-web-o0f3.onrender.com/api/analytics/export', {
       headers: this.authService.getAuthHeaders(),
       responseType: 'blob'
     }).subscribe({
@@ -1295,7 +1295,7 @@ export class Admin implements OnInit {
 
   seedCategories() {
     this.isLoadingCategories = true;
-          this.http.post('https://three60-web-uxsl.onrender.com/api/categories/seed/all', {}, {
+          this.http.post('https://three60-web-o0f3.onrender.com/api/categories/seed/all', {}, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
@@ -1825,7 +1825,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      const req = this.http.post('https://three60-web-uxsl.onrender.com/api/upload/image', formData, {
+      const req = this.http.post('https://three60-web-o0f3.onrender.com/api/upload/image', formData, {
         reportProgress: true,
         observe: 'events',
         headers: authHeaders
@@ -1874,7 +1874,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      const req = this.http.post('https://three60-web-uxsl.onrender.com/api/upload/image', formData, {
+      const req = this.http.post('https://three60-web-o0f3.onrender.com/api/upload/image', formData, {
         reportProgress: true,
         observe: 'events',
         headers: authHeaders
