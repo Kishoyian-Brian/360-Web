@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 import { FileResponseDto } from './dto/file-response.dto';
 import { FileType } from './dto/upload-file.dto';
+import { Express } from 'express';
 
 @Injectable()
 export class UploadService {

@@ -19,6 +19,7 @@ import { UploadFileDto, FileType } from './dto/upload-file.dto';
 import { FileResponseDto } from './dto/file-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
+import { Express } from 'express';
 
 @ApiTags('upload')
 @Controller('upload')
