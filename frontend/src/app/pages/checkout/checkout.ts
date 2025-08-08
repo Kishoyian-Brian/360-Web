@@ -32,18 +32,18 @@ export class Checkout implements OnInit {
     {
       name: 'Bitcoin',
       symbol: 'BTC',
-      address: 'TKieHKDKegGjW2HojHxKgsNkZAota5CuDz'
+      address: '1AGbgzEPd14hzLoDyYoDzwEH1MP5ZekmBi'
     },
     {
       name: 'USDT',
       symbol: 'USDT',
-      address: '0x3C774Adef37D1D6ee2180D7845AE7020e5d79B29',
+      address: 'TKieHKDKegGjW2HojHxKgsNkZAota5CuDz',
       network: 'TRC20'
     },
     {
       name: 'Ethereum',
       symbol: 'ETH',
-      address: 'LdLygre8cKg7ak1tk3LTFTkTtBbhiUiCQn'
+      address: '0x3C774Adef37D1D6ee2180D7845AE7020e5d79B29'
     },
     {
       name: 'Litecoin',
