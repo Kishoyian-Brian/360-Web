@@ -15,8 +15,27 @@ async function bootstrap() {
   app.use(compression());
 
   // CORS
+  const corsOrigin = configService.get<string>('app.corsOrigin');
+  const allowedOrigins = corsOrigin ? corsOrigin.split(',').map(origin => origin.trim()) : ['http://localhost:4200'];
+  
   app.enableCors({
-    origin: configService.get<string>('app.corsOrigin'),
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      // Check if the origin is in our allowed list
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        return callback(null, true);
+      }
+      
+      // Also check without trailing slash
+      const originWithoutSlash = origin.replace(/\/$/, '');
+      if (allowedOrigins.some(allowed => allowed.replace(/\/$/, '') === originWithoutSlash)) {
+        return callback(null, true);
+      }
+      
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   });
 
