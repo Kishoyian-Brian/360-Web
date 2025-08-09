@@ -11,7 +11,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Security middleware
-  app.use(helmet());
+  app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: false, // Disable CSP for now to allow image loading
+  }));
   app.use(compression());
 
   // CORS

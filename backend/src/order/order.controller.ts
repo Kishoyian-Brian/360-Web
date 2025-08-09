@@ -12,7 +12,9 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -164,6 +166,37 @@ export class OrderController {
     const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;
     
     return this.orderService.uploadPaymentProof(id, paymentProofUrl, userId);
+  }
+
+  @Get('payment-proof/:filename')
+  @ApiOperation({ summary: 'Get payment proof image by filename (public access for admins)' })
+  @ApiResponse({ status: 200, description: 'Payment proof image retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Image not found' })
+  async getPaymentProofImage(
+    @Param('filename') filename: string,
+    @Res() res: Response,
+  ) {
+    try {
+      const imagePath = `./uploads/${filename}`;
+      
+      // Set CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET');
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+      
+      // Determine content type based on file extension
+      const ext = filename.split('.').pop()?.toLowerCase();
+      const contentType = ext === 'png' ? 'image/png' : 
+                         ext === 'gif' ? 'image/gif' : 
+                         ext === 'webp' ? 'image/webp' : 'image/jpeg';
+      res.setHeader('Content-Type', contentType);
+      
+      console.log('Serving payment proof image:', imagePath);
+      return res.sendFile(imagePath, { root: process.cwd() });
+    } catch (error) {
+      console.error('Error serving payment proof image:', error);
+      return res.status(404).json({ message: 'Payment proof image not found' });
+    }
   }
 
   @Delete(':id')

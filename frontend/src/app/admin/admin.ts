@@ -853,11 +853,16 @@ export class Admin implements OnInit {
   }
 
   getPaymentProofUrl(paymentProof: string): string {
+    // Extract filename from payment proof path
+    if (paymentProof && paymentProof.includes('/uploads/')) {
+      const filename = paymentProof.replace('/uploads/', '');
+      return `https://three60-web-gzzw.onrender.com/api/orders/payment-proof/${filename}`;
+    }
     // If the payment proof is already a full URL, return it
-    if (paymentProof.startsWith('http')) {
+    if (paymentProof && paymentProof.startsWith('http')) {
       return paymentProof;
     }
-    // Otherwise, construct the full URL
+    // Fallback to direct URL construction
     return `https://three60-web-gzzw.onrender.com${paymentProof}`;
   }
 
