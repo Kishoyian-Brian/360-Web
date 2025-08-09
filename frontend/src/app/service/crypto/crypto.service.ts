@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth/auth.service';
 
 export interface CryptoAccount {
   id: string;
@@ -46,7 +47,10 @@ export class CryptoService {
   
   public cryptoAccounts$ = this.cryptoAccountsSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   // Get all crypto accounts
   getAllAccounts(): Observable<CryptoAccount[]> {
@@ -67,28 +71,36 @@ export class CryptoService {
 
   // Create new crypto account (Admin only)
   createAccount(account: CreateCryptoAccountRequest): Observable<CryptoAccount> {
-    return this.http.post<CryptoAccount>(this.baseUrl, account).pipe(
+    return this.http.post<CryptoAccount>(this.baseUrl, account, {
+      headers: this.authService.getAuthHeaders()
+    }).pipe(
       tap(() => this.refreshAccounts())
     );
   }
 
   // Update crypto account (Admin only)
   updateAccount(id: string, account: UpdateCryptoAccountRequest): Observable<CryptoAccount> {
-    return this.http.patch<CryptoAccount>(`${this.baseUrl}/${id}`, account).pipe(
+    return this.http.patch<CryptoAccount>(`${this.baseUrl}/${id}`, account, {
+      headers: this.authService.getAuthHeaders()
+    }).pipe(
       tap(() => this.refreshAccounts())
     );
   }
 
   // Delete crypto account (Admin only)
   deleteAccount(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`).pipe(
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, {
+      headers: this.authService.getAuthHeaders()
+    }).pipe(
       tap(() => this.refreshAccounts())
     );
   }
 
   // Seed default accounts (Admin only)
   seedDefaultAccounts(): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.baseUrl}/seed`, {}).pipe(
+    return this.http.post<{ message: string }>(`${this.baseUrl}/seed`, {}, {
+      headers: this.authService.getAuthHeaders()
+    }).pipe(
       tap(() => this.refreshAccounts())
     );
   }
