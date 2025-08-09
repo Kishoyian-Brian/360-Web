@@ -2334,7 +2334,7 @@
   <!-- Payment Proof Modal -->
   <div *ngIf="showPaymentProofModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" 
        (click)="closePaymentProofModal()">
-    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white"
+    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-lg rounded-md bg-white"
          (click)="$event.stopPropagation()">
       
       <!-- Modal Header -->
@@ -2350,61 +2350,21 @@
 
       <!-- Modal Body -->
       <div class="py-4" *ngIf="selectedOrderForProof">
-        <div class="mb-4">
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span class="font-medium text-gray-700">Customer:</span>
-              <span class="ml-2">{{ selectedOrderForProof.user?.username || 'N/A' }}</span>
-            </div>
-            <div>
-              <span class="font-medium text-gray-700">Amount:</span>
-              <span class="ml-2">${{ selectedOrderForProof.totalAmount.toFixed(2) }}</span>
-            </div>
-            <div>
-              <span class="font-medium text-gray-700">Payment Method:</span>
-              <span class="ml-2">{{ selectedOrderForProof.paymentMethod }}</span>
-            </div>
-            <div>
-              <span class="font-medium text-gray-700">Payment Status:</span>
-              <span class="ml-2 px-2 py-1 text-xs rounded-full"
-                    [ngClass]="getPaymentStatusBadgeClass(selectedOrderForProof.paymentStatus)">
-                {{ selectedOrderForProof.paymentStatus }}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Payment Proof Image -->
-        <div class="mt-6">
-          <h4 class="text-md font-medium text-gray-900 mb-3">Payment Proof:</h4>
-          <div class="border rounded-lg p-4 bg-gray-50">
-            <img [src]="getPaymentProofUrl(selectedOrderForProof.paymentProof!)" 
-                 [alt]="'Payment proof for order ' + selectedOrderForProof.orderNumber"
-                 class="max-w-full h-auto rounded-lg shadow-md mx-auto"
-                 style="max-height: 500px;"
-                 (error)="$event.target.src='/assets/images/image-error.png'">
-          </div>
-          <div class="mt-2 text-center">
-            <a [href]="getPaymentProofUrl(selectedOrderForProof.paymentProof!)" 
-               target="_blank"
-               class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-              <i class="fas fa-external-link-alt mr-2"></i>
-              Open in New Tab
-            </a>
-          </div>
+        <!-- Payment Proof Image Only -->
+        <div class="text-center">
+          <img [src]="getPaymentProofUrl(selectedOrderForProof.paymentProof!)" 
+               [alt]="'Payment proof for order ' + selectedOrderForProof.orderNumber"
+               class="max-w-full h-auto rounded-lg shadow-lg mx-auto"
+               style="max-height: 70vh;"
+               (error)="$event.target.src='/assets/images/image-error.png'">
         </div>
       </div>
 
       <!-- Modal Footer -->
-      <div class="flex justify-end pt-4 border-t space-x-3">
+      <div class="flex justify-center pt-4 border-t">
         <button (click)="closePaymentProofModal()"
-                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                class="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
           Close
-        </button>
-        <button *ngIf="selectedOrderForProof?.paymentStatus === 'PENDING'"
-                (click)="updatePaymentStatus(selectedOrderForProof!.id, 'COMPLETED')"
-                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-          Approve Payment
         </button>
       </div>
     </div>
