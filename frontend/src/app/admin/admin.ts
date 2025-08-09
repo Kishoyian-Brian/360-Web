@@ -853,17 +853,24 @@ export class Admin implements OnInit {
   }
 
   getPaymentProofUrl(paymentProof: string): string {
+    console.log('getPaymentProofUrl called with:', paymentProof);
+    
     // Extract filename from payment proof path
     if (paymentProof && paymentProof.includes('/uploads/')) {
       const filename = paymentProof.replace('/uploads/', '');
-      return `https://three60-web-gzzw.onrender.com/api/orders/payment-proof/${filename}`;
+      const finalUrl = `https://three60-web-gzzw.onrender.com/api/orders/payment-proof/${filename}`;
+      console.log('Constructed URL:', finalUrl);
+      return finalUrl;
     }
     // If the payment proof is already a full URL, return it
     if (paymentProof && paymentProof.startsWith('http')) {
+      console.log('Using existing URL:', paymentProof);
       return paymentProof;
     }
     // Fallback to direct URL construction
-    return `https://three60-web-gzzw.onrender.com${paymentProof}`;
+    const fallbackUrl = `https://three60-web-gzzw.onrender.com${paymentProof}`;
+    console.log('Using fallback URL:', fallbackUrl);
+    return fallbackUrl;
   }
 
   // Video Management Methods

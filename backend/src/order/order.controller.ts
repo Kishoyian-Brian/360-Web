@@ -176,8 +176,23 @@ export class OrderController {
     @Param('filename') filename: string,
     @Res() res: Response,
   ) {
+    console.log('🖼️ Payment proof image requested:', filename);
+    
     try {
       const imagePath = `./uploads/${filename}`;
+      console.log('📂 Looking for image at:', imagePath);
+      
+      // Check if file exists
+      const fs = require('fs');
+      const fullPath = require('path').resolve(process.cwd(), imagePath);
+      console.log('🔍 Full path:', fullPath);
+      
+      if (!fs.existsSync(fullPath)) {
+        console.log('❌ File not found at:', fullPath);
+        return res.status(404).json({ message: 'Payment proof image not found' });
+      }
+      
+      console.log('✅ File exists, serving image');
       
       // Set CORS headers
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -191,11 +206,41 @@ export class OrderController {
                          ext === 'webp' ? 'image/webp' : 'image/jpeg';
       res.setHeader('Content-Type', contentType);
       
-      console.log('Serving payment proof image:', imagePath);
+      console.log('📤 Serving payment proof image with content-type:', contentType);
       return res.sendFile(imagePath, { root: process.cwd() });
     } catch (error) {
-      console.error('Error serving payment proof image:', error);
-      return res.status(404).json({ message: 'Payment proof image not found' });
+      console.error('💥 Error serving payment proof image:', error);
+      return res.status(500).json({ message: 'Error serving payment proof image' });
+    }
+  }
+
+  @Get('test-uploads')
+  @ApiOperation({ summary: 'Test uploads directory access' })
+  async testUploads(@Res() res: Response) {
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const uploadsDir = path.resolve(process.cwd(), './uploads');
+      
+      console.log('🔍 Testing uploads directory:', uploadsDir);
+      
+      if (!fs.existsSync(uploadsDir)) {
+        console.log('❌ Uploads directory does not exist');
+        return res.json({ error: 'Uploads directory does not exist', path: uploadsDir });
+      }
+      
+      const files = fs.readdirSync(uploadsDir);
+      console.log('📁 Files in uploads directory:', files);
+      
+      return res.json({ 
+        message: 'Uploads directory accessible',
+        path: uploadsDir,
+        files: files,
+        fileCount: files.length
+      });
+    } catch (error) {
+      console.error('💥 Error testing uploads:', error);
+      return res.status(500).json({ error: error.message });
     }
   }
 
