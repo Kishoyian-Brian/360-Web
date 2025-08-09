@@ -40,7 +40,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private readonly API_URL = 'https://three60-web-o0f3.onrender.com/api';
+  private readonly API_URL = 'https://three60-web-gzzw.onrender.com/api';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_info';
 
