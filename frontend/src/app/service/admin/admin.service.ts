@@ -56,6 +56,7 @@ export interface Order {
   paymentMethod: string;
   paymentStatus: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED';
   shippingAddress: any;
+  paymentProof?: string;
   items: OrderItem[];
   createdAt: string;
   updatedAt: string;

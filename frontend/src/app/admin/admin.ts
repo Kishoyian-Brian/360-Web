@@ -188,6 +188,10 @@ export class Admin implements OnInit {
   orders: Order[] = [];
   isLoadingOrders = false;
   orderStats: OrderStats | null = null;
+  
+  // Payment proof modal
+  showPaymentProofModal = false;
+  selectedOrderForProof: Order | null = null;
   orderFilters: OrderFilterDto = {
     page: 1,
     limit: 10,
@@ -836,6 +840,25 @@ export class Admin implements OnInit {
         }
       });
     }
+  }
+
+  viewPaymentProof(order: Order) {
+    this.selectedOrderForProof = order;
+    this.showPaymentProofModal = true;
+  }
+
+  closePaymentProofModal() {
+    this.showPaymentProofModal = false;
+    this.selectedOrderForProof = null;
+  }
+
+  getPaymentProofUrl(paymentProof: string): string {
+    // If the payment proof is already a full URL, return it
+    if (paymentProof.startsWith('http')) {
+      return paymentProof;
+    }
+    // Otherwise, construct the full URL
+    return `https://three60-web-gzzw.onrender.com${paymentProof}`;
   }
 
   // Video Management Methods
