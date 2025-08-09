@@ -69,10 +69,10 @@ export const routes: Routes = [
   { path: '', component: HomeComponent }, // Default route - home page
   { path: 'home', component: HomeComponent }, // Explicit home route
   { path: 'product/:id', component: ProductComponent }, // Product details route
-  { path: 'cart', component: CartComponent, canActivate: [CartAdminGuard] }, // Cart page - protected from admin
+  { path: 'cart', component: CartComponent }, // Cart page - accessible to all users
   { path: 'login', component: Login }, // Login page
   { path: 'register', component: Register }, // Register page
-  { path: 'checkout', component: Checkout, canActivate: [AuthGuard, CartAdminGuard] }, // Checkout page - protected from admin
+  { path: 'checkout', component: Checkout, canActivate: [AuthGuard] }, // Checkout page - requires login
   { path: 'cashout-clips', component: CashoutClips }, // Cashout clips page
   { path: 'test-connections', component: ConnectionTestComponent }, // Connection test page
 

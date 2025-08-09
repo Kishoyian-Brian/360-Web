@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../service/auth/auth.service';
 import { CartService, Cart, CartItem } from '../../service/cart/cart.service';
 import { OrderService, Order, CreateOrderRequest } from '../../service/order/order.service';
 import { ProductService } from '../../service/product/product.service';
@@ -35,6 +36,7 @@ export class Checkout implements OnInit {
   constructor(
     private router: Router,
     private toastService: ToastService,
+    private authService: AuthService,
     private cartService: CartService,
     private orderService: OrderService,
     private productService: ProductService,
@@ -42,6 +44,14 @@ export class Checkout implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Check if user is admin - redirect to admin dashboard
+    if (this.authService.isAuthenticated && this.authService.isAdmin) {
+      console.log('Checkout: Admin user attempting to access checkout, redirecting to admin');
+      this.toastService.error('Admin users cannot access checkout pages');
+      this.router.navigate(['/admin']);
+      return;
+    }
+
     this.loadCart();
     this.loadCryptoAccounts();
   }

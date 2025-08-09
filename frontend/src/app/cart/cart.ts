@@ -25,6 +25,14 @@ export class CartComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Check if user is admin - redirect to admin dashboard
+    if (this.authService.isAuthenticated && this.authService.isAdmin) {
+      console.log('Cart: Admin user attempting to access cart, redirecting to admin');
+      this.toastService.error('Admin users cannot access cart pages');
+      this.router.navigate(['/admin']);
+      return;
+    }
+
     this.loadCart();
     // Listen for cart updates
     window.addEventListener('cartUpdated', () => {
