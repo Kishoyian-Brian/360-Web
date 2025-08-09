@@ -17,7 +17,7 @@ import { CryptoAccountResponseDto } from './dto/crypto-account-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 
-@Controller('api/crypto')
+@Controller('crypto')
 export class CryptoController {
   constructor(private readonly cryptoService: CryptoService) {}
 
