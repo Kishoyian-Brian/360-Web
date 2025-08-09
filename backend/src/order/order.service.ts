@@ -252,6 +252,49 @@ export class OrderService {
     return { message: 'Order deleted successfully' };
   }
 
+  async uploadPaymentProof(orderId: string, paymentProofUrl: string, userId?: string): Promise<OrderResponseDto> {
+    // Build where clause to include user filtering if provided
+    const where: any = { id: orderId };
+    if (userId) {
+      where.userId = userId;
+    }
+
+    const order = await this.prisma.order.findFirst({
+      where,
+      include: {
+        items: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    const updatedOrder = await this.prisma.order.update({
+      where: { id: orderId },
+      data: { paymentProof: paymentProofUrl },
+      include: {
+        items: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    return this.mapToOrderResponse(updatedOrder);
+  }
+
   private mapToOrderResponse(order: any): OrderResponseDto {
     return {
       id: order.id,
@@ -267,6 +310,7 @@ export class OrderService {
       paymentMethod: order.paymentMethod,
       paymentStatus: order.paymentStatus,
       shippingAddress: order.shippingAddress,
+      paymentProof: order.paymentProof,
       items: order.items.map((item: any) => ({
         id: item.id,
         productId: item.productId,

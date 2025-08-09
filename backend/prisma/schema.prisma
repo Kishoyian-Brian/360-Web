@@ -237,6 +237,7 @@ model Order {
     status        OrderStatus   @default(PENDING)
     paymentMethod String?
     paymentStatus PaymentStatus @default(PENDING)
+    paymentProof  String?       // URL to uploaded payment proof image
 
     // Shipping address
     shippingAddress Json? // Store as JSON object

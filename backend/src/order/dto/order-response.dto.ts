@@ -53,6 +53,9 @@ export class OrderResponseDto {
   @ApiProperty()
   shippingAddress: any;
 
+  @ApiProperty({ required: false })
+  paymentProof?: string;
+
   @ApiProperty({ type: [OrderItemResponseDto] })
   items: OrderItemResponseDto[];
 

@@ -9,8 +9,14 @@ import {
   UseGuards,
   Request,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { Express } from 'express';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderFilterDto } from './dto/order-filter.dto';
@@ -105,6 +111,51 @@ export class OrderController {
     @Body() body: { paymentStatus: PaymentStatus },
   ): Promise<OrderResponseDto> {
     return this.orderService.updatePaymentStatus(id, body.paymentStatus);
+  }
+
+  @Post(':id/payment-proof')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('paymentProof', {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + extname(file.originalname));
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only image files are allowed'), false);
+      }
+    },
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+  }))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Upload payment proof for an order' })
+  @ApiResponse({ status: 200, description: 'Payment proof uploaded successfully', type: OrderResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  async uploadPaymentProof(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: any,
+  ): Promise<OrderResponseDto> {
+    if (!file) {
+      throw new Error('Payment proof file is required');
+    }
+
+    // Create the URL for the uploaded file
+    const paymentProofUrl = `/uploads/${file.filename}`;
+    
+    // Update the order with payment proof (only allow user to update their own orders unless admin)
+    const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;
+    
+    return this.orderService.uploadPaymentProof(id, paymentProofUrl, userId);
   }
 
   @Delete(':id')
