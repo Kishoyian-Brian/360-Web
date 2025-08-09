@@ -17,10 +17,10 @@ export class CryptoAccountResponseDto {
     this.name = account.name;
     this.symbol = account.symbol;
     this.address = account.address;
-    this.network = account.network;
+    this.network = account.network || undefined;
     this.isActive = account.isActive;
     this.order = account.order;
-    this.description = account.description;
+    this.description = account.description || undefined;
     this.createdAt = account.createdAt;
     this.updatedAt = account.updatedAt;
   }
