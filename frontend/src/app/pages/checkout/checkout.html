@@ -64,16 +64,7 @@
             <p class="text-sm text-gray-600 mt-1">Order ID: {{ order?.id }}</p>
           </div>
 
-          <!-- Admin Panel Toggle (Admin Only) -->
-          <div *ngIf="isAdmin" class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <div class="flex items-center justify-between">
-              <h3 class="font-medium text-yellow-900">Admin: Crypto Account Management</h3>
-              <button (click)="toggleAdminPanel()" 
-                class="px-3 py-1 bg-yellow-600 text-white text-sm rounded hover:bg-yellow-700 transition-colors">
-                {{ showAdminPanel ? 'Hide Panel' : 'Show Panel' }}
-              </button>
-            </div>
-          </div>
+
 
           <!-- Cryptocurrency Selection -->
           <div class="mb-6">
@@ -91,108 +82,7 @@
             </div>
           </div>
 
-          <!-- Admin Crypto Management Panel -->
-          <div *ngIf="isAdmin && showAdminPanel" class="mb-6 p-6 bg-gray-50 border border-gray-200 rounded-lg">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold text-gray-900">Crypto Account Management</h3>
-              <div class="space-x-2">
-                <button (click)="startCreatingAccount()" 
-                  class="px-4 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
-                  Add Account
-                </button>
-                <button (click)="seedDefaultAccounts()" 
-                  class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
-                  Seed Defaults
-                </button>
-              </div>
-            </div>
 
-            <!-- Create/Edit Form -->
-            <div *ngIf="isCreatingAccount || isEditingAccount" class="mb-6 p-4 bg-white border border-gray-300 rounded-lg">
-              <h4 class="font-medium text-gray-900 mb-4">
-                {{ isCreatingAccount ? 'Create New Account' : 'Edit Account' }}
-              </h4>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input type="text" [(ngModel)]="newCryptoAccount.name" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="Bitcoin">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Symbol</label>
-                  <input type="text" [(ngModel)]="newCryptoAccount.symbol" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="BTC">
-                </div>
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                  <input type="text" [(ngModel)]="newCryptoAccount.address" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="1AGbgzEPd14hzLoDyYoDzwEH1MP5ZekmBi">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Network (Optional)</label>
-                  <input type="text" [(ngModel)]="newCryptoAccount.network" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="TRC20">
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Order</label>
-                  <input type="number" [(ngModel)]="newCryptoAccount.order" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    min="0">
-                </div>
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
-                  <input type="text" [(ngModel)]="newCryptoAccount.description" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="Additional notes">
-                </div>
-                <div class="flex items-center">
-                  <input type="checkbox" [(ngModel)]="newCryptoAccount.isActive" 
-                    class="h-4 w-4 text-brand focus:ring-brand border-gray-300 rounded">
-                  <label class="ml-2 text-sm text-gray-700">Active</label>
-                </div>
-              </div>
-              <div class="flex space-x-2 mt-4">
-                <button (click)="saveAccount()" 
-                  class="px-4 py-2 bg-brand text-white rounded hover:bg-brand/90 transition-colors">
-                  {{ isCreatingAccount ? 'Create' : 'Update' }}
-                </button>
-                <button (click)="cancelEdit()" 
-                  class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
-                  Cancel
-                </button>
-              </div>
-            </div>
-
-            <!-- Accounts List -->
-            <div class="space-y-3">
-              <div *ngFor="let account of cryptoService.cryptoAccounts$ | async" 
-                class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg">
-                <div class="flex-1">
-                  <div class="flex items-center space-x-2">
-                    <span class="font-medium">{{ account.name }} ({{ account.symbol }})</span>
-                    <span *ngIf="!account.isActive" class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded">Inactive</span>
-                    <span *ngIf="account.network" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">{{ account.network }}</span>
-                  </div>
-                  <div class="text-sm text-gray-600 font-mono">{{ account.address }}</div>
-                  <div *ngIf="account.description" class="text-xs text-gray-500">{{ account.description }}</div>
-                </div>
-                <div class="flex space-x-2">
-                  <button (click)="startEditingAccount(account)" 
-                    class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
-                    Edit
-                  </button>
-                  <button (click)="deleteAccount(account.id, account.name)" 
-                    class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <!-- Selected Cryptocurrency Address -->
           <div *ngIf="selectedCrypto" class="bg-gray-50 rounded-lg p-4 mb-6">

@@ -96,6 +96,14 @@
             <span class="ml-3" *ngIf="!isSidebarCollapsed">Analytics</span>
           </a>
 
+          <!-- Crypto Payments -->
+          <a (click)="navigateTo('crypto'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'crypto'" [class.text-white]="currentSection === 'crypto'">
+            <i class="fas fa-coins w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Crypto Payments</span>
+          </a>
+
           <!-- Settings -->
           <a (click)="navigateTo('settings'); $event.preventDefault()"
             class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
@@ -1800,6 +1808,162 @@
                 Analytics data will appear here once you have activity in your
                 system.
               </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crypto Payments Section -->
+        <div *ngIf="currentSection === 'crypto'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Cryptocurrency Payment Accounts
+                </h2>
+                <div class="space-x-2">
+                  <button (click)="startCreatingCryptoAccount()" 
+                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Account
+                  </button>
+                  <button (click)="seedDefaultCryptoAccounts()" 
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-seedling mr-2"></i>Seed Defaults
+                  </button>
+                </div>
+              </div>
+              <p class="text-gray-600 mt-2">
+                Manage cryptocurrency payment accounts that customers can use for payments.
+              </p>
+            </div>
+
+            <!-- Create/Edit Form -->
+            <div *ngIf="isCreatingCryptoAccount || isEditingCryptoAccount" class="p-6 border-b border-gray-200 bg-gray-50">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                {{ isCreatingCryptoAccount ? 'Add New Crypto Account' : 'Edit Crypto Account' }}
+              </h3>
+              <form (ngSubmit)="saveCryptoAccount()" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                    <input type="text" [(ngModel)]="cryptoAccountForm.name" name="name" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Bitcoin">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Symbol *</label>
+                    <input type="text" [(ngModel)]="cryptoAccountForm.symbol" name="symbol" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="BTC">
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Wallet Address *</label>
+                    <input type="text" [(ngModel)]="cryptoAccountForm.address" name="address" required
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="1AGbgzEPd14hzLoDyYoDzwEH1MP5ZekmBi">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Network (Optional)</label>
+                    <input type="text" [(ngModel)]="cryptoAccountForm.network" name="network"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="TRC20">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                    <input type="number" [(ngModel)]="cryptoAccountForm.order" name="order" min="0"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                    <input type="text" [(ngModel)]="cryptoAccountForm.description" name="description"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Additional notes">
+                  </div>
+                  <div class="flex items-center">
+                    <input type="checkbox" [(ngModel)]="cryptoAccountForm.isActive" name="isActive"
+                      class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label class="ml-2 text-sm text-gray-700">Active (customers can use this account)</label>
+                  </div>
+                </div>
+                <div class="flex space-x-2 pt-4">
+                  <button type="submit" [disabled]="isCryptoLoading"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 transition-colors">
+                    {{ isCryptoLoading ? 'Saving...' : (isCreatingCryptoAccount ? 'Create Account' : 'Update Account') }}
+                  </button>
+                  <button type="button" (click)="cancelCryptoEdit()"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Crypto Accounts List -->
+            <div class="p-6">
+              <div *ngIf="isCryptoLoading && cryptoAccounts.length === 0" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading crypto accounts...</p>
+              </div>
+
+              <div *ngIf="!isCryptoLoading && cryptoAccounts.length === 0" class="text-center py-12">
+                <i class="fas fa-coins text-gray-400 text-4xl mb-4"></i>
+                <p class="text-lg font-medium text-gray-600">No Crypto Accounts</p>
+                <p class="text-sm text-gray-500 mb-4">
+                  Add cryptocurrency accounts for customer payments
+                </p>
+                <button (click)="seedDefaultCryptoAccounts()"
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <i class="fas fa-seedling mr-2"></i>Seed Default Accounts
+                </button>
+              </div>
+
+              <div *ngIf="cryptoAccounts.length > 0" class="space-y-4">
+                <div *ngFor="let account of cryptoAccounts" 
+                  class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-3 mb-2">
+                        <h3 class="text-lg font-semibold text-gray-900">{{ account.name }}</h3>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                          {{ account.symbol }}
+                        </span>
+                        <span *ngIf="account.network" class="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded">
+                          {{ account.network }}
+                        </span>
+                        <span *ngIf="!account.isActive" class="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded">
+                          Inactive
+                        </span>
+                        <span *ngIf="account.isActive" class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded">
+                          Active
+                        </span>
+                      </div>
+                      <div class="text-sm text-gray-600 mb-1">
+                        <strong>Address:</strong> 
+                        <code class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">{{ account.address }}</code>
+                        <button (click)="copyCryptoAddress(account.address)" 
+                          class="ml-2 text-blue-600 hover:text-blue-800">
+                          <i class="fas fa-copy"></i>
+                        </button>
+                      </div>
+                      <div *ngIf="account.description" class="text-sm text-gray-500">
+                        {{ account.description }}
+                      </div>
+                      <div class="text-xs text-gray-400 mt-1">
+                        Order: {{ account.order }} | Created: {{ account.createdAt | date:'short' }}
+                      </div>
+                    </div>
+                    <div class="flex space-x-2 ml-4">
+                      <button (click)="startEditingCryptoAccount(account)" 
+                        class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-edit mr-1"></i>Edit
+                      </button>
+                      <button (click)="deleteCryptoAccount(account.id, account.name)" 
+                        class="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
+                        <i class="fas fa-trash mr-1"></i>Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

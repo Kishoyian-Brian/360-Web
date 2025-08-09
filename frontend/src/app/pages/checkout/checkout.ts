@@ -6,8 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { CartService, Cart, CartItem } from '../../service/cart/cart.service';
 import { OrderService, Order, CreateOrderRequest } from '../../service/order/order.service';
 import { ProductService } from '../../service/product/product.service';
-import { CryptoService, CryptoAccount, CreateCryptoAccountRequest } from '../../service/crypto/crypto.service';
-import { AuthService } from '../../service/auth/auth.service';
+import { CryptoService, CryptoAccount } from '../../service/crypto/crypto.service';
 
 // Remove the old interface as we now use CryptoAccount from the service
 
@@ -29,20 +28,7 @@ export class Checkout implements OnInit {
   cryptoPayments: CryptoAccount[] = [];
   selectedCrypto: CryptoAccount | null = null;
   
-  // Admin crypto management
-  showAdminPanel = false;
-  isCreatingAccount = false;
-  isEditingAccount = false;
-  editingAccountId: string | null = null;
-  newCryptoAccount: CreateCryptoAccountRequest = {
-    name: '',
-    symbol: '',
-    address: '',
-    network: '',
-    isActive: true,
-    order: 0,
-    description: ''
-  };
+
   cryptoAmount = 0;
   orderId = '';
 
@@ -52,8 +38,7 @@ export class Checkout implements OnInit {
     private cartService: CartService,
     private orderService: OrderService,
     private productService: ProductService,
-    public cryptoService: CryptoService,
-    private authService: AuthService
+    private cryptoService: CryptoService
   ) { }
 
   ngOnInit() {
@@ -198,163 +183,7 @@ export class Checkout implements OnInit {
     return crypto.name;
   }
 
-  // Admin methods
-  get isAdmin(): boolean {
-    return this.authService.isAdmin;
-  }
 
-  toggleAdminPanel() {
-    this.showAdminPanel = !this.showAdminPanel;
-    if (this.showAdminPanel) {
-      this.loadAllCryptoAccounts();
-    }
-  }
-
-  loadAllCryptoAccounts() {
-    this.cryptoService.getAllAccounts().subscribe({
-      next: (accounts) => {
-        // This will update the cryptoAccounts$ observable
-        console.log('Loaded all crypto accounts for admin:', accounts);
-      },
-      error: (error) => {
-        console.error('Error loading all crypto accounts:', error);
-        this.toastService.error('Failed to load crypto accounts');
-      }
-    });
-  }
-
-  startCreatingAccount() {
-    this.isCreatingAccount = true;
-    this.isEditingAccount = false;
-    this.editingAccountId = null;
-    this.resetForm();
-  }
-
-  startEditingAccount(account: CryptoAccount) {
-    this.isEditingAccount = true;
-    this.isCreatingAccount = false;
-    this.editingAccountId = account.id;
-    this.newCryptoAccount = {
-      name: account.name,
-      symbol: account.symbol,
-      address: account.address,
-      network: account.network || '',
-      isActive: account.isActive,
-      order: account.order,
-      description: account.description || ''
-    };
-  }
-
-  saveAccount() {
-    if (this.isCreatingAccount) {
-      this.createAccount();
-    } else if (this.isEditingAccount && this.editingAccountId) {
-      this.updateAccount();
-    }
-  }
-
-  createAccount() {
-    if (!this.validateForm()) return;
-
-    this.cryptoService.createAccount(this.newCryptoAccount).subscribe({
-      next: (account) => {
-        this.toastService.success('Crypto account created successfully!');
-        this.cancelEdit();
-        this.loadCryptoAccounts(); // Refresh active accounts
-        console.log('Created crypto account:', account);
-      },
-      error: (error) => {
-        console.error('Error creating crypto account:', error);
-        this.toastService.error('Failed to create crypto account');
-      }
-    });
-  }
-
-  updateAccount() {
-    if (!this.validateForm() || !this.editingAccountId) return;
-
-    this.cryptoService.updateAccount(this.editingAccountId, this.newCryptoAccount).subscribe({
-      next: (account) => {
-        this.toastService.success('Crypto account updated successfully!');
-        this.cancelEdit();
-        this.loadCryptoAccounts(); // Refresh active accounts
-        console.log('Updated crypto account:', account);
-      },
-      error: (error) => {
-        console.error('Error updating crypto account:', error);
-        this.toastService.error('Failed to update crypto account');
-      }
-    });
-  }
-
-  deleteAccount(accountId: string, accountName: string) {
-    if (!confirm(`Are you sure you want to delete the ${accountName} account? This action cannot be undone.`)) {
-      return;
-    }
-
-    this.cryptoService.deleteAccount(accountId).subscribe({
-      next: () => {
-        this.toastService.success('Crypto account deleted successfully!');
-        this.loadCryptoAccounts(); // Refresh active accounts
-      },
-      error: (error) => {
-        console.error('Error deleting crypto account:', error);
-        this.toastService.error('Failed to delete crypto account');
-      }
-    });
-  }
-
-  cancelEdit() {
-    this.isCreatingAccount = false;
-    this.isEditingAccount = false;
-    this.editingAccountId = null;
-    this.resetForm();
-  }
-
-  resetForm() {
-    this.newCryptoAccount = {
-      name: '',
-      symbol: '',
-      address: '',
-      network: '',
-      isActive: true,
-      order: 0,
-      description: ''
-    };
-  }
-
-  validateForm(): boolean {
-    if (!this.newCryptoAccount.name.trim()) {
-      this.toastService.error('Please enter a name');
-      return false;
-    }
-    if (!this.newCryptoAccount.symbol.trim()) {
-      this.toastService.error('Please enter a symbol');
-      return false;
-    }
-    if (!this.newCryptoAccount.address.trim()) {
-      this.toastService.error('Please enter an address');
-      return false;
-    }
-    return true;
-  }
-
-  seedDefaultAccounts() {
-    if (!confirm('This will create default crypto accounts if they don\'t exist. Continue?')) {
-      return;
-    }
-
-    this.cryptoService.seedDefaultAccounts().subscribe({
-      next: (response) => {
-        this.toastService.success(response.message);
-        this.loadCryptoAccounts();
-      },
-      error: (error) => {
-        console.error('Error seeding accounts:', error);
-        this.toastService.error('Failed to seed default accounts');
-      }
-    });
-  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];

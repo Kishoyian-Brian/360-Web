@@ -8,6 +8,7 @@ import { AdminService, Order, OrderFilterDto, OrderStats } from '../service/admi
 import { ToastService } from '../services/toast.service';
 import { BlogService, BlogPost, CreateBlogPostDto, UpdateBlogPostDto, BlogCategory, BlogTag } from '../service/blog/blog.service';
 import { VouchService, Vouch, CreateVouchDto, UpdateVouchDto, VouchResponse, VouchStats } from '../service/vouch/vouch.service';
+import { CryptoService, CryptoAccount, CreateCryptoAccountRequest } from '../service/crypto/crypto.service';
 
 export interface Product {
   id: string;
@@ -347,13 +348,30 @@ export class Admin implements OnInit {
   vouchImageFile: File | null = null;
   vouchImageUploadProgress = 0;
 
+  // Crypto account management
+  cryptoAccounts: CryptoAccount[] = [];
+  isCryptoLoading = false;
+  isCreatingCryptoAccount = false;
+  isEditingCryptoAccount = false;
+  editingCryptoAccountId: string | null = null;
+  cryptoAccountForm: CreateCryptoAccountRequest = {
+    name: '',
+    symbol: '',
+    address: '',
+    network: '',
+    isActive: true,
+    order: 0,
+    description: ''
+  };
+
   constructor(
     private authService: AuthService,
     private http: HttpClient,
     private adminService: AdminService,
     private blogService: BlogService,
     private vouchService: VouchService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cryptoService: CryptoService
   ) { }
 
   ngOnInit() {
@@ -364,6 +382,7 @@ export class Admin implements OnInit {
     this.loadCategories(); // Load predefined categories
     this.loadVouches(); // Initialize vouches
     this.loadVouchStats(); // Initialize vouch stats
+    this.loadCryptoAccounts(); // Initialize crypto accounts
   }
 
   navigateTo(section: string) {
@@ -1902,5 +1921,172 @@ export class Admin implements OnInit {
       this.vouchImageUploadProgress = 0;
       return '';
     }
+  }
+
+  // Crypto Account Management Methods
+  loadCryptoAccounts() {
+    this.isCryptoLoading = true;
+    this.cryptoService.getAllAccounts().subscribe({
+      next: (accounts) => {
+        this.cryptoAccounts = accounts;
+        this.isCryptoLoading = false;
+        console.log('Loaded crypto accounts:', accounts);
+      },
+      error: (error) => {
+        console.error('Error loading crypto accounts:', error);
+        this.toastService.error('Failed to load crypto accounts');
+        this.isCryptoLoading = false;
+      }
+    });
+  }
+
+  startCreatingCryptoAccount() {
+    this.isCreatingCryptoAccount = true;
+    this.isEditingCryptoAccount = false;
+    this.editingCryptoAccountId = null;
+    this.resetCryptoForm();
+  }
+
+  startEditingCryptoAccount(account: CryptoAccount) {
+    this.isEditingCryptoAccount = true;
+    this.isCreatingCryptoAccount = false;
+    this.editingCryptoAccountId = account.id;
+    this.cryptoAccountForm = {
+      name: account.name,
+      symbol: account.symbol,
+      address: account.address,
+      network: account.network || '',
+      isActive: account.isActive,
+      order: account.order,
+      description: account.description || ''
+    };
+  }
+
+  saveCryptoAccount() {
+    if (this.isCreatingCryptoAccount) {
+      this.createCryptoAccount();
+    } else if (this.isEditingCryptoAccount && this.editingCryptoAccountId) {
+      this.updateCryptoAccount();
+    }
+  }
+
+  createCryptoAccount() {
+    if (!this.validateCryptoForm()) return;
+
+    this.isCryptoLoading = true;
+    this.cryptoService.createAccount(this.cryptoAccountForm).subscribe({
+      next: (account) => {
+        this.toastService.success('Crypto account created successfully!');
+        this.cancelCryptoEdit();
+        this.loadCryptoAccounts();
+        console.log('Created crypto account:', account);
+      },
+      error: (error) => {
+        console.error('Error creating crypto account:', error);
+        this.toastService.error('Failed to create crypto account');
+        this.isCryptoLoading = false;
+      }
+    });
+  }
+
+  updateCryptoAccount() {
+    if (!this.validateCryptoForm() || !this.editingCryptoAccountId) return;
+
+    this.isCryptoLoading = true;
+    this.cryptoService.updateAccount(this.editingCryptoAccountId, this.cryptoAccountForm).subscribe({
+      next: (account) => {
+        this.toastService.success('Crypto account updated successfully!');
+        this.cancelCryptoEdit();
+        this.loadCryptoAccounts();
+        console.log('Updated crypto account:', account);
+      },
+      error: (error) => {
+        console.error('Error updating crypto account:', error);
+        this.toastService.error('Failed to update crypto account');
+        this.isCryptoLoading = false;
+      }
+    });
+  }
+
+  deleteCryptoAccount(accountId: string, accountName: string) {
+    if (!confirm(`Are you sure you want to delete the ${accountName} account? This action cannot be undone.`)) {
+      return;
+    }
+
+    this.isCryptoLoading = true;
+    this.cryptoService.deleteAccount(accountId).subscribe({
+      next: () => {
+        this.toastService.success('Crypto account deleted successfully!');
+        this.loadCryptoAccounts();
+      },
+      error: (error) => {
+        console.error('Error deleting crypto account:', error);
+        this.toastService.error('Failed to delete crypto account');
+        this.isCryptoLoading = false;
+      }
+    });
+  }
+
+  cancelCryptoEdit() {
+    this.isCreatingCryptoAccount = false;
+    this.isEditingCryptoAccount = false;
+    this.editingCryptoAccountId = null;
+    this.resetCryptoForm();
+    this.isCryptoLoading = false;
+  }
+
+  resetCryptoForm() {
+    this.cryptoAccountForm = {
+      name: '',
+      symbol: '',
+      address: '',
+      network: '',
+      isActive: true,
+      order: 0,
+      description: ''
+    };
+  }
+
+  validateCryptoForm(): boolean {
+    if (!this.cryptoAccountForm.name.trim()) {
+      this.toastService.error('Please enter a name');
+      return false;
+    }
+    if (!this.cryptoAccountForm.symbol.trim()) {
+      this.toastService.error('Please enter a symbol');
+      return false;
+    }
+    if (!this.cryptoAccountForm.address.trim()) {
+      this.toastService.error('Please enter an address');
+      return false;
+    }
+    return true;
+  }
+
+  seedDefaultCryptoAccounts() {
+    if (!confirm('This will create default crypto accounts if they don\'t exist. Continue?')) {
+      return;
+    }
+
+    this.isCryptoLoading = true;
+    this.cryptoService.seedDefaultAccounts().subscribe({
+      next: (response) => {
+        this.toastService.success(response.message);
+        this.loadCryptoAccounts();
+      },
+      error: (error) => {
+        console.error('Error seeding accounts:', error);
+        this.toastService.error('Failed to seed default accounts');
+        this.isCryptoLoading = false;
+      }
+    });
+  }
+
+  copyCryptoAddress(address: string) {
+    navigator.clipboard.writeText(address).then(() => {
+      this.toastService.success('Address copied to clipboard!');
+    }).catch(() => {
+      this.toastService.error('Failed to copy address');
+    });
   }
 }
