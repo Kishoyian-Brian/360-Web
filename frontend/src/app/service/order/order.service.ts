@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 
 export interface OrderItem {
   id: string;
@@ -59,7 +60,10 @@ export interface OrdersResponse {
 export class OrderService {
   private readonly API_URL = 'https://three60-web-gzzw.onrender.com/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   // Get user's orders with pagination and filters
   getOrders(
@@ -78,17 +82,24 @@ export class OrderService {
       if (filters.search) params = params.set('search', filters.search);
     }
 
-    return this.http.get<OrdersResponse>(`${this.API_URL}/orders`, { params });
+    return this.http.get<OrdersResponse>(`${this.API_URL}/orders`, { 
+      params,
+      headers: this.authService.getAuthHeaders()
+    });
   }
 
   // Get a single order by ID
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.API_URL}/orders/${orderId}`);
+    return this.http.get<Order>(`${this.API_URL}/orders/${orderId}`, {
+      headers: this.authService.getAuthHeaders()
+    });
   }
 
   // Create a new order from cart
   createOrder(request: CreateOrderRequest): Observable<Order> {
-    return this.http.post<Order>(`${this.API_URL}/orders`, request);
+    return this.http.post<Order>(`${this.API_URL}/orders`, request, {
+      headers: this.authService.getAuthHeaders()
+    });
   }
 
   // Update order (for payment proof, status changes, etc.)
@@ -101,7 +112,9 @@ export class OrderService {
     const formData = new FormData();
     formData.append('paymentProof', paymentProofFile);
     
-    return this.http.post<Order>(`${this.API_URL}/orders/${orderId}/payment-proof`, formData);
+    return this.http.post<Order>(`${this.API_URL}/orders/${orderId}/payment-proof`, formData, {
+      headers: this.authService.getAuthHeaders()
+    });
   }
 
   // Cancel order
