@@ -41,7 +41,7 @@ export interface UpdateCryptoAccountRequest {
   providedIn: 'root'
 })
 export class CryptoService {
-  private readonly baseUrl = `${environment.apiUrl}/api/crypto`;
+  private readonly baseUrl = `${environment.apiUrl}/crypto`;
   private cryptoAccountsSubject = new BehaviorSubject<CryptoAccount[]>([]);
   
   public cryptoAccounts$ = this.cryptoAccountsSubject.asObservable();
