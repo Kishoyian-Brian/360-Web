@@ -109,11 +109,20 @@ export class OrderService {
 
   // Submit payment proof
   submitPaymentProof(orderId: string, paymentProofFile: File): Observable<Order> {
+    console.log('OrderService: Submitting payment proof for order:', orderId);
+    console.log('OrderService: File details:', paymentProofFile.name, paymentProofFile.size, paymentProofFile.type);
+    
     const formData = new FormData();
     formData.append('paymentProof', paymentProofFile);
     
+    // Get auth headers but remove Content-Type for FormData
+    const authHeaders = this.authService.getAuthHeaders();
+    delete authHeaders['Content-Type']; // Let browser set multipart boundary
+    
+    console.log('OrderService: Sending request to:', `${this.API_URL}/orders/${orderId}/payment-proof`);
+    
     return this.http.post<Order>(`${this.API_URL}/orders/${orderId}/payment-proof`, formData, {
-      headers: this.authService.getAuthHeaders()
+      headers: authHeaders
     });
   }
 

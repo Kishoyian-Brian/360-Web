@@ -11,6 +11,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -145,12 +146,19 @@ export class OrderController {
     @UploadedFile() file: Express.Multer.File,
     @Request() req: any,
   ): Promise<OrderResponseDto> {
+    console.log('Upload payment proof endpoint called');
+    console.log('Order ID:', id);
+    console.log('File received:', file ? file.filename : 'No file');
+    console.log('User:', req.user.id, req.user.role);
+    
     if (!file) {
-      throw new Error('Payment proof file is required');
+      console.error('No file uploaded');
+      throw new BadRequestException('Payment proof file is required');
     }
 
     // Create the URL for the uploaded file
     const paymentProofUrl = `/uploads/${file.filename}`;
+    console.log('Payment proof URL:', paymentProofUrl);
     
     // Update the order with payment proof (only allow user to update their own orders unless admin)
     const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;

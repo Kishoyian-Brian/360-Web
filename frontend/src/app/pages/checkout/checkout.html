@@ -135,7 +135,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">
                 Screenshot of Payment Confirmation
               </label>
-              <input type="file" accept="image/*" (change)="onFileSelected($event)"
+              <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
                 class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand file:text-white hover:file:bg-brand/90" />
               <p class="text-xs text-gray-500 mt-1">
                 Accepted formats: JPG, PNG, GIF (Max 5MB)
@@ -150,6 +150,11 @@
               </button>
             </div>
 
+            <!-- Debug Info -->
+            <div *ngIf="paymentProofFile" class="mb-2 text-xs text-gray-500">
+              Selected file: {{ paymentProofFile.name }} ({{ (paymentProofFile.size / 1024 / 1024).toFixed(2) }}MB)
+            </div>
+            
             <!-- Submit Button -->
             <button (click)="submitPaymentProof()" [disabled]="!paymentProofFile || isSubmittingPayment"
               class="w-full bg-brand text-white py-3 px-6 rounded-lg font-medium hover:bg-brand/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2">

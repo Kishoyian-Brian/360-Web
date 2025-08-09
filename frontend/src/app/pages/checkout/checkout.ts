@@ -211,6 +211,7 @@ export class Checkout implements OnInit {
       }
 
       this.paymentProofFile = file;
+      console.log('Payment proof file selected:', file.name, file.size);
 
       // Create preview
       const reader = new FileReader();
@@ -218,32 +219,56 @@ export class Checkout implements OnInit {
         this.paymentProofPreview = e.target.result;
       };
       reader.readAsDataURL(file);
+    } else {
+      // Clear the file if none selected
+      this.paymentProofFile = null;
+      this.paymentProofPreview = null;
+      console.log('No file selected, cleared payment proof');
     }
   }
 
   removePaymentProof() {
     this.paymentProofFile = null;
     this.paymentProofPreview = null;
+    
+    // Clear the file input
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+    console.log('Payment proof removed and file input cleared');
   }
 
   submitPaymentProof() {
+    console.log('Submit payment proof called');
+    console.log('Payment proof file:', this.paymentProofFile);
+    console.log('Order:', this.order);
+    
     if (!this.paymentProofFile || !this.order) {
-      this.toastService.error('Please select a payment proof image');
+      if (!this.paymentProofFile) {
+        console.log('No payment proof file selected');
+        this.toastService.error('Please select a payment proof image');
+      }
+      if (!this.order) {
+        console.log('No order found');
+        this.toastService.error('Order not found. Please refresh and try again.');
+      }
       return;
     }
 
     this.isSubmittingPayment = true;
+    console.log('Submitting payment proof for order:', this.order.id);
 
     this.orderService.submitPaymentProof(this.order.id, this.paymentProofFile).subscribe({
       next: (updatedOrder) => {
         this.order = updatedOrder;
         this.isSubmittingPayment = false;
         this.toastService.success('Payment proof submitted successfully! We will verify your payment shortly.');
-        console.log('Payment proof submitted:', updatedOrder);
+        console.log('Payment proof submitted successfully:', updatedOrder);
       },
       error: (error) => {
         console.error('Error submitting payment proof:', error);
-        this.toastService.error('Failed to submit payment proof');
+        this.toastService.error('Failed to submit payment proof. Please try again.');
         this.isSubmittingPayment = false;
       }
     });
