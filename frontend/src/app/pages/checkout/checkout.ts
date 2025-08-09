@@ -56,6 +56,16 @@ export class Checkout implements OnInit {
     this.loadCryptoAccounts();
   }
 
+  private cartLoaded = false;
+  private cryptoLoaded = false;
+
+  private checkIfReadyToCreateOrder() {
+    if (this.cartLoaded && this.cryptoLoaded && this.cart && this.cryptoPayments.length > 0) {
+      console.log('Both cart and crypto accounts loaded, creating order...');
+      this.createOrder();
+    }
+  }
+
   loadCart() {
     this.isLoading = true;
     this.cartService.getCart().subscribe({
@@ -109,6 +119,8 @@ export class Checkout implements OnInit {
             this.cryptoAmount = updatedCart.total;
             this.isLoading = false;
             console.log('Updated cart with product details:', updatedCart);
+            this.cartLoaded = true;
+            this.checkIfReadyToCreateOrder();
           },
           error: (error) => {
             console.error('Error reloading cart:', error);
@@ -121,6 +133,8 @@ export class Checkout implements OnInit {
       });
     } else {
       this.isLoading = false;
+      this.cartLoaded = true;
+      this.checkIfReadyToCreateOrder();
     }
   }
 
@@ -131,14 +145,18 @@ export class Checkout implements OnInit {
       return;
     }
 
+    // Check if order already exists
+    if (this.order) {
+      console.log('Order already exists:', this.order.id);
+      return;
+    }
+
     this.isLoading = true;
     const orderRequest: CreateOrderRequest = {
-      items: this.cart.items.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity
-      })),
-      bitcoinAddress: this.selectedCrypto?.address || '' // Keep for backward compatibility
+      paymentMethod: this.selectedCrypto ? this.selectedCrypto.symbol : 'CRYPTO'
     };
+
+    console.log('Creating order with request:', orderRequest);
 
     this.orderService.createOrder(orderRequest).subscribe({
       next: (order) => {
@@ -164,10 +182,14 @@ export class Checkout implements OnInit {
           this.selectedCrypto = accounts[0]; // Default to first account
         }
         console.log('Loaded crypto accounts:', accounts);
+        this.cryptoLoaded = true;
+        this.checkIfReadyToCreateOrder();
       },
       error: (error) => {
         console.error('Error loading crypto accounts:', error);
         this.toastService.error('Failed to load payment methods');
+        this.cryptoLoaded = true; // Set to true even on error so we don't block order creation
+        this.checkIfReadyToCreateOrder();
       }
     });
   }

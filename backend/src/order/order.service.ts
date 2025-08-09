@@ -259,6 +259,8 @@ export class OrderService {
       where.userId = userId;
     }
 
+    console.log('Looking for order with conditions:', where);
+
     const order = await this.prisma.order.findFirst({
       where,
       include: {
@@ -273,8 +275,22 @@ export class OrderService {
       },
     });
 
+    console.log('Order found:', order ? `ID: ${order.id}, UserID: ${order.userId}` : 'No order found');
+
     if (!order) {
-      throw new NotFoundException('Order not found');
+      // Let's also try to find the order without user filtering to debug
+      const orderWithoutUserFilter = await this.prisma.order.findUnique({
+        where: { id: orderId },
+        select: { id: true, userId: true }
+      });
+      
+      if (orderWithoutUserFilter) {
+        console.log('Order exists but belongs to different user. Order UserID:', orderWithoutUserFilter.userId, 'Request UserID:', userId);
+        throw new NotFoundException('Order not found or access denied');
+      } else {
+        console.log('Order with ID does not exist:', orderId);
+        throw new NotFoundException('Order not found');
+      }
     }
 
     const updatedOrder = await this.prisma.order.update({
