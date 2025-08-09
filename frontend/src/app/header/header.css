@@ -118,6 +118,25 @@ body.menu-open {
   overflow: hidden;
 }
 
+/* Mobile menu scrolling improvements */
+.mobile-menu-nav {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Ensure dropdowns don't break scrolling */
+.mobile-menu-nav ul {
+  padding-bottom: 2rem; /* Extra padding at bottom for easier scrolling */
+}
+
+/* Better touch scrolling on iOS */
+@supports (-webkit-touch-callout: none) {
+  .mobile-menu-nav {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Debug styles - ensure mobile menu is visible */
 [class*="fixed inset-0 z-50"] {
   display: block !important;

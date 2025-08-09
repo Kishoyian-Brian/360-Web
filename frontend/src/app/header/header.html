@@ -166,12 +166,12 @@
   
   <!-- Side Menu -->
   <div 
-    class="fixed top-0 left-0 h-full w-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col"
+    class="fixed top-0 left-0 h-full w-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col overflow-hidden"
     (click)="$event.stopPropagation()"
     style="display: block !important; transform: translateX(0) !important;"
   >
     <!-- Mobile Menu Header -->
-    <div class="flex items-center justify-end p-6 border-b border-gray-100">
+    <div class="flex items-center justify-end p-6 border-b border-gray-100 flex-shrink-0">
       <button
         (click)="closeMobileMenu()"
         class="text-gray-400 hover:text-gray-600 p-2"
@@ -183,8 +183,8 @@
     </div>
 
     <!-- Mobile Menu Items -->
-    <nav class="p-6 flex-1 overflow-y-auto">
-      <ul class="space-y-1">
+    <nav class="p-6 flex-1 overflow-y-auto min-h-0 mobile-menu-nav">
+      <ul class="space-y-1 pb-8">
         <!-- Main Navigation -->
         <li>
           <a routerLink="/" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
