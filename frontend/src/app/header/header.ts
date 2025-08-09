@@ -16,6 +16,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartItemCount: number = 0;
   isMobileMenuOpen: boolean = false;
   isAdmin: boolean = false;
+  isPagesDropdownOpen: boolean = false;
+  isCategoriesDropdownOpen: boolean = false;
+  isMoreLogsDropdownOpen: boolean = false;
+  isLinkablesDropdownOpen: boolean = false;
+  isTransfersDropdownOpen: boolean = false;
   private cartSubscription?: Subscription;
 
   constructor(
@@ -86,5 +91,26 @@ export class HeaderComponent implements OnInit, OnDestroy {
     console.log('Navigating to:', route);
     this.closeMobileMenu();
     this.router.navigate([route]);
+  }
+
+  // Dropdown toggle methods
+  togglePagesDropdown(): void {
+    this.isPagesDropdownOpen = !this.isPagesDropdownOpen;
+  }
+
+  toggleCategoriesDropdown(): void {
+    this.isCategoriesDropdownOpen = !this.isCategoriesDropdownOpen;
+  }
+
+  toggleMoreLogsDropdown(): void {
+    this.isMoreLogsDropdownOpen = !this.isMoreLogsDropdownOpen;
+  }
+
+  toggleLinkablesDropdown(): void {
+    this.isLinkablesDropdownOpen = !this.isLinkablesDropdownOpen;
+  }
+
+  toggleTransfersDropdown(): void {
+    this.isTransfersDropdownOpen = !this.isTransfersDropdownOpen;
   }
 }

@@ -15,4 +15,29 @@ body {
   font-family: 'Karla', sans-serif;
 }
 
+/* Hide scrollbar for mobile while maintaining scrollability */
+@media (max-width: 639px) {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Ensure body and main containers are scrollable */
+  body, html {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  main {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
 /* You can add global styles to this file, and also import other style files */

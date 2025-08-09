@@ -8,10 +8,11 @@
           <a href="https://t.me/legitsauce_methods" target="_blank" rel="noopener noreferrer">
             <div class="flex items-center">
               <div
-                class="w-8 h-8 bg-yellow-400 rounded flex items-center justify-center"
+                class="w-8 h-8 bg-yellow-400 rounded flex items-center justify-center mr-2"
               >
                 <img src="https://i.pinimg.com/736x/16/ef/29/16ef29479eea4687d442988fd5377192.jpg" alt="">
               </div>
+              <div class="font-bold text-sm text-white uppercase">WILLIAMSMITH EMPIRE</div>
             </div>
           </a>
         </div>
@@ -165,21 +166,15 @@
   
   <!-- Side Menu -->
   <div 
-    class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300"
+    class="fixed top-0 left-0 h-full w-full bg-white shadow-lg transform transition-transform duration-300 flex flex-col"
     (click)="$event.stopPropagation()"
     style="display: block !important; transform: translateX(0) !important;"
   >
     <!-- Mobile Menu Header -->
-    <div class="flex items-center justify-between p-4 border-b border-gray-200">
-      <div class="flex items-center">
-        <div class="w-8 h-8 bg-yellow-400 rounded flex items-center justify-center mr-2">
-          <img src="https://i.pinimg.com/736x/16/ef/29/16ef29479eea4687d442988fd5377192.jpg" alt="">
-        </div>
-        <span class="font-bold text-lg text-gray-900">Menu</span>
-      </div>
+    <div class="flex items-center justify-end p-6 border-b border-gray-100">
       <button
         (click)="closeMobileMenu()"
-        class="text-gray-500 hover:text-gray-700"
+        class="text-gray-400 hover:text-gray-600 p-2"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -188,223 +183,294 @@
     </div>
 
     <!-- Mobile Menu Items -->
-    <nav class="p-4">
-      <ul class="space-y-2">
+    <nav class="p-6 flex-1 overflow-y-auto">
+      <ul class="space-y-1">
+        <!-- Main Navigation -->
         <li>
-          <a routerLink="/" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Home
-          </a>
-        </li>
-        <li>
-          <a routerLink="/blog" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Blog
-          </a>
-        </li>
-        <li>
-          <a routerLink="/voucher" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Vouches
-          </a>
-        </li>
-        <li>
-          <a *ngIf="!isAdmin" routerLink="/cart" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded flex items-center justify-between">
-            <span>Cart</span>
-            <span class="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-              {{ cartItemCount }}
-            </span>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/login" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Login
+          <a routerLink="/" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <span class="font-medium">Home</span>
           </a>
         </li>
         
+        <li>
+          <a routerLink="/shop" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <span class="font-medium">Shop</span>
+          </a>
+        </li>
+        
+        <li>
+          <a routerLink="/blog" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <span class="font-medium">Blog</span>
+          </a>
+        </li>
+        
+        <!-- Pages Section -->
+        <li>
+          <button (click)="togglePagesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div class="flex items-center">
+              <span class="font-medium">Pages</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isPagesDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <!-- Pages Dropdown -->
+          <ul *ngIf="isPagesDropdownOpen" class="ml-6 mt-2 space-y-1">
+            <li>
+              <a routerLink="/register" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Register</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/login" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Log In</span>
+              </a>
+            </li>
+            <li *ngIf="!isAdmin">
+              <a routerLink="/cart" (click)="closeMobileMenu()" class="flex items-center justify-between px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Cart</span>
+                <span class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                  {{ cartItemCount }}
+                </span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/pages/cashout-clips" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Cashout Clips</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/checkout" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Checkout</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/voucher" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Vouches</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- Divider -->
+        <li class="border-t border-blue-100 my-4"></li>
+        
         <!-- Categories Section -->
-        <li class="pt-4">
-          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Categories</div>
-        </li>
         <li>
-          <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            CC & CVV
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Bank Logs
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Stealth Accounts
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Fullz
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Fraud Guides
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/tools" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Tools
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            E-Gift Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Deposit Checks
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Transfers
-          </a>
-        </li>
-        <li>
-          <a routerLink="/category/clones" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Clones
-          </a>
+          <button (click)="toggleCategoriesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div class="flex items-center">
+              <span class="font-medium">Categories</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isCategoriesDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <!-- Categories Dropdown -->
+          <ul *ngIf="isCategoriesDropdownOpen" class="ml-6 mt-2 space-y-1">
+            <li>
+              <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">CC & CVV</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Bank Logs</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Stealth Accounts</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Fullz</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Fraud Guides</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/tools" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Tools</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">E-Gift Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Deposit Checks</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Transfers</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/category/clones" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Clones</span>
+              </a>
+            </li>
+          </ul>
         </li>
         
         <!-- More Logs Section -->
-        <li class="pt-4">
-          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">More Logs</div>
-        </li>
         <li>
-          <a routerLink="/more-logs/usa-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            USA Banks
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/uk-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            UK Banks
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/canada-banks" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Canada Banks
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/usa-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            USA Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/uk-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            UK Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/europe-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Europe Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/africa-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Africa Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/canada-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Canada Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/australia-cards" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Australia Cards
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/credit-union" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Credit Union
-          </a>
-        </li>
-        <li>
-          <a routerLink="/more-logs/crypto-logs" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Crypto Logs
-          </a>
+          <button (click)="toggleMoreLogsDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div class="flex items-center">
+              <span class="font-medium">More Logs</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isMoreLogsDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <!-- More Logs Dropdown -->
+          <ul *ngIf="isMoreLogsDropdownOpen" class="ml-6 mt-2 space-y-1">
+            <li>
+              <a routerLink="/more-logs/usa-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">USA Banks</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/uk-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">UK Banks</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/canada-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Canada Banks</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/usa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">USA Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/uk-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">UK Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/europe-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Europe Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/africa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Africa Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/canada-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Canada Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/australia-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Australia Cards</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/credit-union" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Credit Union</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/more-logs/crypto-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Crypto Logs</span>
+              </a>
+            </li>
+          </ul>
         </li>
         
         <!-- Linkables Section -->
-        <li class="pt-4">
-          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Linkables</div>
-        </li>
         <li>
-          <a routerLink="/linkable/cashapp" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            CashApp
-          </a>
-        </li>
-        <li>
-          <a routerLink="/linkable/paypal" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            PayPal
-          </a>
-        </li>
-        <li>
-          <a routerLink="/linkable/venmo" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Venmo
-          </a>
-        </li>
-        <li>
-          <a routerLink="/linkable/applepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            ApplePay
-          </a>
-        </li>
-        <li>
-          <a routerLink="/linkable/googlepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            GooglePay
-          </a>
+          <button (click)="toggleLinkablesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div class="flex items-center">
+              <span class="font-medium">Linkables</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isLinkablesDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <!-- Linkables Dropdown -->
+          <ul *ngIf="isLinkablesDropdownOpen" class="ml-6 mt-2 space-y-1">
+            <li>
+              <a routerLink="/linkable/cashapp" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">CashApp</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/linkable/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">PayPal</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/linkable/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Venmo</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/linkable/applepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">ApplePay</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/linkable/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">GooglePay</span>
+              </a>
+            </li>
+          </ul>
         </li>
         
         <!-- Transfers Section -->
-        <li class="pt-4">
-          <div class="px-4 py-2 text-sm font-semibold text-gray-600 uppercase tracking-wide">Transfers</div>
-        </li>
         <li>
-          <a routerLink="/transfers/cashapp" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            CashApp
-          </a>
-        </li>
-        <li>
-          <a routerLink="/transfers/paypal" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            PayPal
-          </a>
-        </li>
-        <li>
-          <a routerLink="/transfers/venmo" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Venmo
-          </a>
-        </li>
-        <li>
-          <a routerLink="/transfers/zelle" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Zelle
-          </a>
-        </li>
-        <li>
-          <a routerLink="/transfers/googlepay" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            GooglePay
-          </a>
+          <button (click)="toggleTransfersDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+            <div class="flex items-center">
+              <span class="font-medium">Transfers</span>
+            </div>
+            <svg class="w-4 h-4 transition-transform" [class.rotate-180]="isTransfersDropdownOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <!-- Transfers Dropdown -->
+          <ul *ngIf="isTransfersDropdownOpen" class="ml-6 mt-2 space-y-1">
+            <li>
+              <a routerLink="/transfers/cashapp" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">CashApp</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/transfers/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">PayPal</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/transfers/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Venmo</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/transfers/zelle" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">Zelle</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/transfers/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                <span class="font-medium">GooglePay</span>
+              </a>
+            </li>
+          </ul>
         </li>
         
-        <!-- User Actions -->
-        <li class="pt-4 border-t border-gray-200">
-          <a routerLink="/login" (click)="closeMobileMenu(); onLoginClick()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Login
-          </a>
-        </li>
-        <li>
-          <a routerLink="/cart" (click)="closeMobileMenu()" class="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded">
-            Cart ({{ cartItemCount }})
-          </a>
-        </li>
+
       </ul>
     </nav>
   </div>

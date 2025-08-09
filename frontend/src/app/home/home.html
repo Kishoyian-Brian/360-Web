@@ -34,7 +34,7 @@
       <!-- Products Grid -->
       <div
         *ngIf="!loading && products.length > 0"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6"
         id="cl-body"
       >
         <div class="col-span-1" *ngFor="let product of products">
@@ -53,7 +53,7 @@
                   <img
                     [src]="ProductUtils.getProductImage(product)"
                     [alt]="ProductUtils.getProductAltText(product)"
-                    class="mb-2 sm:mb-3 mx-auto h-28 sm:h-36 w-full object-contain"
+                    class="mb-2 sm:mb-3 mx-auto h-32 sm:h-40 w-full object-cover rounded-md"
                   />
                 </a>
               </div>

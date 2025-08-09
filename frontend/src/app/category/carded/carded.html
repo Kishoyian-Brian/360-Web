@@ -1,9 +1,9 @@
 <!-- Category Page Content -->
 <main>
-  <!-- Notice Banner -->
+  <!-- Notice Banner - Hidden on mobile -->
   <section class="my-0 lg:my-0">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="mb-2">
+      <div class="mb-2 hidden sm:block">
         <div class="mt-4 mb-0">
           <div class="bg-brand text-white p-3 overflow-hidden">
             <div class="animate-marquee whitespace-nowrap">
@@ -24,8 +24,8 @@
         </div>
       </div>
 
-      <!-- Category Header -->
-      <div class="mb-0">
+      <!-- Category Header - Hidden on mobile -->
+      <div class="mb-0 hidden sm:block">
         <div class="flex justify-between items-center bg-gray-100 p-4 rounded">
           <h1 class="text-2xl font-bold text-gray-900 text-center w-full">
             CARDED
@@ -48,7 +48,7 @@
 
         <!-- Products Grid -->
         <div class="lg:col-span-3 mt-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             <!-- Product Cards -->
             <div
               class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
@@ -67,12 +67,12 @@
                   <img
                     [src]="ProductUtils.getProductImage(product)"
                     [alt]="ProductUtils.getProductAltText(product)"
-                    class="w-full h-36 object-contain mb-3 cursor-pointer"
+                    class="w-full h-32 sm:h-40 object-cover rounded-md mb-2 sm:mb-3 cursor-pointer"
                     (click)="viewProduct(product)"
                   />
                 </div>
-                <div class="bg-gray-100 p-4 rounded">
-                  <div class="text-sm mb-1">
+                <div class="bg-gray-100 p-2 sm:p-4 rounded">
+                  <div class="text-xs sm:text-sm mb-1">
                     <small class="text-gray-600"
                       >{{ ProductUtils.getProductCategory(product) }}</small
                     >

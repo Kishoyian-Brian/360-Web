@@ -20,6 +20,9 @@ export class UsaCards implements OnInit {
   total = 0;
   totalPages = 0;
   ProductUtils = ProductUtils;
+  
+  // Notice message
+  noticeMessage = "NOTICE: All orders and payments must be made through our website or to our telegram support ";;
 
   constructor(
     private router: Router,

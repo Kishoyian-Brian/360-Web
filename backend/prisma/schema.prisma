@@ -480,3 +480,21 @@ model Payment {
 
     @@map("payments")
 }
+
+model CryptoAccount {
+    id          String  @id @default(cuid())
+    name        String  // Bitcoin, USDT, Ethereum, etc.
+    symbol      String  // BTC, USDT, ETH, etc.
+    address     String  // Crypto wallet address
+    network     String? // TRC20, ERC20, etc.
+    isActive    Boolean @default(true)
+    order       Int     @default(0) // For ordering in UI
+    description String? // Optional description
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([symbol])
+    @@map("crypto_accounts")
+}
