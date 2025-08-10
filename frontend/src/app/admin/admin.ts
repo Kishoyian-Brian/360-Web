@@ -907,7 +907,10 @@ export class Admin implements OnInit {
     return isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
   }
 
-  getFullName(user: User): string {
+  getFullName(user: User | undefined): string {
+    if (!user) {
+      return 'Unknown User';
+    }
     if (user.firstName && user.lastName) {
       return `${user.firstName} ${user.lastName}`;
     }
