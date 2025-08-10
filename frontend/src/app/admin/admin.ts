@@ -9,6 +9,7 @@ import { ToastService } from '../services/toast.service';
 import { BlogService, BlogPost, CreateBlogPostDto, UpdateBlogPostDto, BlogCategory, BlogTag } from '../service/blog/blog.service';
 import { VouchService, Vouch, CreateVouchDto, UpdateVouchDto, VouchResponse, VouchStats } from '../service/vouch/vouch.service';
 import { CryptoService, CryptoAccount, CreateCryptoAccountRequest } from '../service/crypto/crypto.service';
+import { UserService } from '../service/user/user';
 
 export interface Product {
   id: string;
@@ -395,7 +396,8 @@ export class Admin implements OnInit {
     private blogService: BlogService,
     private vouchService: VouchService,
     private toastService: ToastService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -2238,10 +2240,17 @@ export class Admin implements OnInit {
   approveTopup(topupId: string) {
     this.isProcessingTopup = true;
     
-    // Simulate API call to approve topup
-    setTimeout(() => {
-      const topup = this.topups.find(t => t.id === topupId);
-      if (topup) {
+    const topup = this.topups.find(t => t.id === topupId);
+    if (!topup) {
+      this.toastService.error('Topup request not found');
+      this.isProcessingTopup = false;
+      return;
+    }
+
+    // Add funds to user account
+    this.userService.addFundsToUser(topup.userId, topup.amount, `Topup approved - Request #${topupId}`).subscribe({
+      next: (userProfile) => {
+        // Update topup status
         topup.status = 'APPROVED';
         topup.updatedAt = new Date().toISOString();
         
@@ -2250,11 +2259,16 @@ export class Admin implements OnInit {
         this.topupStats!.approvedRequests++;
         this.pendingTopupsCount = this.topupStats!.pendingRequests;
         
-        this.toastService.success(`Topup request #${topupId} approved! Funds added to user account.`);
+        this.toastService.success(`Topup request #${topupId} approved! $${topup.amount.toFixed(2)} added to user account. New balance: $${userProfile.balance.toFixed(2)}`);
+        this.isProcessingTopup = false;
+        this.closeTopupProofModal();
+      },
+      error: (error) => {
+        console.error('Failed to add funds to user account:', error);
+        this.toastService.error('Failed to add funds to user account. Please try again.');
+        this.isProcessingTopup = false;
       }
-      this.isProcessingTopup = false;
-      this.closeTopupProofModal();
-    }, 1000);
+    });
   }
 
   rejectTopup(topupId: string) {

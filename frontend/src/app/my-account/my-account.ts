@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../service/auth/auth.service';
+import { UserService, UserProfile } from '../service/user/user';
+import { Subscription } from 'rxjs';
 
 interface User {
   id: number;
@@ -17,18 +19,28 @@ interface User {
   templateUrl: './my-account.html',
   styleUrl: './my-account.css'
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnInit, OnDestroy {
   user: User | null = null;
   isLoggedIn = false;
+  isLoading = false;
+  private balanceSubscription?: Subscription;
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.checkAuthentication();
     this.loadUserData();
+    this.initializeBalanceSubscription();
+  }
+
+  ngOnDestroy() {
+    if (this.balanceSubscription) {
+      this.balanceSubscription.unsubscribe();
+    }
   }
 
   checkAuthentication() {
@@ -42,16 +54,43 @@ export class MyAccountComponent implements OnInit {
   }
 
   loadUserData() {
-    // Load user data from AuthService
+    this.isLoading = true;
+    // Load user data from AuthService and UserService
     const currentUser = this.authService.currentUser;
     if (currentUser) {
       this.user = {
         id: parseInt(currentUser.id),
         username: currentUser.username,
         email: currentUser.email,
-        balance: 0, // You can get this from API later
+        balance: this.userService.getCurrentBalance(), // Get real balance from service
         status: currentUser.isActive ? 'Active' : 'Inactive'
       };
+      
+      // Load user profile with balance from API
+      this.userService.getUserProfile().subscribe({
+        next: (profile: UserProfile) => {
+          this.user = {
+            id: parseInt(profile.id),
+            username: profile.username,
+            email: profile.email,
+            balance: profile.balance, // Real balance from API
+            status: profile.isActive ? 'Active' : 'Inactive'
+          };
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Failed to load user profile:', error);
+          // Fallback to auth service data
+          this.user = {
+            id: parseInt(currentUser.id),
+            username: currentUser.username,
+            email: currentUser.email,
+            balance: 0, // Default to 0 if API fails
+            status: currentUser.isActive ? 'Active' : 'Inactive'
+          };
+          this.isLoading = false;
+        }
+      });
     } else {
       // Mock user data for demonstration
       this.user = {
@@ -61,7 +100,17 @@ export class MyAccountComponent implements OnInit {
         balance: 0,
         status: 'Active'
       };
+      this.isLoading = false;
     }
+  }
+
+  initializeBalanceSubscription() {
+    // Subscribe to balance updates
+    this.balanceSubscription = this.userService.userBalance$.subscribe(balance => {
+      if (this.user) {
+        this.user.balance = balance;
+      }
+    });
   }
 
   onTopup() {
