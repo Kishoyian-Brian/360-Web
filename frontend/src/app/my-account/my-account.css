@@ -1,0 +1,106 @@
+/* My Account Component - Tailwind CSS Custom Styles */
+
+/* Custom Brand Color */
+.bg-brand {
+  background-color: #32529d;
+}
+
+.hover\:text-brand:hover {
+  color: #32529d;
+}
+
+.text-brand {
+  color: #32529d;
+}
+
+/* Sidebar Navigation Styles */
+.sidebar-nav a {
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-nav a:hover {
+  background-color: #f3f4f6;
+  transform: translateX(4px);
+}
+
+/* Active Link Styles */
+.sidebar-nav a.active {
+  background-color: #32529d;
+  color: white;
+}
+
+/* Card Hover Effects */
+.account-card {
+  transition: all 0.3s ease-in-out;
+}
+
+.account-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #32529d;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #2a4a8a;
+  transform: translateY(-1px);
+}
+
+/* Status Badge Styles */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar-nav {
+    margin-bottom: 1rem;
+  }
+  
+  .account-info {
+    text-align: center;
+  }
+}
+
+/* Animation for loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #32529d;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

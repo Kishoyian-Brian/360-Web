@@ -32,6 +32,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { CartAdminGuard } from './guards/cart-admin.guard';
 import { ConnectionTestComponent } from './connection-test/connection-test';
+import { MyAccountComponent } from './my-account/my-account';
 
 // Admin Components
 import { Admin } from './admin/admin';
@@ -132,4 +133,5 @@ export const routes: Routes = [
   { path: 'voucher', component: Voucher },
   { path: 'blog', component: Blog },
   { path: 'blog/:slug', component: BlogArticle }, // Individual blog article route
+  { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuard] }, // My Account page - protected
 ];
