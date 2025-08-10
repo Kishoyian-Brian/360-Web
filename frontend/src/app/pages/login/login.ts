@@ -21,7 +21,7 @@ export class Login implements OnInit, OnDestroy {
 
   isLoading = false;
   isFormValid = false;
-  returnUrl: string = '/home';
+  returnUrl: string = '/my-account';
 
   constructor(
     private authService: AuthService,
@@ -36,7 +36,7 @@ export class Login implements OnInit, OnDestroy {
     this.clearLoginForm();
     
     this.route.queryParams.subscribe(params => {
-      this.returnUrl = params['returnUrl'] || '/home';
+      this.returnUrl = params['returnUrl'] || '/my-account';
     });
 
     if (this.authService.isAuthenticated) {
@@ -108,15 +108,15 @@ export class Login implements OnInit, OnDestroy {
 
   private handleSuccessfulLogin(): void {
     // Check if returnUrl is safe for the user's role
-    if (this.returnUrl && this.returnUrl !== '/home') {
+    if (this.returnUrl && this.returnUrl !== '/my-account') {
       // If user is admin and returnUrl is admin page, allow it
       if (this.authService.isAdmin && this.returnUrl === '/admin') {
         this.router.navigate([this.returnUrl]);
         return;
       }
-      // If user is not admin and returnUrl is admin page, redirect to home
+      // If user is not admin and returnUrl is admin page, redirect to my-account
       if (!this.authService.isAdmin && this.returnUrl === '/admin') {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/my-account']);
         return;
       }
       // For other returnUrls, check if user has permission (you can add more checks here)
@@ -130,7 +130,7 @@ export class Login implements OnInit, OnDestroy {
     if (this.authService.isAdmin) {
       this.router.navigate(['/admin']);
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/my-account']);
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../service/auth/auth.service';
 
 interface User {
   id: number;
@@ -20,7 +21,10 @@ export class MyAccountComponent implements OnInit {
   user: User | null = null;
   isLoggedIn = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.checkAuthentication();
@@ -28,9 +32,8 @@ export class MyAccountComponent implements OnInit {
   }
 
   checkAuthentication() {
-    // Check if user is logged in (you can use your auth service here)
-    const token = localStorage.getItem('authToken');
-    if (!token) {
+    // Check if user is logged in using AuthService
+    if (!this.authService.isAuthenticated) {
       // Redirect to login if not authenticated
       this.router.navigate(['/login']);
       return;
@@ -39,10 +42,16 @@ export class MyAccountComponent implements OnInit {
   }
 
   loadUserData() {
-    // Load user data from localStorage or API
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      this.user = JSON.parse(userData);
+    // Load user data from AuthService
+    const currentUser = this.authService.currentUser;
+    if (currentUser) {
+      this.user = {
+        id: parseInt(currentUser.id),
+        username: currentUser.username,
+        email: currentUser.email,
+        balance: 0, // You can get this from API later
+        status: currentUser.isActive ? 'Active' : 'Inactive'
+      };
     } else {
       // Mock user data for demonstration
       this.user = {
@@ -74,13 +83,11 @@ export class MyAccountComponent implements OnInit {
   }
 
   onLogout() {
-    // Handle logout functionality
+    // Handle logout functionality using AuthService
     console.log('Logout clicked');
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
+    this.authService.logout();
     this.isLoggedIn = false;
     this.user = null;
-    this.router.navigate(['/login']);
   }
 
   onAddFunds() {
