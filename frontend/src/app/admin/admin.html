@@ -104,6 +104,17 @@
             <span class="ml-3" *ngIf="!isSidebarCollapsed">Crypto Payments</span>
           </a>
 
+          <!-- Topup Requests -->
+          <a (click)="navigateTo('topups'); $event.preventDefault()"
+            class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
+            [class.bg-blue-600]="currentSection === 'topups'" [class.text-white]="currentSection === 'topups'">
+            <i class="fas fa-wallet w-5 h-5"></i>
+            <span class="ml-3" *ngIf="!isSidebarCollapsed">Topup Requests</span>
+            <span *ngIf="!isSidebarCollapsed && pendingTopupsCount > 0" class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+              {{ pendingTopupsCount }}
+            </span>
+          </a>
+
           <!-- Settings -->
           <a (click)="navigateTo('settings'); $event.preventDefault()"
             class="flex items-center px-3 py-2 text-gray-300 rounded-lg hover:bg-gray-800 hover:text-white transition-colors cursor-pointer"
@@ -1986,6 +1997,165 @@
           </div>
         </div>
 
+        <!-- Topup Requests Section -->
+        <div *ngIf="currentSection === 'topups'">
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-900">
+                  Topup Requests Management
+                </h2>
+                <div class="flex items-center space-x-4">
+                  <div class="text-sm text-gray-600">
+                    <span class="font-medium">{{ pendingTopupsCount }}</span> pending requests
+                  </div>
+                  <button (click)="loadTopups()" 
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-sync-alt mr-2"></i>Refresh
+                  </button>
+                </div>
+              </div>
+              <p class="text-gray-600 mt-2">
+                Review and approve topup requests from users. Users can add funds to their accounts using cryptocurrency payments.
+              </p>
+            </div>
+
+            <!-- Topup Statistics -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-blue-100 rounded-lg">
+                      <i class="fas fa-wallet text-blue-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Total Requests</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ topupStats?.totalRequests || 0 }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-yellow-100 rounded-lg">
+                      <i class="fas fa-clock text-yellow-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Pending</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ topupStats?.pendingRequests || 0 }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-green-100 rounded-lg">
+                      <i class="fas fa-check text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Approved</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ topupStats?.approvedRequests || 0 }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 border">
+                  <div class="flex items-center">
+                    <div class="p-2 bg-red-100 rounded-lg">
+                      <i class="fas fa-times text-red-600"></i>
+                    </div>
+                    <div class="ml-4">
+                      <p class="text-sm font-medium text-gray-600">Rejected</p>
+                      <p class="text-2xl font-semibold text-gray-900">{{ topupStats?.rejectedRequests || 0 }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Topup Requests List -->
+            <div class="p-6">
+              <div *ngIf="isLoadingTopups && topups.length === 0" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-2 text-gray-600">Loading topup requests...</p>
+              </div>
+
+              <div *ngIf="!isLoadingTopups && topups.length === 0" class="text-center py-12">
+                <i class="fas fa-wallet text-gray-400 text-4xl mb-4"></i>
+                <p class="text-lg font-medium text-gray-600">No Topup Requests</p>
+                <p class="text-sm text-gray-500">No topup requests have been submitted yet.</p>
+              </div>
+
+              <div *ngIf="!isLoadingTopups && topups.length > 0" class="space-y-4">
+                <div *ngFor="let topup of topups" class="bg-white border border-gray-200 rounded-lg p-6">
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-4 mb-4">
+                        <div class="flex items-center space-x-2">
+                          <span class="text-lg font-semibold text-gray-900">#{{ topup.id }}</span>
+                          <span [class]="getTopupStatusBadgeClass(topup.status)" class="px-2 py-1 text-xs font-medium rounded-full">
+                            {{ getTopupStatusText(topup.status) }}
+                          </span>
+                        </div>
+                        <span class="text-sm text-gray-500">{{ formatDate(topup.createdAt) }}</span>
+                      </div>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">User</p>
+                          <p class="text-gray-900">{{ topup.user?.username || 'Unknown' }}</p>
+                          <p class="text-sm text-gray-500">{{ topup.user?.email || 'No email' }}</p>
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Amount</p>
+                          <p class="text-lg font-semibold text-green-600">${{ topup.amount.toFixed(2) }}</p>
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-gray-600">Payment Method</p>
+                          <p class="text-gray-900">{{ topup.cryptoAccount?.name || 'Unknown' }}</p>
+                          <p class="text-sm text-gray-500">{{ topup.cryptoAccount?.symbol }}</p>
+                        </div>
+                      </div>
+
+                      <!-- Payment Proof -->
+                      <div *ngIf="topup.paymentProofUrl" class="mb-4">
+                        <p class="text-sm font-medium text-gray-600 mb-2">Payment Proof</p>
+                        <div class="flex items-center space-x-2">
+                          <img [src]="getTopupProofUrl(topup.paymentProofUrl)" 
+                               alt="Payment proof" 
+                               class="w-20 h-20 object-cover rounded-lg border cursor-pointer"
+                               (click)="viewTopupProof(topup)">
+                          <button (click)="viewTopupProof(topup)" 
+                                  class="text-blue-600 hover:text-blue-800 text-sm">
+                            View Full Size
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex flex-col space-y-2 ml-4">
+                      <button *ngIf="topup.status === 'PENDING'" 
+                              (click)="approveTopup(topup.id)"
+                              [disabled]="isProcessingTopup"
+                              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 transition-colors">
+                        <i class="fas fa-check mr-2"></i>Approve
+                      </button>
+                      <button *ngIf="topup.status === 'PENDING'" 
+                              (click)="rejectTopup(topup.id)"
+                              [disabled]="isProcessingTopup"
+                              class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 transition-colors">
+                        <i class="fas fa-times mr-2"></i>Reject
+                      </button>
+                      <button (click)="deleteTopup(topup.id)"
+                              class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                        <i class="fas fa-trash mr-2"></i>Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Settings Section -->
         <div *ngIf="currentSection === 'settings'">
           <div class="bg-white rounded-lg shadow">
@@ -2405,6 +2575,92 @@
                 (click)="updatePaymentStatus(selectedOrderForProof!.id, 'COMPLETED')"
                 class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
           Approve Payment
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Topup Proof Modal -->
+  <div *ngIf="showTopupProofModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" 
+       (click)="closeTopupProofModal()">
+    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3 shadow-lg rounded-md bg-white"
+         (click)="$event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b">
+        <h3 class="text-lg font-semibold text-gray-900">
+          Topup Payment Proof - Request #{{ selectedTopupForProof?.id }}
+        </h3>
+        <button (click)="closeTopupProofModal()" 
+                class="text-gray-400 hover:text-gray-600 transition-colors">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="py-4" *ngIf="selectedTopupForProof">
+        <div class="mb-4">
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span class="font-medium text-gray-700">User:</span>
+              <span class="ml-2">{{ selectedTopupForProof.user?.username || 'N/A' }}</span>
+            </div>
+            <div>
+              <span class="font-medium text-gray-700">Amount:</span>
+              <span class="ml-2">${{ selectedTopupForProof.amount.toFixed(2) }}</span>
+            </div>
+            <div>
+              <span class="font-medium text-gray-700">Payment Method:</span>
+              <span class="ml-2">{{ selectedTopupForProof.cryptoAccount?.name || 'N/A' }}</span>
+            </div>
+            <div>
+              <span class="font-medium text-gray-700">Status:</span>
+              <span class="ml-2 px-2 py-1 text-xs rounded-full"
+                    [ngClass]="getTopupStatusBadgeClass(selectedTopupForProof.status)">
+                {{ getTopupStatusText(selectedTopupForProof.status) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Proof Image -->
+        <div class="mt-6">
+          <h4 class="text-md font-medium text-gray-900 mb-3">Payment Proof:</h4>
+          <div class="border rounded-lg p-4 bg-gray-50">
+            <img [src]="getTopupProofUrl(selectedTopupForProof.paymentProofUrl!)" 
+                 [alt]="'Payment proof for topup request ' + selectedTopupForProof.id"
+                 class="max-w-full h-auto rounded-lg shadow-md mx-auto"
+                 style="max-height: 500px;"
+                 (error)="$event.target.src='/assets/images/image-error.png'">
+          </div>
+          <div class="mt-2 text-center">
+            <a [href]="getTopupProofUrl(selectedTopupForProof.paymentProofUrl!)" 
+               target="_blank"
+               class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+              <i class="fas fa-external-link-alt mr-2"></i>
+              Open in New Tab
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex justify-end pt-4 border-t space-x-3">
+        <button (click)="closeTopupProofModal()"
+                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+          Close
+        </button>
+        <button *ngIf="selectedTopupForProof?.status === 'PENDING'"
+                (click)="approveTopup(selectedTopupForProof!.id)"
+                [disabled]="isProcessingTopup"
+                class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 transition-colors">
+          <i class="fas fa-check mr-2"></i>Approve & Add Funds
+        </button>
+        <button *ngIf="selectedTopupForProof?.status === 'PENDING'"
+                (click)="rejectTopup(selectedTopupForProof!.id)"
+                [disabled]="isProcessingTopup"
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 transition-colors">
+          <i class="fas fa-times mr-2"></i>Reject
         </button>
       </div>
     </div>

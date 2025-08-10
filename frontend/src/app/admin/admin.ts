@@ -54,6 +54,26 @@ export interface User {
   lastLogin?: string;
 }
 
+export interface TopupRequest {
+  id: string;
+  userId: string;
+  user?: User;
+  amount: number;
+  cryptoAccountId: string;
+  cryptoAccount?: CryptoAccount;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  paymentProofUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TopupStats {
+  totalRequests: number;
+  pendingRequests: number;
+  approvedRequests: number;
+  rejectedRequests: number;
+}
+
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -387,6 +407,7 @@ export class Admin implements OnInit {
     this.loadVouches(); // Initialize vouches
     this.loadVouchStats(); // Initialize vouch stats
     this.loadCryptoAccounts(); // Initialize crypto accounts
+    this.loadTopups(); // Initialize topup requests
   }
 
   navigateTo(section: string) {
@@ -427,6 +448,8 @@ export class Admin implements OnInit {
     } else if (section === 'vouches') {
       this.loadVouches();
       this.loadVouchStats();
+    } else if (section === 'topups') {
+      this.loadTopups();
     }
   }
 
@@ -2123,5 +2146,200 @@ export class Admin implements OnInit {
     }).catch(() => {
       this.toastService.error('Failed to copy address');
     });
+  }
+
+  // Topup Management
+  topups: TopupRequest[] = [];
+  isLoadingTopups = false;
+  topupStats: TopupStats | null = null;
+  pendingTopupsCount = 0;
+  isProcessingTopup = false;
+  showTopupProofModal = false;
+  selectedTopupForProof: TopupRequest | null = null;
+
+  loadTopups() {
+    this.isLoadingTopups = true;
+    // For now, we'll simulate loading topups
+    // In a real implementation, this would call an API
+    setTimeout(() => {
+      this.topups = [
+        {
+          id: 'TOPUP-001',
+          userId: '1',
+          user: {
+            id: '1',
+            username: 'john_doe',
+            email: 'john@example.com',
+            role: 'USER',
+            isActive: true,
+            createdAt: '2024-01-01T00:00:00Z',
+            updatedAt: '2024-01-01T00:00:00Z'
+          },
+          amount: 100.00,
+          cryptoAccountId: '1',
+          cryptoAccount: {
+            id: '1',
+            name: 'Bitcoin',
+            symbol: 'BTC',
+            address: '1AGbgzEPd14hzLoDyYoDzwEH1MP5ZekmBi',
+            isActive: true,
+            order: 1,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          status: 'PENDING',
+          paymentProofUrl: 'https://example.com/proof1.jpg',
+          createdAt: '2024-01-15T10:30:00Z',
+          updatedAt: '2024-01-15T10:30:00Z'
+        },
+        {
+          id: 'TOPUP-002',
+          userId: '2',
+          user: {
+            id: '2',
+            username: 'jane_smith',
+            email: 'jane@example.com',
+            role: 'USER',
+            isActive: true,
+            createdAt: '2024-01-01T00:00:00Z',
+            updatedAt: '2024-01-01T00:00:00Z'
+          },
+          amount: 250.00,
+          cryptoAccountId: '2',
+          cryptoAccount: {
+            id: '2',
+            name: 'Ethereum',
+            symbol: 'ETH',
+            address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+            isActive: true,
+            order: 2,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          status: 'APPROVED',
+          paymentProofUrl: 'https://example.com/proof2.jpg',
+          createdAt: '2024-01-14T15:45:00Z',
+          updatedAt: '2024-01-14T16:00:00Z'
+        }
+      ];
+      
+      this.topupStats = {
+        totalRequests: this.topups.length,
+        pendingRequests: this.topups.filter(t => t.status === 'PENDING').length,
+        approvedRequests: this.topups.filter(t => t.status === 'APPROVED').length,
+        rejectedRequests: this.topups.filter(t => t.status === 'REJECTED').length
+      };
+      
+      this.pendingTopupsCount = this.topupStats.pendingRequests;
+      this.isLoadingTopups = false;
+    }, 1000);
+  }
+
+  approveTopup(topupId: string) {
+    this.isProcessingTopup = true;
+    
+    // Simulate API call to approve topup
+    setTimeout(() => {
+      const topup = this.topups.find(t => t.id === topupId);
+      if (topup) {
+        topup.status = 'APPROVED';
+        topup.updatedAt = new Date().toISOString();
+        
+        // Update stats
+        this.topupStats!.pendingRequests--;
+        this.topupStats!.approvedRequests++;
+        this.pendingTopupsCount = this.topupStats!.pendingRequests;
+        
+        this.toastService.success(`Topup request #${topupId} approved! Funds added to user account.`);
+      }
+      this.isProcessingTopup = false;
+      this.closeTopupProofModal();
+    }, 1000);
+  }
+
+  rejectTopup(topupId: string) {
+    this.isProcessingTopup = true;
+    
+    // Simulate API call to reject topup
+    setTimeout(() => {
+      const topup = this.topups.find(t => t.id === topupId);
+      if (topup) {
+        topup.status = 'REJECTED';
+        topup.updatedAt = new Date().toISOString();
+        
+        // Update stats
+        this.topupStats!.pendingRequests--;
+        this.topupStats!.rejectedRequests++;
+        this.pendingTopupsCount = this.topupStats!.pendingRequests;
+        
+        this.toastService.success(`Topup request #${topupId} rejected.`);
+      }
+      this.isProcessingTopup = false;
+      this.closeTopupProofModal();
+    }, 1000);
+  }
+
+  deleteTopup(topupId: string) {
+    if (confirm('Are you sure you want to delete this topup request?')) {
+      const topup = this.topups.find(t => t.id === topupId);
+      if (topup) {
+        // Update stats before removing
+        if (topup.status === 'PENDING') {
+          this.topupStats!.pendingRequests--;
+          this.pendingTopupsCount = this.topupStats!.pendingRequests;
+        } else if (topup.status === 'APPROVED') {
+          this.topupStats!.approvedRequests--;
+        } else if (topup.status === 'REJECTED') {
+          this.topupStats!.rejectedRequests--;
+        }
+        this.topupStats!.totalRequests--;
+        
+        // Remove from array
+        this.topups = this.topups.filter(t => t.id !== topupId);
+        
+        this.toastService.success(`Topup request #${topupId} deleted.`);
+      }
+    }
+  }
+
+  viewTopupProof(topup: TopupRequest) {
+    this.selectedTopupForProof = topup;
+    this.showTopupProofModal = true;
+  }
+
+  closeTopupProofModal() {
+    this.showTopupProofModal = false;
+    this.selectedTopupForProof = null;
+  }
+
+  getTopupProofUrl(proofUrl: string): string {
+    // In a real implementation, this would construct the full URL
+    return proofUrl;
+  }
+
+  getTopupStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'APPROVED':
+        return 'bg-green-100 text-green-800';
+      case 'REJECTED':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  }
+
+  getTopupStatusText(status: string): string {
+    switch (status) {
+      case 'PENDING':
+        return 'Pending';
+      case 'APPROVED':
+        return 'Approved';
+      case 'REJECTED':
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
   }
 }
