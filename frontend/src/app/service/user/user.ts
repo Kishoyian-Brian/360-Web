@@ -108,9 +108,13 @@ export class UserService {
     return this.updateUserBalance(request);
   }
 
-  // Get balance history for a user
-  getBalanceHistory(userId: string): Observable<BalanceHistory[]> {
-    return this.http.get<BalanceHistory[]>(`${this.baseUrl}/${userId}/balance-history`, {
+  // Get balance history for a user with pagination
+  getBalanceHistory(userId: string, page: number = 1, limit: number = 10): Observable<{ history: BalanceHistory[]; total: number; page: number; limit: number }> {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    
+    return this.http.get<{ history: BalanceHistory[]; total: number; page: number; limit: number }>(`${this.baseUrl}/${userId}/balance-history?${params.toString()}`, {
       headers: this.authService.getAuthHeaders()
     });
   }

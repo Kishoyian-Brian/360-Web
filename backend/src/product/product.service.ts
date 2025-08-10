@@ -364,6 +364,53 @@ export class ProductService {
     return { message: `Product '${existingProduct.name}' deleted successfully.` };
   }
 
+  async bulkDeleteProducts(productIds: string[]): Promise<{ message: string; deletedCount: number }> {
+    if (!productIds || productIds.length === 0) {
+      throw new BadRequestException('No product IDs provided for deletion.');
+    }
+
+    let deletedCount = 0;
+    const failedDeletions: string[] = [];
+
+    for (const productId of productIds) {
+      try {
+        const existingProduct = await this.prisma.product.findUnique({
+          where: { id: productId },
+          include: {
+            orderItems: true,
+          },
+        });
+
+        if (!existingProduct) {
+          failedDeletions.push(`Product with ID '${productId}' not found.`);
+          continue;
+        }
+
+        // Check if product has associated orders
+        if (existingProduct.orderItems && existingProduct.orderItems.length > 0) {
+          failedDeletions.push(`Product '${existingProduct.name}' has associated orders and cannot be deleted.`);
+          continue;
+        }
+
+        await this.prisma.product.delete({
+          where: { id: productId },
+        });
+
+        deletedCount++;
+      } catch (error) {
+        console.error(`Error deleting product ${productId}:`, error);
+        failedDeletions.push(`Failed to delete product with ID '${productId}'.`);
+      }
+    }
+
+    let message = `Successfully deleted ${deletedCount} product(s).`;
+    if (failedDeletions.length > 0) {
+      message += ` Failed to delete ${failedDeletions.length} product(s): ${failedDeletions.join(', ')}`;
+    }
+
+    return { message, deletedCount };
+  }
+
   async getProductsByCategory(categorySlug: string, limit: number = 10): Promise<ProductResponseDto[]> {
     const products = await this.prisma.product.findMany({
       where: {

@@ -85,6 +85,26 @@ export class ProductController {
     return this.productService.deleteProduct(id);
   }
 
+  @Delete('bulk-delete')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Bulk delete products (Admin only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Products deleted successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+        deletedCount: { type: 'number' },
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Invalid product IDs or products have associated orders' })
+  async bulkDeleteProducts(@Body() body: { productIds: string[] }): Promise<{ message: string; deletedCount: number }> {
+    return this.productService.bulkDeleteProducts(body.productIds);
+  }
+
   @Put(':id/stock')
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiBearerAuth()

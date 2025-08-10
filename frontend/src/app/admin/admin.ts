@@ -28,6 +28,7 @@ export interface Product {
   productType?: string;
   createdAt: string;
   updatedAt: string;
+  selected?: boolean; // For bulk operations
 }
 
 export interface CreateProductRequest {
@@ -86,6 +87,9 @@ export interface TopupStats {
 export class Admin implements OnInit {
   currentSection = 'dashboard';
   isSidebarCollapsed = false;
+  
+  // Make Math available in template
+  Math = Math;
 
   // Product management
   products: Product[] = [];
@@ -93,6 +97,20 @@ export class Admin implements OnInit {
   showAddProductForm = false;
   selectedFile: File | null = null;
   uploadProgress = 0;
+  
+  // Product pagination
+  currentProductPage = 1;
+  totalProductPages = 1;
+  totalProducts = 0;
+  productsPerPage = 10;
+  productFilters = {
+    search: '',
+    categoryId: '',
+    productType: '',
+    isActive: '',
+    minPrice: '',
+    maxPrice: ''
+  };
 
   productForm = {
     name: '',
@@ -465,13 +483,45 @@ export class Admin implements OnInit {
   }
 
   // Product Management Methods
-  loadProducts() {
+  loadProducts(page: number = 1) {
     this.isLoading = true;
-          this.http.get('https://three60-web-gzzw.onrender.com/api/products', {
+    this.currentProductPage = page;
+    
+    // Build query parameters
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('limit', this.productsPerPage.toString());
+    
+    // Add filters
+    if (this.productFilters.search) {
+      params.append('search', this.productFilters.search);
+    }
+    if (this.productFilters.categoryId) {
+      params.append('categoryId', this.productFilters.categoryId);
+    }
+    if (this.productFilters.productType) {
+      params.append('productType', this.productFilters.productType);
+    }
+    if (this.productFilters.isActive !== '') {
+      params.append('isActive', this.productFilters.isActive);
+    }
+    if (this.productFilters.minPrice) {
+      params.append('minPrice', this.productFilters.minPrice);
+    }
+    if (this.productFilters.maxPrice) {
+      params.append('maxPrice', this.productFilters.maxPrice);
+    }
+    
+    this.http.get(`https://three60-web-gzzw.onrender.com/api/products?${params.toString()}`, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
-        this.products = response.products || [];
+        this.products = (response.products || []).map((product: Product) => ({
+          ...product,
+          selected: false
+        }));
+        this.totalProducts = response.total || 0;
+        this.totalProductPages = Math.ceil(this.totalProducts / this.productsPerPage);
         this.isLoading = false;
       },
       error: (error) => {
@@ -480,6 +530,50 @@ export class Admin implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  // Product pagination methods
+  onProductPageChange(page: number) {
+    if (page >= 1 && page <= this.totalProductPages) {
+      this.loadProducts(page);
+    }
+  }
+
+  // Product filter methods
+  onProductSearch() {
+    this.currentProductPage = 1;
+    this.loadProducts(1);
+  }
+
+  onProductFilter() {
+    this.currentProductPage = 1;
+    this.loadProducts(1);
+  }
+
+  clearProductFilters() {
+    this.productFilters = {
+      search: '',
+      categoryId: '',
+      productType: '',
+      isActive: '',
+      minPrice: '',
+      maxPrice: ''
+    };
+    this.currentProductPage = 1;
+    this.loadProducts(1);
+  }
+
+  // Get page numbers for pagination
+  getProductPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPages = Math.min(5, this.totalProductPages);
+    const startPage = Math.max(1, this.currentProductPage - Math.floor(maxPages / 2));
+    const endPage = Math.min(this.totalProductPages, startPage + maxPages - 1);
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   onFileSelected(event: any) {
@@ -630,21 +724,98 @@ export class Admin implements OnInit {
     this.uploadProgress = 0;
   }
 
+  // Enhanced delete product with better confirmation and error handling
   deleteProduct(productId: string) {
-    if (confirm('Are you sure you want to delete this product?')) {
+    const product = this.products.find(p => p.id === productId);
+    const productName = product ? product.name : 'this product';
+    
+    const confirmMessage = `Are you sure you want to delete "${productName}"?\n\nThis action cannot be undone and will permanently remove the product from the system.`;
+    
+    if (confirm(confirmMessage)) {
+      // Show loading state
+      this.isLoading = true;
+      
       this.http.delete(`https://three60-web-gzzw.onrender.com/api/products/${productId}`, {
         headers: this.authService.getAuthHeaders()
       }).subscribe({
-        next: (response) => {
-          this.toastService.success('Product deleted successfully');
+        next: (response: any) => {
+          this.toastService.success(response.message || 'Product deleted successfully');
           this.loadProducts();
         },
         error: (error) => {
           console.error('Error deleting product:', error);
-          this.toastService.error('Failed to delete product');
+          
+          // Show more specific error message from backend
+          let errorMessage = 'Failed to delete product';
+          if (error?.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error?.message) {
+            errorMessage = error.message;
+          }
+          
+          this.toastService.error(errorMessage);
+          this.isLoading = false;
         }
       });
     }
+  }
+
+  // Bulk delete products
+  bulkDeleteProducts() {
+    const selectedProducts = this.products.filter(p => p.selected);
+    
+    if (selectedProducts.length === 0) {
+      this.toastService.error('Please select products to delete');
+      return;
+    }
+    
+    const confirmMessage = `Are you sure you want to delete ${selectedProducts.length} selected product(s)?\n\nThis action cannot be undone and will permanently remove the products from the system.`;
+    
+    if (confirm(confirmMessage)) {
+      this.isLoading = true;
+      const productIds = selectedProducts.map(p => p.id);
+      
+      this.http.delete(`https://three60-web-gzzw.onrender.com/api/products/bulk-delete`, {
+        headers: this.authService.getAuthHeaders(),
+        body: { productIds }
+      }).subscribe({
+        next: (response: any) => {
+          this.toastService.success(`${response.deletedCount || selectedProducts.length} product(s) deleted successfully`);
+          this.loadProducts();
+        },
+        error: (error) => {
+          console.error('Error bulk deleting products:', error);
+          
+          let errorMessage = 'Failed to delete products';
+          if (error?.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error?.message) {
+            errorMessage = error.message;
+          }
+          
+          this.toastService.error(errorMessage);
+          this.isLoading = false;
+        }
+      });
+    }
+  }
+
+  // Select/deselect all products for bulk operations
+  selectAllProducts() {
+    const allSelected = this.products.every(p => p.selected);
+    this.products.forEach(product => {
+      product.selected = !allSelected;
+    });
+  }
+
+  // Get selected products count
+  getSelectedProductsCount(): number {
+    return this.products.filter(p => p.selected).length;
+  }
+
+  // Check if all products are selected
+  areAllProductsSelected(): boolean {
+    return this.products.length > 0 && this.products.every(p => p.selected === true);
   }
 
   // User Management Methods
