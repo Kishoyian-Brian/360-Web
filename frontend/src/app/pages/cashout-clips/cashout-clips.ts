@@ -38,6 +38,11 @@ export class CashoutClips implements OnInit {
         this.loading = false;
         console.log('Loaded videos:', this.videos);
         
+        // Log video URLs for debugging
+        this.videos.forEach(video => {
+          console.log(`Video: ${video.title}, URL: ${video.videoUrl}, Type: ${this.isYouTubeUrl(video.videoUrl) ? 'YouTube' : 'Direct'}`);
+        });
+        
         // Ensure videos load their first frame after a short delay
         setTimeout(() => {
           this.videos.forEach(video => {
@@ -76,6 +81,10 @@ export class CashoutClips implements OnInit {
       return;
     }
     
+    // Prevent event bubbling
+    event.preventDefault();
+    event.stopPropagation();
+    
     // Get the clicked video element - handle both direct video clicks and button clicks
     let videoElement: HTMLVideoElement | null = null;
     
@@ -88,14 +97,36 @@ export class CashoutClips implements OnInit {
       if (videoContainer) {
         videoElement = videoContainer.querySelector('video') as HTMLVideoElement;
       }
+    } else if (event.target instanceof HTMLElement) {
+      // Handle clicks on SVG elements or other HTML elements
+      const clickedElement = event.target as HTMLElement;
+      const videoContainer = clickedElement.closest('.relative');
+      if (videoContainer) {
+        videoElement = videoContainer.querySelector('video') as HTMLVideoElement;
+      }
     }
     
     // Check if we found a valid video element
     if (!videoElement || typeof videoElement.pause !== 'function') {
       console.error('Invalid video element or video element not found');
+      console.log('Event target:', event.target);
+      console.log('Video element found:', videoElement);
       return;
     }
     
+    // Ensure video is loaded
+    if (videoElement.readyState < 2) {
+      console.log('Video not ready, waiting for load...');
+      videoElement.addEventListener('canplay', () => {
+        this.handleVideoPlayback(video, videoElement);
+      }, { once: true });
+      return;
+    }
+    
+    this.handleVideoPlayback(video, videoElement);
+  }
+
+  private handleVideoPlayback(video: Video, videoElement: HTMLVideoElement) {
     // If video is paused, start playing
     if (videoElement.paused) {
       this.safePlayVideo(videoElement).then((success) => {
@@ -113,6 +144,9 @@ export class CashoutClips implements OnInit {
               console.error('Error incrementing view count:', error);
             }
           });
+        } else {
+          console.error('Failed to play video');
+          this.toastService.error('Failed to play video. Please try again.');
         }
       });
     } else {
@@ -161,10 +195,53 @@ export class CashoutClips implements OnInit {
     }
   }
 
+  // Handle video can play event
+  onVideoCanPlay(event: Event, video: Video) {
+    try {
+      const videoElement = event.target as HTMLVideoElement;
+      console.log('Video can play:', video.title, 'Ready state:', videoElement.readyState);
+    } catch (error) {
+      console.error('Error in onVideoCanPlay:', error);
+    }
+  }
+
+  // Handle video error event
+  onVideoError(event: Event, video: Video) {
+    try {
+      const videoElement = event.target as HTMLVideoElement;
+      console.error('Video error:', video.title, 'Error:', videoElement.error);
+      this.toastService.error(`Failed to load video: ${video.title}`);
+    } catch (error) {
+      console.error('Error in onVideoError:', error);
+    }
+  }
+
   // Check if URL is a YouTube URL
   isYouTubeUrl(url: string): boolean {
     if (!url) return false;
     return url.includes('youtube.com') || url.includes('youtu.be');
+  }
+
+  // Validate video URL
+  isValidVideoUrl(url: string): boolean {
+    if (!url) return false;
+    
+    // Check if it's a YouTube URL
+    if (this.isYouTubeUrl(url)) {
+      return true;
+    }
+    
+    // Check if it's a valid video file URL
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
+    const hasVideoExtension = videoExtensions.some(ext => url.toLowerCase().includes(ext));
+    
+    // Check if it's a valid URL
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   // Convert YouTube URL to embed URL
@@ -284,13 +361,33 @@ export class CashoutClips implements OnInit {
     return new Promise((resolve) => {
       try {
         if (videoElement && typeof videoElement.play === 'function') {
-          videoElement.play().then(() => {
-            resolve(true);
-          }).catch((error) => {
-            console.error('Error playing video:', error);
+          // Ensure video is muted to comply with autoplay policies
+          videoElement.muted = true;
+          
+          // Try to play the video
+          const playPromise = videoElement.play();
+          
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log('Video play successful');
+              resolve(true);
+            }).catch((error) => {
+              console.error('Error playing video:', error);
+              
+              // Handle specific autoplay policy errors
+              if (error.name === 'NotAllowedError') {
+                console.log('Autoplay blocked by browser policy');
+                this.toastService.error('Please click the play button to start the video');
+              }
+              
+              resolve(false);
+            });
+          } else {
+            console.log('Video play promise undefined');
             resolve(false);
-          });
+          }
         } else {
+          console.error('Video element or play function not available');
           resolve(false);
         }
       } catch (error) {

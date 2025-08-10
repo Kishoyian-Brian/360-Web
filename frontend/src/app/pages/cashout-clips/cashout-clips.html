@@ -56,24 +56,37 @@
             
             <!-- Regular Video (if not YouTube) -->
             <div class="relative">
+              <!-- Invalid URL Warning -->
+              <div *ngIf="!isYouTubeUrl(video.videoUrl) && !isValidVideoUrl(video.videoUrl)" class="w-full h-[550px] bg-gray-200 flex items-center justify-center">
+                <div class="text-center text-gray-600">
+                  <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <p class="text-lg font-medium">Invalid Video URL</p>
+                  <p class="text-sm">This video cannot be loaded</p>
+                </div>
+              </div>
+              
               <video 
-                *ngIf="!isYouTubeUrl(video.videoUrl)"
+                *ngIf="!isYouTubeUrl(video.videoUrl) && isValidVideoUrl(video.videoUrl)"
                 [src]="video.videoUrl" 
                 preload="metadata"
                 class="w-full h-[550px] object-cover cursor-pointer"
                 (click)="playVideo(video, $event)"
+                (error)="onVideoError($event, video)"
                 #videoPlayer
                 muted
                 loop
                 playsinline
                 (loadeddata)="onVideoLoaded($event, video)"
+                (canplay)="onVideoCanPlay($event, video)"
               >
                 Your browser does not support the video tag.
               </video>
               
               <!-- Play/Pause Button Overlay for Regular Videos -->
-              <div *ngIf="!isYouTubeUrl(video.videoUrl)" class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                <button (click)="playVideo(video, $event)" class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg">
+              <div *ngIf="!isYouTubeUrl(video.videoUrl) && isValidVideoUrl(video.videoUrl)" class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center pointer-events-none">
+                <button (click)="playVideo(video, $event)" class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg pointer-events-auto">
                   <!-- Play Icon (when paused) -->
                   <svg *ngIf="!isVideoPlaying(video.id)" class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
