@@ -2333,8 +2333,9 @@ export class Admin implements OnInit {
 
   loadTopups() {
     this.isLoadingTopups = true;
-    // For now, we'll simulate loading topups
-    // In a real implementation, this would call an API
+    // TODO: Replace with real API call to backend
+    // For now, we'll simulate loading topups with mock data
+    // In a real implementation, this would call: this.adminService.getTopups()
     setTimeout(() => {
       this.topups = [
         {
@@ -2343,7 +2344,11 @@ export class Admin implements OnInit {
           user: {
             id: '1',
             username: 'john_doe',
-            email: 'john@example.com',
+            email: 'john.doe@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            phone: '+1 (555) 123-4567',
+            country: 'United States',
             role: 'USER',
             isActive: true,
             balance: 500.00,
@@ -2363,7 +2368,7 @@ export class Admin implements OnInit {
             updatedAt: new Date()
           },
           status: 'PENDING',
-          paymentProofUrl: 'https://example.com/proof1.jpg',
+          paymentProofUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&h=600&fit=crop',
           createdAt: '2024-01-15T10:30:00Z',
           updatedAt: '2024-01-15T10:30:00Z'
         },
@@ -2373,7 +2378,11 @@ export class Admin implements OnInit {
           user: {
             id: '2',
             username: 'jane_smith',
-            email: 'jane@example.com',
+            email: 'jane.smith@example.com',
+            firstName: 'Jane',
+            lastName: 'Smith',
+            phone: '+1 (555) 987-6543',
+            country: 'Canada',
             role: 'USER',
             isActive: true,
             balance: 750.00,
@@ -2393,9 +2402,43 @@ export class Admin implements OnInit {
             updatedAt: new Date()
           },
           status: 'APPROVED',
-          paymentProofUrl: 'https://example.com/proof2.jpg',
+          paymentProofUrl: 'https://images.unsplash.com/photo-1639762681057-408e52192e55?w=800&h=600&fit=crop',
           createdAt: '2024-01-14T15:45:00Z',
           updatedAt: '2024-01-14T16:00:00Z'
+        },
+        {
+          id: 'TOPUP-003',
+          userId: '3',
+          user: {
+            id: '3',
+            username: 'mike_wilson',
+            email: 'mike.wilson@example.com',
+            firstName: 'Michael',
+            lastName: 'Wilson',
+            phone: '+44 20 7946 0958',
+            country: 'United Kingdom',
+            role: 'USER',
+            isActive: true,
+            balance: 1200.00,
+            createdAt: '2024-01-01T00:00:00Z',
+            updatedAt: '2024-01-01T00:00:00Z'
+          },
+          amount: 500.00,
+          cryptoAccountId: '3',
+          cryptoAccount: {
+            id: '3',
+            name: 'Litecoin',
+            symbol: 'LTC',
+            address: 'LQn9y2SbjgwEacB8W93YV5J7TjqNt6HmKx',
+            isActive: true,
+            order: 3,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          },
+          status: 'PENDING',
+          paymentProofUrl: 'https://images.unsplash.com/photo-1639762681057-408e52192e55?w=800&h=600&fit=crop',
+          createdAt: '2024-01-16T09:15:00Z',
+          updatedAt: '2024-01-16T09:15:00Z'
         }
       ];
       

@@ -238,4 +238,32 @@ export class AdminService {
       { headers: this.authService.getAuthHeaders() }
     );
   }
+
+  // TODO: Implement topup management API methods
+  // These methods should be implemented when the backend topup functionality is ready
+  
+  // getTopups(filters?: any): Observable<any> {
+  //   return this.http.get<any>(`${this.API_URL}/topups`, { 
+  //     params: filters,
+  //     headers: this.authService.getAuthHeaders() 
+  //   });
+  // }
+  
+  // approveTopup(topupId: string): Observable<any> {
+  //   return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/approve`, {}, {
+  //     headers: this.authService.getAuthHeaders()
+  //   });
+  // }
+  
+  // rejectTopup(topupId: string): Observable<any> {
+  //   return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/reject`, {}, {
+  //     headers: this.authService.getAuthHeaders()
+  //   });
+  // }
+  
+  // deleteTopup(topupId: string): Observable<any> {
+  //   return this.http.delete<any>(`${this.API_URL}/topups/${topupId}`, {
+  //     headers: this.authService.getAuthHeaders()
+  //   });
+  // }
 }
