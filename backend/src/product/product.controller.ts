@@ -65,26 +65,6 @@ export class ProductController {
     return this.productService.updateProduct(id, updateProductDto);
   }
 
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete product (Admin only)' })
-  @ApiResponse({
-    status: 200,
-    description: 'Product deleted successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string' },
-      },
-    },
-  })
-  @ApiResponse({ status: 404, description: 'Product not found' })
-  @ApiResponse({ status: 400, description: 'Product has associated orders' })
-  async deleteProduct(@Param('id') id: string): Promise<{ message: string }> {
-    return this.productService.deleteProduct(id);
-  }
-
   @Delete('bulk-delete')
   @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiBearerAuth()
@@ -103,6 +83,26 @@ export class ProductController {
   @ApiResponse({ status: 400, description: 'Invalid product IDs or products have associated orders' })
   async bulkDeleteProducts(@Body() body: { productIds: string[] }): Promise<{ message: string; deletedCount: number }> {
     return this.productService.bulkDeleteProducts(body.productIds);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete product (Admin only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Product deleted successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  @ApiResponse({ status: 400, description: 'Product has associated orders' })
+  async deleteProduct(@Param('id') id: string): Promise<{ message: string }> {
+    return this.productService.deleteProduct(id);
   }
 
   @Put(':id/stock')
