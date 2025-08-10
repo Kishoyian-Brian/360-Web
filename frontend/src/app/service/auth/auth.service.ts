@@ -56,7 +56,9 @@ export class AuthService {
   }
 
   get isAuthenticated(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    const user = this.getStoredUser();
+    return !!(token && user);
   }
 
   get isAdmin(): boolean {
@@ -108,12 +110,20 @@ export class AuthService {
     const user = this.getStoredUser();
     
     if (token && user) {
+      // Set the user immediately from localStorage to prevent logout on refresh
+      this.currentUserSubject.next(user);
+      
+      // Optionally verify token with backend (but don't clear auth if it fails)
       this.verifyToken(token).subscribe({
         next: (response) => {
+          // Update user data if verification succeeds
+          this.setUser(response.user);
           this.currentUserSubject.next(response.user);
         },
-        error: () => {
-          this.clearAuthData();
+        error: (error) => {
+          console.warn('Token verification failed, but keeping user logged in:', error);
+          // Don't clear auth data on verification failure
+          // User stays logged in with localStorage data
         }
       });
     }
@@ -170,7 +180,7 @@ export class AuthService {
     if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
       this.router.navigate(['/admin']);
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/my-account']);
     }
   }
 
@@ -186,5 +196,10 @@ export class AuthService {
           throw error;
         })
       );
+  }
+
+  // Method to manually check and restore auth status
+  restoreAuthStatus(): void {
+    this.checkAuthStatus();
   }
 }

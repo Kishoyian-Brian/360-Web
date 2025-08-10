@@ -32,6 +32,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Restore auth status from localStorage
+    this.authService.restoreAuthStatus();
+    
     // Check if user is admin and authenticated
     this.isAdmin = this.authService.isAdmin;
     this.isAuthenticated = this.authService.isAuthenticated;
