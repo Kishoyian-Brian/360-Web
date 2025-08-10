@@ -35,6 +35,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     this.checkAuthentication();
     this.loadUserData();
     this.initializeBalanceSubscription();
+    // Initialize balance when component loads
+    this.userService.initializeBalance();
   }
 
   ngOnDestroy() {

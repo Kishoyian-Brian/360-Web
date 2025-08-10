@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { UserService } from '../user/user';
 
 export interface User {
   id: string;
@@ -47,8 +46,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) {
     this.checkAuthStatus();
   }
@@ -80,8 +78,6 @@ export class AuthService {
           this.setToken(response.access_token);
           this.setUser(response.user);
           this.currentUserSubject.next(response.user);
-          // Initialize user balance after successful login
-          this.userService.initializeBalance();
         }),
         catchError(error => {
           console.error('Login error:', error);
@@ -117,17 +113,12 @@ export class AuthService {
       // Set the user immediately from localStorage to prevent logout on refresh
       this.currentUserSubject.next(user);
       
-      // Initialize user balance
-      this.userService.initializeBalance();
-      
       // Optionally verify token with backend (but don't clear auth if it fails)
       this.verifyToken(token).subscribe({
         next: (response) => {
           // Update user data if verification succeeds
           this.setUser(response.user);
           this.currentUserSubject.next(response.user);
-          // Refresh balance after token verification
-          this.userService.refreshBalance();
         },
         error: (error) => {
           console.warn('Token verification failed, but keeping user logged in:', error);
