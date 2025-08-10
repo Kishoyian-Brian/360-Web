@@ -1,0 +1,159 @@
+/* Topup Component - Tailwind CSS Custom Styles */
+
+/* Custom Brand Color */
+.bg-brand {
+  background-color: #32529d;
+}
+
+.hover\:bg-brand\/90:hover {
+  background-color: rgba(50, 82, 157, 0.9);
+}
+
+.text-brand {
+  color: #32529d;
+}
+
+.hover\:text-brand\/80:hover {
+  color: rgba(50, 82, 157, 0.8);
+}
+
+/* Payment Method Selection */
+.payment-method {
+  transition: all 0.2s ease-in-out;
+}
+
+.payment-method:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method.selected {
+  border-color: #32529d;
+  background-color: rgba(50, 82, 157, 0.05);
+}
+
+/* File Upload Styling */
+.file-upload {
+  transition: all 0.2s ease-in-out;
+}
+
+.file-upload:hover {
+  border-color: #32529d;
+}
+
+/* Button Animations */
+.btn-primary {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(50, 82, 157, 0.3);
+}
+
+.btn-primary:disabled {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Loading Animation */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Success Modal */
+.modal-overlay {
+  backdrop-filter: blur(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-method {
+    margin-bottom: 1rem;
+  }
+  
+  .crypto-address {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+}
+
+/* Form Validation Styles */
+.input-error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-success {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Crypto Address Display */
+.crypto-address {
+  font-family: 'Courier New', monospace;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  word-break: break-all;
+  font-size: 0.875rem;
+}
+
+/* Amount Input Styling */
+.amount-input {
+  position: relative;
+}
+
+.amount-input input {
+  padding-left: 2rem;
+}
+
+.amount-input .currency-symbol {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* File Preview */
+.file-preview {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s ease-in-out;
+}
+
+.file-preview:hover {
+  border-color: #32529d;
+  transform: scale(1.02);
+}
+
+/* Instructions Styling */
+.instructions {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-left: 4px solid #32529d;
+}
+
+/* Summary Card */
+.summary-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease-in-out;
+}
+
+.summary-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}

@@ -65,9 +65,7 @@ export class MyAccountComponent implements OnInit {
   }
 
   onTopup() {
-    // Handle topup functionality
-    console.log('Topup clicked');
-    // You can navigate to a topup page or show a modal
+    this.router.navigate(['/topup']);
   }
 
   onPurchase() {

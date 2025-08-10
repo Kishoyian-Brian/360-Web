@@ -1,0 +1,216 @@
+<main>
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Notice Banner -->
+    <div class="bg-brand text-white p-4 mb-6 rounded">
+      <marquee
+        >NOTICE: All payments must be made through our website or telegram support
+        @Charlie_7O ONLY</marquee
+      >
+    </div>
+
+    <!-- Header -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Add Funds to Account</h1>
+          <p class="text-gray-600 mt-2">Add funds to your wallet using cryptocurrency payments</p>
+        </div>
+        <button (click)="goBack()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          ← Back to My Account
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"></div>
+      <span class="ml-3 text-gray-600">Loading payment options...</span>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!isLoading" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Payment Form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Payment Details</h2>
+
+          <!-- Amount Input -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Amount to Add (USD)
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <input 
+                type="number" 
+                [(ngModel)]="topupAmount" 
+                (input)="onAmountChange()"
+                min="0" 
+                step="0.01"
+                class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-transparent"
+                placeholder="Enter amount (e.g., 100.00)"
+              />
+            </div>
+            <p class="text-sm text-gray-500 mt-1">Minimum amount: $10.00</p>
+          </div>
+
+          <!-- Crypto Payment Selection -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Select Payment Method
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div 
+                *ngFor="let crypto of cryptoPayments"
+                (click)="selectCryptoPayment(crypto)"
+                [class]="selectedCrypto?.id === crypto.id 
+                  ? 'border-2 border-brand bg-brand/5' 
+                  : 'border border-gray-300 hover:border-gray-400'"
+                class="p-4 rounded-lg cursor-pointer transition-colors"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="font-medium text-gray-900">{{ crypto.name }}</h3>
+                    <p class="text-sm text-gray-600">{{ crypto.symbol }}</p>
+                  </div>
+                  <div *ngIf="selectedCrypto?.id === crypto.id" class="text-brand">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected Crypto Details -->
+          <div *ngIf="selectedCrypto" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h3 class="font-medium text-gray-900 mb-3">Payment Address</h3>
+            <div class="flex items-center space-x-3">
+              <div class="flex-1 p-3 bg-white border border-gray-300 rounded-lg">
+                <p class="text-sm font-mono text-gray-800 break-all">{{ selectedCrypto.address }}</p>
+              </div>
+              <button 
+                (click)="copyCryptoAddress()"
+                class="px-4 py-2 bg-brand text-white rounded-lg hover:bg-brand/90 transition-colors"
+              >
+                Copy
+              </button>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">
+              Send exactly <strong>${{ topupAmount.toFixed(2) }}</strong> worth of {{ selectedCrypto.symbol }} to this address
+            </p>
+          </div>
+
+          <!-- File Upload -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Screenshot of Payment Confirmation
+            </label>
+            <input 
+              #fileInput 
+              type="file" 
+              accept="image/*" 
+              (change)="onFileSelected($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand file:text-white hover:file:bg-brand/90" 
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              Accepted formats: JPG, PNG, GIF (Max 5MB)
+            </p>
+          </div>
+
+          <!-- Preview -->
+          <div *ngIf="paymentProofPreview" class="mb-6">
+            <img [src]="paymentProofPreview" alt="Payment proof preview" class="max-w-md rounded-lg border" />
+            <button (click)="removePaymentProof()" class="mt-2 text-sm text-red-600 hover:text-red-800">
+              Remove
+            </button>
+          </div>
+
+          <!-- Debug Info -->
+          <div *ngIf="paymentProofFile" class="mb-4 text-xs text-gray-500">
+            Selected file: {{ paymentProofFile.name }} ({{ (paymentProofFile.size / 1024 / 1024).toFixed(2) }}MB)
+          </div>
+          
+          <!-- Submit Button -->
+          <button 
+            (click)="submitTopup()" 
+            [disabled]="!paymentProofFile || isSubmitting || topupAmount <= 0"
+            class="w-full bg-brand text-white py-3 px-6 rounded-lg font-medium hover:bg-brand/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+          >
+            <span *ngIf="!isSubmitting">Submit Topup Request</span>
+            <span *ngIf="isSubmitting" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Submitting...
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <!-- Topup Summary -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h3 class="font-semibold text-gray-800 mb-4">Topup Summary</h3>
+          <div class="space-y-3 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Amount:</span>
+              <span class="font-medium text-brand">${{ topupAmount.toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Payment Method:</span>
+              <span class="font-medium">{{ selectedCrypto?.name || 'Not selected' }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Status:</span>
+              <span class="font-medium text-yellow-600">Pending</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-blue-50 rounded-lg p-4 mb-6">
+          <h3 class="font-medium text-blue-900 mb-2">How to Add Funds</h3>
+          <ol class="text-sm text-blue-800 space-y-2">
+            <li>1. Enter the amount you want to add</li>
+            <li>2. Select your preferred cryptocurrency</li>
+            <li>3. Send the exact amount to the provided address</li>
+            <li>4. Upload a screenshot of the payment confirmation</li>
+            <li>5. Submit your request for approval</li>
+          </ol>
+        </div>
+
+        <!-- Support -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <h3 class="font-medium text-gray-900 mb-2">Need Help?</h3>
+          <p class="text-sm text-gray-600 mb-3">
+            If you have any questions about adding funds, please contact our support team.
+          </p>
+          <a href="#" class="text-sm text-brand hover:text-brand/80 font-medium">
+            Contact Support →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="topupId" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+        <div class="text-green-500 mb-4">
+          <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Topup Request Submitted!</h3>
+        <p class="text-gray-600 mb-4">Your request has been submitted successfully. We'll review and process it shortly.</p>
+        <p class="text-sm text-gray-500 mb-4">Request ID: {{ topupId }}</p>
+        <button (click)="goBack()" class="bg-brand text-white px-6 py-2 rounded-lg hover:bg-brand/90 transition-colors">
+          Back to My Account
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
