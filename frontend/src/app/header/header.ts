@@ -16,12 +16,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   cartItemCount: number = 0;
   isMobileMenuOpen: boolean = false;
   isAdmin: boolean = false;
+  isAuthenticated: boolean = false;
   isPagesDropdownOpen: boolean = false;
   isCategoriesDropdownOpen: boolean = false;
   isMoreLogsDropdownOpen: boolean = false;
   isLinkablesDropdownOpen: boolean = false;
   isTransfersDropdownOpen: boolean = false;
   private cartSubscription?: Subscription;
+  private authSubscription?: Subscription;
 
   constructor(
     private router: Router,
@@ -30,8 +32,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Check if user is admin
+    // Check if user is admin and authenticated
     this.isAdmin = this.authService.isAdmin;
+    this.isAuthenticated = this.authService.isAuthenticated;
+    
+    // Subscribe to authentication changes
+    this.authSubscription = this.authService.currentUser$.subscribe(user => {
+      this.isAuthenticated = !!user;
+      this.isAdmin = this.authService.isAdmin;
+    });
     
     // Subscribe to cart changes to update the cart count
     this.cartSubscription = this.cartService.cart$.subscribe(cart => {
@@ -51,6 +60,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.cartSubscription) {
       this.cartSubscription.unsubscribe();
+    }
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
     }
   }
 
