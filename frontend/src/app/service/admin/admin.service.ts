@@ -13,6 +13,7 @@ export interface User {
   lastName?: string;
   phone?: string;
   country?: string;
+  balance: number;
   createdAt: string;
   updatedAt: string;
   lastLogin?: string;
@@ -188,5 +189,53 @@ export class AdminService {
     return this.http.delete<{ message: string }>(`${this.API_URL}/orders/${orderId}`, {
       headers: this.authService.getAuthHeaders()
     });
+  }
+
+  // Balance Management
+  updateUserBalance(userId: string, amount: number, type: string, reason: string, referenceId?: string, referenceType?: string): Observable<User> {
+    const request = {
+      amount,
+      type,
+      reason,
+      referenceId,
+      referenceType
+    };
+    
+    return this.http.patch<User>(`${this.API_URL}/users/${userId}/balance`, request, {
+      headers: this.authService.getAuthHeaders()
+    });
+  }
+
+  getUserBalance(userId: string): Observable<{ balance: number }> {
+    return this.http.get<{ balance: number }>(`${this.API_URL}/users/${userId}/balance`, {
+      headers: this.authService.getAuthHeaders()
+    });
+  }
+
+  getUserBalanceHistory(userId: string, page: number = 1, limit: number = 10): Observable<{
+    history: any[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const params = { page: page.toString(), limit: limit.toString() };
+    
+    return this.http.get<{
+      history: any[];
+      total: number;
+      page: number;
+      limit: number;
+    }>(`${this.API_URL}/users/${userId}/balance-history`, {
+      headers: this.authService.getAuthHeaders(),
+      params
+    });
+  }
+
+  // Payment Management with Balance Update
+  updatePaymentStatusWithBalance(paymentId: string, status: string): Observable<any> {
+    return this.http.patch<any>(`${this.API_URL}/payments/${paymentId}/status`, 
+      { status }, 
+      { headers: this.authService.getAuthHeaders() }
+    );
   }
 }

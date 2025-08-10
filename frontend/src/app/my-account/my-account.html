@@ -70,6 +70,10 @@
                 <span class="ml-2 text-lg text-gray-900">{{ user?.username || 'Guest' }}</span>
               </div>
               <div class="flex items-center">
+                <span class="text-lg font-medium text-gray-700">Email:</span>
+                <span class="ml-2 text-lg text-gray-900">{{ user?.email || 'No email' }}</span>
+              </div>
+              <div class="flex items-center">
                 <span class="text-lg font-medium text-gray-700">Wallet Balance:</span>
                 <span *ngIf="isLoading" class="ml-2 text-lg text-gray-500">
                   <svg class="animate-spin h-5 w-5 inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -93,13 +97,28 @@
               </div>
             </div>
 
-            <!-- Account Status -->
+            <!-- Profile Information -->
             <div class="bg-white border border-gray-200 rounded-lg p-4">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">Account Status</h3>
-              <div class="flex items-center">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  Active
-                </span>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Profile Information</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Username:</span>
+                  <span class="text-sm font-medium text-gray-900">{{ user?.username || 'N/A' }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Email:</span>
+                  <span class="text-sm font-medium text-gray-900">{{ user?.email || 'N/A' }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">Status:</span>
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    {{ user?.status || 'Active' }}
+                  </span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-gray-600">User ID:</span>
+                  <span class="text-sm font-medium text-gray-900">#{{ user?.id || 'N/A' }}</span>
+                </div>
               </div>
             </div>
 
@@ -114,8 +133,80 @@
                   View Orders
                 </button>
                 <button (click)="onUpdateProfile()" class="w-full text-left text-sm text-blue-600 hover:text-blue-800">
-                  Update Profile
+                  Edit Profile
                 </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Balance History Section -->
+          <div class="mt-8">
+            <div class="bg-white border border-gray-200 rounded-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">Balance History</h3>
+                <button (click)="loadBalanceHistory()" class="text-sm text-blue-600 hover:text-blue-800">
+                  Refresh
+                </button>
+              </div>
+              
+              <div *ngIf="isLoadingBalanceHistory" class="text-center py-4">
+                <svg class="animate-spin h-6 w-6 mx-auto text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-2 text-sm text-gray-500">Loading balance history...</p>
+              </div>
+
+              <div *ngIf="!isLoadingBalanceHistory && balanceHistory.length === 0" class="text-center py-8">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="mt-2 text-sm text-gray-500">No balance history available</p>
+              </div>
+
+              <div *ngIf="!isLoadingBalanceHistory && balanceHistory.length > 0" class="space-y-3">
+                <div *ngFor="let transaction of balanceHistory" class="border border-gray-200 rounded-lg p-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2">
+                        <span class="text-sm font-medium text-gray-900">{{ transaction.reason }}</span>
+                        <span [class]="getTransactionTypeClass(transaction.type)" class="px-2 py-1 text-xs font-medium rounded-full">
+                          {{ transaction.type }}
+                        </span>
+                      </div>
+                      <p class="text-xs text-gray-500 mt-1">{{ transaction.createdAt | date:'medium' }}</p>
+                    </div>
+                    <div class="text-right">
+                      <div [class]="transaction.type === 'ADD' || transaction.type === 'PAYMENT_APPROVAL' || transaction.type === 'TOPUP_APPROVAL' || transaction.type === 'REFUND' ? 'text-green-600' : 'text-red-600'" class="text-sm font-semibold">
+                        {{ transaction.type === 'ADD' || transaction.type === 'PAYMENT_APPROVAL' || transaction.type === 'TOPUP_APPROVAL' || transaction.type === 'REFUND' ? '+' : '-' }}${{ transaction.amount.toFixed(2) }}
+                      </div>
+                      <div class="text-xs text-gray-500">
+                        Balance: ${{ transaction.newBalance.toFixed(2) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pagination -->
+              <div *ngIf="!isLoadingBalanceHistory && balanceHistory.length > 0" class="mt-4 flex items-center justify-between">
+                <div class="text-sm text-gray-500">
+                  Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ Math.min(currentPage * itemsPerPage, totalItems) }} of {{ totalItems }} transactions
+                </div>
+                <div class="flex space-x-2">
+                  <button 
+                    (click)="previousPage()" 
+                    [disabled]="currentPage === 1"
+                    class="px-3 py-1 text-sm border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">
+                    Previous
+                  </button>
+                  <button 
+                    (click)="nextPage()" 
+                    [disabled]="currentPage >= totalPages"
+                    class="px-3 py-1 text-sm border border-gray-300 rounded disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           </div>

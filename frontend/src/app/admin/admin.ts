@@ -50,6 +50,7 @@ export interface User {
   lastName?: string;
   phone?: string;
   country?: string;
+  balance: number;
   createdAt: string;
   updatedAt: string;
   lastLogin?: string;
@@ -2174,6 +2175,7 @@ export class Admin implements OnInit {
             email: 'john@example.com',
             role: 'USER',
             isActive: true,
+            balance: 500.00,
             createdAt: '2024-01-01T00:00:00Z',
             updatedAt: '2024-01-01T00:00:00Z'
           },
@@ -2203,6 +2205,7 @@ export class Admin implements OnInit {
             email: 'jane@example.com',
             role: 'USER',
             isActive: true,
+            balance: 750.00,
             createdAt: '2024-01-01T00:00:00Z',
             updatedAt: '2024-01-01T00:00:00Z'
           },
@@ -2247,8 +2250,15 @@ export class Admin implements OnInit {
       return;
     }
 
-    // Add funds to user account
-    this.userService.addFundsToUser(topup.userId, topup.amount, `Topup approved - Request #${topupId}`).subscribe({
+    // Use the new balance management system
+    this.adminService.updateUserBalance(
+      topup.userId, 
+      topup.amount, 
+      'TOPUP_APPROVAL', 
+      `Topup approved - Request #${topupId}`,
+      topupId,
+      'topup'
+    ).subscribe({
       next: (userProfile) => {
         // Update topup status
         topup.status = 'APPROVED';

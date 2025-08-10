@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../service/auth/auth.service';
-import { UserService, UserProfile } from '../service/user/user';
+import { UserService, UserProfile, BalanceHistory } from '../service/user/user';
 import { Subscription } from 'rxjs';
 
 interface User {
@@ -23,6 +23,13 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   user: User | null = null;
   isLoggedIn = false;
   isLoading = false;
+  isLoadingBalanceHistory = false;
+  balanceHistory: BalanceHistory[] = [];
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
+  totalPages = 1;
+  Math = Math; // Make Math available in template
   private balanceSubscription?: Subscription;
 
   constructor(
@@ -37,6 +44,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     this.initializeBalanceSubscription();
     // Initialize balance when component loads
     this.userService.initializeBalance();
+    // Load balance history after user data is loaded
+    setTimeout(() => {
+      this.loadBalanceHistory();
+    }, 1000);
   }
 
   ngOnDestroy() {
@@ -128,7 +139,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   onProfile() {
     // Handle profile functionality
     console.log('Profile clicked');
-    // You can navigate to a profile page or show a modal
+    // Show profile information (already visible in the main content)
+    // Could navigate to a dedicated profile page in the future
   }
 
   onLogout() {
@@ -153,7 +165,57 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   onUpdateProfile() {
     // Handle update profile functionality
-    console.log('Update profile clicked');
-    this.onProfile();
+    console.log('Edit profile clicked');
+    // Could show a profile edit modal or navigate to edit page
+    // For now, just show a message
+    alert('Profile editing feature will be implemented soon!');
+  }
+
+  // Balance History Methods
+  loadBalanceHistory() {
+    if (!this.user) return;
+    
+    this.isLoadingBalanceHistory = true;
+    this.userService.getBalanceHistory(this.user.id.toString(), this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.balanceHistory = response.history;
+        this.totalItems = response.total;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.isLoadingBalanceHistory = false;
+      },
+      error: (error) => {
+        console.error('Failed to load balance history:', error);
+        this.isLoadingBalanceHistory = false;
+      }
+    });
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadBalanceHistory();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadBalanceHistory();
+    }
+  }
+
+  getTransactionTypeClass(type: string): string {
+    switch (type) {
+      case 'ADD':
+      case 'PAYMENT_APPROVAL':
+      case 'TOPUP_APPROVAL':
+      case 'REFUND':
+        return 'bg-green-100 text-green-800';
+      case 'SUBTRACT':
+      case 'PURCHASE':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
   }
 }

@@ -14,6 +14,8 @@ import {
   ResetPasswordDto,
   ChangePasswordDto,
 } from './dto/password-reset.dto';
+import { UpdateBalanceDto, BalanceTransactionType } from './dto/update-balance.dto';
+import { BalanceHistoryDto } from './dto/balance-history.dto';
 import * as bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 
@@ -289,6 +291,138 @@ export class UserService {
     return { message: 'Password reset successfully' };
   }
 
+  // Update user balance
+  async updateUserBalance(
+    userId: string,
+    updateBalanceDto: UpdateBalanceDto,
+  ): Promise<UserResponseDto> {
+    // Get current user with balance
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const currentBalance = user.balance || 0;
+    let newBalance: number;
+
+    // Calculate new balance based on transaction type
+    switch (updateBalanceDto.type) {
+      case BalanceTransactionType.ADD:
+      case BalanceTransactionType.PAYMENT_APPROVAL:
+      case BalanceTransactionType.TOPUP_APPROVAL:
+      case BalanceTransactionType.REFUND:
+        newBalance = currentBalance + updateBalanceDto.amount;
+        break;
+      case BalanceTransactionType.SUBTRACT:
+      case BalanceTransactionType.PURCHASE:
+        if (currentBalance < updateBalanceDto.amount) {
+          throw new BadRequestException('Insufficient balance');
+        }
+        newBalance = currentBalance - updateBalanceDto.amount;
+        break;
+      default:
+        throw new BadRequestException('Invalid transaction type');
+    }
+
+    // Use transaction to ensure data consistency
+    const result = await this.prisma.$transaction(async (prisma) => {
+      // Update user balance
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { balance: newBalance },
+      });
+
+      // Create balance history record
+      await prisma.balanceHistory.create({
+        data: {
+          userId,
+          amount: updateBalanceDto.amount,
+          type: updateBalanceDto.type,
+          reason: updateBalanceDto.reason,
+          previousBalance: currentBalance,
+          newBalance,
+          referenceId: updateBalanceDto.referenceId,
+          referenceType: updateBalanceDto.referenceType,
+        },
+      });
+
+      return updatedUser;
+    });
+
+    return this.mapToUserResponse(result);
+  }
+
+  // Get user balance history
+  async getBalanceHistory(
+    userId: string,
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{
+    history: BalanceHistoryDto[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    // Check if user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const skip = (page - 1) * limit;
+
+    // Get balance history with pagination
+    const [history, total] = await Promise.all([
+      this.prisma.balanceHistory.findMany({
+        where: { userId },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.balanceHistory.count({
+        where: { userId },
+      }),
+    ]);
+
+    return {
+      history: history.map((record) => ({
+        id: record.id,
+        userId: record.userId,
+        amount: record.amount,
+        type: record.type,
+        reason: record.reason,
+        previousBalance: record.previousBalance,
+        newBalance: record.newBalance,
+        referenceId: record.referenceId,
+        referenceType: record.referenceType,
+        createdAt: record.createdAt.toISOString(),
+      })),
+      total,
+      page,
+      limit,
+    };
+  }
+
+  // Get user current balance
+  async getUserBalance(userId: string): Promise<{ balance: number }> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { balance: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    return { balance: user.balance || 0 };
+  }
+
   // Helper method to map user to response DTO
   private mapToUserResponse(user: any): UserResponseDto {
     return {
@@ -301,6 +435,7 @@ export class UserService {
       lastName: user.lastName,
       phone: user.phone,
       country: user.country,
+      balance: user.balance || 0,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       lastLogin: user.lastLogin,

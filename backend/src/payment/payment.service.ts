@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { PaymentResponseDto } from './dto/payment-response.dto';
 import { PaymentStatus } from '@prisma/client';
+import { BalanceTransactionType } from '../user/dto/update-balance.dto';
 
 @Injectable()
 export class PaymentService {
@@ -89,24 +90,71 @@ export class PaymentService {
   async updatePaymentStatus(id: string, status: PaymentStatus): Promise<PaymentResponseDto> {
     const payment = await this.prisma.payment.findUnique({
       where: { id },
+      include: {
+        order: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
 
     if (!payment) {
       throw new NotFoundException(`Payment with ID ${id} not found`);
     }
 
-    const updatedPayment = await this.prisma.payment.update({
-      where: { id },
-      data: { status },
+    // Use transaction to ensure data consistency
+    const result = await this.prisma.$transaction(async (prisma) => {
+      // Update payment status
+      const updatedPayment = await prisma.payment.update({
+        where: { id },
+        data: { status },
+        include: {
+          order: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      });
+
+      // Update order payment status
+      await prisma.order.update({
+        where: { id: payment.orderId },
+        data: { paymentStatus: status },
+      });
+
+      // If payment is approved (COMPLETED), update user balance
+      if (status === PaymentStatus.COMPLETED && payment.order?.user) {
+        const userId = payment.order.user.id;
+        const currentBalance = payment.order.user.balance || 0;
+        const newBalance = currentBalance + payment.amount;
+
+        // Update user balance
+        await prisma.user.update({
+          where: { id: userId },
+          data: { balance: newBalance },
+        });
+
+        // Create balance history record
+        await prisma.balanceHistory.create({
+          data: {
+            userId,
+            amount: payment.amount,
+            type: BalanceTransactionType.PAYMENT_APPROVAL,
+            reason: `Payment approved for order #${payment.order.orderNumber}`,
+            previousBalance: currentBalance,
+            newBalance,
+            referenceId: payment.id,
+            referenceType: 'payment',
+          },
+        });
+      }
+
+      return updatedPayment;
     });
 
-    // Update order payment status
-    await this.prisma.order.update({
-      where: { id: payment.orderId },
-      data: { paymentStatus: status },
-    });
-
-    return this.mapToPaymentResponse(updatedPayment);
+    return this.mapToPaymentResponse(result);
   }
 
   async getPaymentStats() {

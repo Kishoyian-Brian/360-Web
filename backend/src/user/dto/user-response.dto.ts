@@ -62,6 +62,12 @@ export class UserResponseDto {
   country?: string;
 
   @ApiProperty({
+    description: 'User account balance',
+    example: 500.00,
+  })
+  balance: number;
+
+  @ApiProperty({
     description: 'Account creation date',
     example: '2024-01-01T00:00:00.000Z',
   })

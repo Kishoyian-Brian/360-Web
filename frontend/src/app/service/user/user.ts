@@ -24,18 +24,22 @@ export interface UserProfile {
 export interface UpdateBalanceRequest {
   userId: string;
   amount: number;
-  type: 'ADD' | 'SUBTRACT';
+  type: 'ADD' | 'SUBTRACT' | 'PAYMENT_APPROVAL' | 'TOPUP_APPROVAL' | 'PURCHASE' | 'REFUND';
   reason: string;
+  referenceId?: string;
+  referenceType?: string;
 }
 
 export interface BalanceHistory {
   id: string;
   userId: string;
   amount: number;
-  type: 'ADD' | 'SUBTRACT';
+  type: 'ADD' | 'SUBTRACT' | 'PAYMENT_APPROVAL' | 'TOPUP_APPROVAL' | 'PURCHASE' | 'REFUND';
   reason: string;
   previousBalance: number;
   newBalance: number;
+  referenceId?: string;
+  referenceType?: string;
   createdAt: string;
 }
 

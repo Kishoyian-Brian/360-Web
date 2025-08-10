@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Put,
+  Patch,
   Delete,
   Body,
   Param,
@@ -27,6 +28,8 @@ import {
   ResetPasswordDto,
   ChangePasswordDto,
 } from './dto/password-reset.dto';
+import { UpdateBalanceDto } from './dto/update-balance.dto';
+import { BalanceHistoryDto } from './dto/balance-history.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 
@@ -212,5 +215,123 @@ export class UserController {
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<{ message: string }> {
     return this.userService.changePassword(req.user.id, changePasswordDto);
+  }
+
+  // Balance Management Endpoints
+
+  @Patch(':id/balance')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Update user balance (Admin only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Balance updated successfully',
+    type: UserResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 400, description: 'Invalid transaction or insufficient balance' })
+  async updateUserBalance(
+    @Param('id') userId: string,
+    @Body() updateBalanceDto: UpdateBalanceDto,
+  ): Promise<UserResponseDto> {
+    return this.userService.updateUserBalance(userId, updateBalanceDto);
+  }
+
+  @Get(':id/balance')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user current balance' })
+  @ApiResponse({
+    status: 200,
+    description: 'Balance retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        balance: { type: 'number', example: 500.00 },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async getUserBalance(@Param('id') userId: string): Promise<{ balance: number }> {
+    return this.userService.getUserBalance(userId);
+  }
+
+  @Get(':id/balance-history')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user balance history' })
+  @ApiResponse({
+    status: 200,
+    description: 'Balance history retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        history: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/BalanceHistoryDto' },
+        },
+        total: { type: 'number' },
+        page: { type: 'number' },
+        limit: { type: 'number' },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiQuery({ name: 'page', required: false, type: 'number', example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: 'number', example: 10 })
+  async getBalanceHistory(
+    @Param('id') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.userService.getBalanceHistory(userId, page, limit);
+  }
+
+  @Get('profile/me/balance')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user balance' })
+  @ApiResponse({
+    status: 200,
+    description: 'Balance retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        balance: { type: 'number', example: 500.00 },
+      },
+    },
+  })
+  async getCurrentUserBalance(@Request() req): Promise<{ balance: number }> {
+    return this.userService.getUserBalance(req.user.id);
+  }
+
+  @Get('profile/me/balance-history')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get current user balance history' })
+  @ApiResponse({
+    status: 200,
+    description: 'Balance history retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        history: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/BalanceHistoryDto' },
+        },
+        total: { type: 'number' },
+        page: { type: 'number' },
+        limit: { type: 'number' },
+      },
+    },
+  })
+  @ApiQuery({ name: 'page', required: false, type: 'number', example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: 'number', example: 10 })
+  async getCurrentUserBalanceHistory(
+    @Request() req,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.userService.getBalanceHistory(req.user.id, page, limit);
   }
 } 

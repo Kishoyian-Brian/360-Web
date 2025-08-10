@@ -45,10 +45,14 @@ export class CashoutClips implements OnInit {
               const videoElements = document.querySelectorAll('video');
               videoElements.forEach(videoElement => {
                 if (videoElement.src === video.videoUrl) {
-                  // Set to first frame and pause
-                  videoElement.currentTime = 0;
-                  videoElement.pause();
-                  console.log('Set video to first frame:', video.title);
+                  try {
+                    // Set to first frame and pause
+                    videoElement.currentTime = 0;
+                    this.safePauseVideo(videoElement);
+                    console.log('Set video to first frame:', video.title);
+                  } catch (error) {
+                    console.error('Error setting video to first frame:', error);
+                  }
                 }
               });
             }
@@ -72,57 +76,89 @@ export class CashoutClips implements OnInit {
       return;
     }
     
-    // Get the clicked video element
-    const videoElement = event.target as HTMLVideoElement;
+    // Get the clicked video element - handle both direct video clicks and button clicks
+    let videoElement: HTMLVideoElement | null = null;
+    
+    if (event.target instanceof HTMLVideoElement) {
+      videoElement = event.target as HTMLVideoElement;
+    } else if (event.target instanceof HTMLButtonElement) {
+      // If button was clicked, find the associated video element
+      const button = event.target as HTMLButtonElement;
+      const videoContainer = button.closest('.relative');
+      if (videoContainer) {
+        videoElement = videoContainer.querySelector('video') as HTMLVideoElement;
+      }
+    }
+    
+    // Check if we found a valid video element
+    if (!videoElement || typeof videoElement.pause !== 'function') {
+      console.error('Invalid video element or video element not found');
+      return;
+    }
     
     // If video is paused, start playing
     if (videoElement.paused) {
-      videoElement.play().then(() => {
-        console.log('Video started playing');
-        this.playingVideos.add(video.id);
-      }).catch(error => {
-        console.error('Error playing video:', error);
-      });
-      
-      // Increment view count when video starts playing
-      this.videoService.incrementViews(video.id).subscribe({
-        next: () => {
-          video.views++;
-          console.log('View count incremented');
-        },
-        error: (error) => {
-          console.error('Error incrementing view count:', error);
+      this.safePlayVideo(videoElement).then((success) => {
+        if (success) {
+          console.log('Video started playing');
+          this.playingVideos.add(video.id);
+          
+          // Increment view count when video starts playing
+          this.videoService.incrementViews(video.id).subscribe({
+            next: () => {
+              video.views++;
+              console.log('View count incremented');
+            },
+            error: (error) => {
+              console.error('Error incrementing view count:', error);
+            }
+          });
         }
       });
     } else {
       // If video is playing, pause it and show first frame
-      videoElement.pause();
-      videoElement.currentTime = 0;
-      this.playingVideos.delete(video.id);
+      if (this.safePauseVideo(videoElement)) {
+        videoElement.currentTime = 0;
+        this.playingVideos.delete(video.id);
+      }
     }
   }
 
   // Ensure video content is visible
   ensureVideoVisible(videoElement: HTMLVideoElement) {
-    // Set to first frame to show video content
-    videoElement.currentTime = 0;
-    videoElement.pause();
-    
-    // Force a reload to ensure the frame is displayed
-    videoElement.load();
+    try {
+      // Set to first frame to show video content
+      videoElement.currentTime = 0;
+      this.safePauseVideo(videoElement);
+      
+      // Force a reload to ensure the frame is displayed
+      videoElement.load();
+    } catch (error) {
+      console.error('Error ensuring video visibility:', error);
+    }
   }
 
   // Handle video loaded event
   onVideoLoaded(event: Event, video: Video) {
-    const videoElement = event.target as HTMLVideoElement;
-    
-    // Set the video to the first frame (0 seconds) to show content
-    videoElement.currentTime = 0;
-    
-    // Ensure the video is paused and shows the first frame
-    videoElement.pause();
-    
-    console.log('Video loaded:', video.title);
+    try {
+      const videoElement = event.target as HTMLVideoElement;
+      
+      // Check if it's a valid video element
+      if (!videoElement || typeof videoElement.pause !== 'function') {
+        console.error('Invalid video element in onVideoLoaded');
+        return;
+      }
+      
+      // Set the video to the first frame (0 seconds) to show content
+      videoElement.currentTime = 0;
+      
+      // Ensure the video is paused and shows the first frame
+      this.safePauseVideo(videoElement);
+      
+      console.log('Video loaded:', video.title);
+    } catch (error) {
+      console.error('Error in onVideoLoaded:', error);
+    }
   }
 
   // Check if URL is a YouTube URL
@@ -227,5 +263,40 @@ export class CashoutClips implements OnInit {
   // Check if a video is currently playing
   isVideoPlaying(videoId: string): boolean {
     return this.playingVideos.has(videoId);
+  }
+
+  // Helper method to safely pause a video element
+  private safePauseVideo(videoElement: HTMLVideoElement): boolean {
+    try {
+      if (videoElement && typeof videoElement.pause === 'function') {
+        videoElement.pause();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error pausing video:', error);
+      return false;
+    }
+  }
+
+  // Helper method to safely play a video element
+  private safePlayVideo(videoElement: HTMLVideoElement): Promise<boolean> {
+    return new Promise((resolve) => {
+      try {
+        if (videoElement && typeof videoElement.play === 'function') {
+          videoElement.play().then(() => {
+            resolve(true);
+          }).catch((error) => {
+            console.error('Error playing video:', error);
+            resolve(false);
+          });
+        } else {
+          resolve(false);
+        }
+      } catch (error) {
+        console.error('Error in safePlayVideo:', error);
+        resolve(false);
+      }
+    });
   }
 }

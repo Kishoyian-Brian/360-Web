@@ -81,6 +81,15 @@ enum PaymentMethod {
     CASH
 }
 
+enum BalanceTransactionType {
+    ADD
+    SUBTRACT
+    PAYMENT_APPROVAL
+    TOPUP_APPROVAL
+    PURCHASE
+    REFUND
+}
+
 model User {
     id       String   @id @default(cuid())
     username String   @unique
@@ -95,6 +104,9 @@ model User {
     phone     String?
     country   String?
 
+    // Account balance
+    balance   Float    @default(0.00)
+
     // Timestamps
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -106,6 +118,7 @@ model User {
     blogComments BlogComment[] @relation("UserBlogComments")
     carts        Cart[]
     Payment      Payment[]
+    balanceHistory BalanceHistory[]
 
     @@map("users")
 }
@@ -498,4 +511,24 @@ model CryptoAccount {
 
     @@unique([symbol])
     @@map("crypto_accounts")
+}
+
+model BalanceHistory {
+    id          String                 @id @default(cuid())
+    userId      String
+    amount      Float
+    type        BalanceTransactionType
+    reason      String
+    previousBalance Float
+    newBalance  Float
+    referenceId String? // Payment ID, Order ID, etc.
+    referenceType String? // 'payment', 'order', 'topup', etc.
+
+    // Timestamps
+    createdAt DateTime @default(now())
+
+    // Relations
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("balance_history")
 }
