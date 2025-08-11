@@ -15,89 +15,54 @@ export class TopupService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createTopupRequest(userId: string, createTopupDto: CreateTopupRequestDto): Promise<TopupResponseDto> {
-    // TODO: Uncomment when migration is run
-    // // Verify crypto account exists and is active
-    // const cryptoAccount = await this.prisma.cryptoAccount.findUnique({
-    //   where: { id: createTopupDto.cryptoAccountId }
-    // });
+    // Verify crypto account exists and is active
+    const cryptoAccount = await this.prisma.cryptoAccount.findUnique({
+      where: { id: createTopupDto.cryptoAccountId }
+    });
 
-    // if (!cryptoAccount) {
-    //   throw new NotFoundException('Crypto account not found');
-    // }
+    if (!cryptoAccount) {
+      throw new NotFoundException('Crypto account not found');
+    }
 
-    // if (!cryptoAccount.isActive) {
-    //   throw new BadRequestException('Crypto account is not active');
-    // }
+    if (!cryptoAccount.isActive) {
+      throw new BadRequestException('Crypto account is not active');
+    }
 
-    // // Create topup request
-    // const topupRequest = await this.prisma.topupRequest.create({
-    //   data: {
-    //     userId,
-    //     amount: createTopupDto.amount,
-    //     cryptoAccountId: createTopupDto.cryptoAccountId,
-    //     paymentProofUrl: createTopupDto.paymentProofUrl,
-    //     status: TopupStatus.PENDING,
-    //   },
-    //   include: {
-    //     user: {
-    //       select: {
-    //         id: true,
-    //         username: true,
-    //         email: true,
-    //         firstName: true,
-    //         lastName: true,
-    //         phone: true,
-    //         country: true,
-    //         balance: true,
-    //       }
-    //     },
-    //     cryptoAccount: {
-    //       select: {
-    //         id: true,
-    //         name: true,
-    //         symbol: true,
-    //         address: true,
-    //         network: true,
-    //       }
-    //     }
-    //   }
-    // });
-
-    // return this.mapToResponseDto(topupRequest);
-
-    // Temporary mock implementation until migration is run
-    const mockTopupRequest = {
-      id: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      userId,
-      amount: createTopupDto.amount,
-      cryptoAccountId: createTopupDto.cryptoAccountId,
-      status: TopupStatus.PENDING,
-      paymentProofUrl: createTopupDto.paymentProofUrl,
-      adminNotes: null,
-      processedAt: null,
-      processedBy: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: {
-        id: userId,
-        username: 'mock-user',
-        email: 'mock@example.com',
-        firstName: 'Mock',
-        lastName: 'User',
-        phone: '+1234567890',
-        country: 'US',
-        balance: 0,
+    // Create topup request
+    const topupRequest = await this.prisma.topupRequest.create({
+      data: {
+        userId,
+        amount: createTopupDto.amount,
+        cryptoAccountId: createTopupDto.cryptoAccountId,
+        paymentProofUrl: createTopupDto.paymentProofUrl,
+        status: TopupStatus.PENDING,
       },
-      cryptoAccount: {
-        id: createTopupDto.cryptoAccountId,
-        name: 'Mock Crypto',
-        symbol: 'BTC',
-        address: 'mock-address',
-        network: 'Bitcoin',
-      },
-    };
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            country: true,
+            balance: true,
+          }
+        },
+        cryptoAccount: {
+          select: {
+            id: true,
+            name: true,
+            symbol: true,
+            address: true,
+            network: true,
+          }
+        }
+      }
+    });
 
-    return this.mapToResponseDto(mockTopupRequest);
+    return this.mapToResponseDto(topupRequest);
   }
 
   async getTopupRequests(filters: TopupFilterDto): Promise<{
@@ -106,162 +71,84 @@ export class TopupService {
     page: number;
     limit: number;
   }> {
-    // TODO: Uncomment when migration is deployed and Prisma client is regenerated
-    // try {
-    //   // Try to get real data first
-    //   const { page = 1, limit = 10, search, status, cryptoAccountId, userId } = filters;
-    //   const skip = (page - 1) * limit;
+    const { page = 1, limit = 10, search, status, cryptoAccountId, userId } = filters;
+    const skip = (page - 1) * limit;
 
-    //   // Build where clause
-    //   const where: any = {};
-      
-    //   if (status) {
-    //     where.status = status;
-    //   }
-      
-    //   if (cryptoAccountId) {
-    //     where.cryptoAccountId = cryptoAccountId;
-    //   }
-      
-    //   if (userId) {
-    //     where.userId = userId;
-    //   }
-      
-    //   if (search) {
-    //     where.OR = [
-    //       {
-    //         user: {
-    //           username: {
-    //             contains: search,
-    //             mode: 'insensitive'
-    //           }
-    //         }
-    //       },
-    //       {
-    //         user: {
-    //           email: {
-    //             contains: search,
-    //             mode: 'insensitive'
-    //           }
-    //         }
-    //       }
-    //     ];
-    //   }
+    // Build where clause
+    const where: any = {};
+    
+    if (status) {
+      where.status = status;
+    }
+    
+    if (cryptoAccountId) {
+      where.cryptoAccountId = cryptoAccountId;
+    }
+    
+    if (userId) {
+      where.userId = userId;
+    }
+    
+    if (search) {
+      where.OR = [
+        {
+          user: {
+            username: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          }
+        },
+        {
+          user: {
+            email: {
+              contains: search,
+              mode: 'insensitive'
+            }
+          }
+        }
+      ];
+    }
 
-    //   // Get total count
-    //   const total = await this.prisma.topupRequest.count({ where });
+    // Get total count
+    const total = await this.prisma.topupRequest.count({ where });
 
-    //   // Get topup requests with pagination
-    //   const topupRequests = await this.prisma.topupRequest.findMany({
-    //     where,
-    //     skip,
-    //     take: limit,
-    //     orderBy: { createdAt: 'desc' },
-    //     include: {
-    //       user: {
-    //         select: {
-    //           id: true,
-    //           username: true,
-    //           email: true,
-    //           firstName: true,
-    //           lastName: true,
-    //           phone: true,
-    //           country: true,
-    //           balance: true,
-    //         }
-    //       },
-    //       cryptoAccount: {
-    //         select: {
-    //           id: true,
-    //           name: true,
-    //           symbol: true,
-    //           address: true,
-    //           network: true,
-    //         }
-    //       }
-    //     }
-    //   });
-
-    //   return {
-    //     topups: topupRequests.map(topup => this.mapToResponseDto(topup)),
-    //     total,
-    //     page,
-    //     limit
-    //   };
-    // } catch (error) {
-    //   // If database table doesn't exist or other error, return mock data
-    //   console.log('Database not ready for topups, returning mock data:', error.message);
-    // }
-
-    // Temporary mock implementation until migration is deployed
-    const mockTopups = [
-      {
-        id: 'mock-topup-1',
-        userId: 'user-1',
-        amount: 50,
-        cryptoAccountId: 'crypto-1',
-        status: TopupStatus.PENDING,
-        paymentProofUrl: 'https://example.com/proof1.jpg',
-        adminNotes: null,
-        processedAt: null,
-        processedBy: null,
-        createdAt: new Date(Date.now() - 86400000), // 1 day ago
-        updatedAt: new Date(Date.now() - 86400000),
+    // Get topup requests with pagination
+    const topupRequests = await this.prisma.topupRequest.findMany({
+      where,
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+      include: {
         user: {
-          id: 'user-1',
-          username: 'john_doe',
-          email: 'john@example.com',
-          firstName: 'John',
-          lastName: 'Doe',
-          phone: '+1234567890',
-          country: 'US',
-          balance: 100,
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            country: true,
+            balance: true,
+          }
         },
         cryptoAccount: {
-          id: 'crypto-1',
-          name: 'Bitcoin',
-          symbol: 'BTC',
-          address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
-          network: 'Bitcoin',
-        },
-      },
-      {
-        id: 'mock-topup-2',
-        userId: 'user-2',
-        amount: 25,
-        cryptoAccountId: 'crypto-2',
-        status: TopupStatus.APPROVED,
-        paymentProofUrl: 'https://example.com/proof2.jpg',
-        adminNotes: 'Payment verified successfully',
-        processedAt: new Date(Date.now() - 3600000), // 1 hour ago
-        processedBy: 'admin-1',
-        createdAt: new Date(Date.now() - 7200000), // 2 hours ago
-        updatedAt: new Date(Date.now() - 3600000),
-        user: {
-          id: 'user-2',
-          username: 'jane_smith',
-          email: 'jane@example.com',
-          firstName: 'Jane',
-          lastName: 'Smith',
-          phone: '+1987654321',
-          country: 'CA',
-          balance: 75,
-        },
-        cryptoAccount: {
-          id: 'crypto-2',
-          name: 'Ethereum',
-          symbol: 'ETH',
-          address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
-          network: 'Ethereum',
-        },
-      },
-    ];
+          select: {
+            id: true,
+            name: true,
+            symbol: true,
+            address: true,
+            network: true,
+          }
+        }
+      }
+    });
 
     return {
-      topups: mockTopups.map(topup => this.mapToResponseDto(topup)),
-      total: mockTopups.length,
-      page: 1,
-      limit: 10
+      topups: topupRequests.map(topup => this.mapToResponseDto(topup)),
+      total,
+      page,
+      limit
     };
   }
 
@@ -462,32 +349,18 @@ export class TopupService {
     approvedRequests: number;
     rejectedRequests: number;
   }> {
-    // TODO: Uncomment when migration is deployed and Prisma client is regenerated
-    // try {
-    //   const [totalRequests, pendingRequests, approvedRequests, rejectedRequests] = await Promise.all([
-    //     this.prisma.topupRequest.count(),
-    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.PENDING } }),
-    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.APPROVED } }),
-    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.REJECTED } }),
-    //   ]);
+    const [totalRequests, pendingRequests, approvedRequests, rejectedRequests] = await Promise.all([
+      this.prisma.topupRequest.count(),
+      this.prisma.topupRequest.count({ where: { status: TopupStatus.PENDING } }),
+      this.prisma.topupRequest.count({ where: { status: TopupStatus.APPROVED } }),
+      this.prisma.topupRequest.count({ where: { status: TopupStatus.REJECTED } }),
+    ]);
 
-    //   return {
-    //     totalRequests,
-    //     pendingRequests,
-    //     approvedRequests,
-    //     rejectedRequests,
-    //   };
-    // } catch (error) {
-    //   // If database table doesn't exist or other error, return mock data
-    //   console.log('Database not ready for topup stats, returning mock data:', error.message);
-    // }
-
-    // Temporary mock implementation until migration is deployed
     return {
-      totalRequests: 2,
-      pendingRequests: 1,
-      approvedRequests: 1,
-      rejectedRequests: 0,
+      totalRequests,
+      pendingRequests,
+      approvedRequests,
+      rejectedRequests,
     };
   }
 
