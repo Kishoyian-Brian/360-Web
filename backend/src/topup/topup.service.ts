@@ -106,88 +106,94 @@ export class TopupService {
     page: number;
     limit: number;
   }> {
-    // TODO: Uncomment when migration is run
-    // const { page = 1, limit = 10, search, status, cryptoAccountId, userId } = filters;
-    // const skip = (page - 1) * limit;
+    // TODO: Uncomment when migration is deployed and Prisma client is regenerated
+    // try {
+    //   // Try to get real data first
+    //   const { page = 1, limit = 10, search, status, cryptoAccountId, userId } = filters;
+    //   const skip = (page - 1) * limit;
 
-    // // Build where clause
-    // const where: any = {};
-    
-    // if (status) {
-    //   where.status = status;
-    // }
-    
-    // if (cryptoAccountId) {
-    //   where.cryptoAccountId = cryptoAccountId;
-    // }
-    
-    // if (userId) {
-    //   where.userId = userId;
-    // }
-    
-    // if (search) {
-    //   where.OR = [
-    //     {
-    //       user: {
-    //         username: {
-    //           contains: search,
-    //           mode: 'insensitive'
-    //         }
-    //       }
-    //     },
-    //     {
-    //       user: {
-    //         email: {
-    //           contains: search,
-    //           mode: 'insensitive'
-    //         }
-    //       }
-    //     }
-    //   ];
-    // }
-
-    // // Get total count
-    // const total = await this.prisma.topupRequest.count({ where });
-
-    // // Get topup requests with pagination
-    // const topupRequests = await this.prisma.topupRequest.findMany({
-    //   where,
-    //   skip,
-    //   take: limit,
-    //   orderBy: { createdAt: 'desc' },
-    //   include: {
-    //     user: {
-    //       select: {
-    //         id: true,
-    //         username: true,
-    //         email: true,
-    //         firstName: true,
-    //         lastName: true,
-    //         phone: true,
-    //         country: true,
-    //         balance: true,
-    //       }
-    //     },
-    //     cryptoAccount: {
-    //       select: {
-    //         id: true,
-    //         name: true,
-    //         symbol: true,
-    //         address: true,
-    //         network: true,
-    //       }
-    //     }
+    //   // Build where clause
+    //   const where: any = {};
+      
+    //   if (status) {
+    //     where.status = status;
     //   }
-    // });
+      
+    //   if (cryptoAccountId) {
+    //     where.cryptoAccountId = cryptoAccountId;
+    //   }
+      
+    //   if (userId) {
+    //     where.userId = userId;
+    //   }
+      
+    //   if (search) {
+    //     where.OR = [
+    //       {
+    //         user: {
+    //           username: {
+    //             contains: search,
+    //             mode: 'insensitive'
+    //           }
+    //         }
+    //       },
+    //       {
+    //         user: {
+    //           email: {
+    //             contains: search,
+    //             mode: 'insensitive'
+    //           }
+    //         }
+    //       }
+    //     ];
+    //   }
 
-    // return {
-    //   topups: topupRequests.map(topup => this.mapToResponseDto(topup)),
-    //   total,
-    //   page,
-    //   limit
-    // };
+    //   // Get total count
+    //   const total = await this.prisma.topupRequest.count({ where });
 
-    // Temporary mock implementation until migration is run
+    //   // Get topup requests with pagination
+    //   const topupRequests = await this.prisma.topupRequest.findMany({
+    //     where,
+    //     skip,
+    //     take: limit,
+    //     orderBy: { createdAt: 'desc' },
+    //     include: {
+    //       user: {
+    //         select: {
+    //           id: true,
+    //           username: true,
+    //           email: true,
+    //           firstName: true,
+    //           lastName: true,
+    //           phone: true,
+    //           country: true,
+    //           balance: true,
+    //         }
+    //       },
+    //       cryptoAccount: {
+    //         select: {
+    //           id: true,
+    //           name: true,
+    //           symbol: true,
+    //           address: true,
+    //           network: true,
+    //         }
+    //       }
+    //     }
+    //   });
+
+    //   return {
+    //     topups: topupRequests.map(topup => this.mapToResponseDto(topup)),
+    //     total,
+    //     page,
+    //     limit
+    //   };
+    // } catch (error) {
+    //   // If database table doesn't exist or other error, return mock data
+    //   console.log('Database not ready for topups, returning mock data:', error.message);
+    // }
+
+    // Temporary mock implementation until migration is deployed
     const mockTopups = [
       {
         id: 'mock-topup-1',
@@ -456,22 +462,27 @@ export class TopupService {
     approvedRequests: number;
     rejectedRequests: number;
   }> {
-    // TODO: Uncomment when migration is run
-    // const [totalRequests, pendingRequests, approvedRequests, rejectedRequests] = await Promise.all([
-    //   this.prisma.topupRequest.count(),
-    //   this.prisma.topupRequest.count({ where: { status: TopupStatus.PENDING } }),
-    //   this.prisma.topupRequest.count({ where: { status: TopupStatus.APPROVED } }),
-    //   this.prisma.topupRequest.count({ where: { status: TopupStatus.REJECTED } }),
-    // ]);
+    // TODO: Uncomment when migration is deployed and Prisma client is regenerated
+    // try {
+    //   const [totalRequests, pendingRequests, approvedRequests, rejectedRequests] = await Promise.all([
+    //     this.prisma.topupRequest.count(),
+    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.PENDING } }),
+    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.APPROVED } }),
+    //     this.prisma.topupRequest.count({ where: { status: TopupStatus.REJECTED } }),
+    //   ]);
 
-    // return {
-    //   totalRequests,
-    //   pendingRequests,
-    //   approvedRequests,
-    //   rejectedRequests,
-    // };
+    //   return {
+    //     totalRequests,
+    //     pendingRequests,
+    //     approvedRequests,
+    //     rejectedRequests,
+    //   };
+    // } catch (error) {
+    //   // If database table doesn't exist or other error, return mock data
+    //   console.log('Database not ready for topup stats, returning mock data:', error.message);
+    // }
 
-    // Temporary mock implementation until migration is run
+    // Temporary mock implementation until migration is deployed
     return {
       totalRequests: 2,
       pendingRequests: 1,

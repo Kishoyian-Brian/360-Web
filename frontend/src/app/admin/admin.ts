@@ -471,6 +471,7 @@ export class Admin implements OnInit {
       this.loadVouchStats();
     } else if (section === 'topups') {
       this.loadTopups();
+      this.loadTopupStats();
     }
   }
 
