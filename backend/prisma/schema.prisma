@@ -119,6 +119,7 @@ model User {
     carts        Cart[]
     Payment      Payment[]
     balanceHistory BalanceHistory[]
+    topupRequests TopupRequest[]
 
     @@map("users")
 }
@@ -509,6 +510,9 @@ model CryptoAccount {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    // Relations
+    topupRequests TopupRequest[]
+
     @@unique([symbol])
     @@map("crypto_accounts")
 }
@@ -531,4 +535,32 @@ model BalanceHistory {
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@map("balance_history")
+}
+
+enum TopupStatus {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+model TopupRequest {
+    id              String      @id @default(cuid())
+    userId          String
+    amount          Float
+    cryptoAccountId String
+    status          TopupStatus @default(PENDING)
+    paymentProofUrl String?     // URL to payment proof image
+    adminNotes      String?     // Admin notes for approval/rejection
+    processedAt     DateTime?   // When admin processed the request
+    processedBy     String?     // Admin who processed the request
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    cryptoAccount CryptoAccount @relation(fields: [cryptoAccountId], references: [id])
+
+    @@map("topup_requests")
 }

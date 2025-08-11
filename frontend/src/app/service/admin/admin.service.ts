@@ -239,31 +239,57 @@ export class AdminService {
     );
   }
 
-  // TODO: Implement topup management API methods
-  // These methods should be implemented when the backend topup functionality is ready
+  // Topup Management
+  getTopups(filters?: any): Observable<{
+    topups: any[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    return this.http.get<{
+      topups: any[];
+      total: number;
+      page: number;
+      limit: number;
+    }>(`${this.API_URL}/topups`, { 
+      params: filters,
+      headers: this.authService.getAuthHeaders() 
+    });
+  }
+
+  getTopupStats(): Observable<{
+    totalRequests: number;
+    pendingRequests: number;
+    approvedRequests: number;
+    rejectedRequests: number;
+  }> {
+    return this.http.get<{
+      totalRequests: number;
+      pendingRequests: number;
+      approvedRequests: number;
+      rejectedRequests: number;
+    }>(`${this.API_URL}/topups/stats`, {
+      headers: this.authService.getAuthHeaders()
+    });
+  }
+
+  approveTopup(topupId: string, notes?: string): Observable<any> {
+    return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/approve`, 
+      { notes }, 
+      { headers: this.authService.getAuthHeaders() }
+    );
+  }
   
-  // getTopups(filters?: any): Observable<any> {
-  //   return this.http.get<any>(`${this.API_URL}/topups`, { 
-  //     params: filters,
-  //     headers: this.authService.getAuthHeaders() 
-  //   });
-  // }
+  rejectTopup(topupId: string, notes?: string): Observable<any> {
+    return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/reject`, 
+      { notes }, 
+      { headers: this.authService.getAuthHeaders() }
+    );
+  }
   
-  // approveTopup(topupId: string): Observable<any> {
-  //   return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/approve`, {}, {
-  //     headers: this.authService.getAuthHeaders()
-  //   });
-  // }
-  
-  // rejectTopup(topupId: string): Observable<any> {
-  //   return this.http.patch<any>(`${this.API_URL}/topups/${topupId}/reject`, {}, {
-  //     headers: this.authService.getAuthHeaders()
-  //   });
-  // }
-  
-  // deleteTopup(topupId: string): Observable<any> {
-  //   return this.http.delete<any>(`${this.API_URL}/topups/${topupId}`, {
-  //     headers: this.authService.getAuthHeaders()
-  //   });
-  // }
+  deleteTopup(topupId: string): Observable<any> {
+    return this.http.delete<any>(`${this.API_URL}/topups/${topupId}`, {
+      headers: this.authService.getAuthHeaders()
+    });
+  }
 }

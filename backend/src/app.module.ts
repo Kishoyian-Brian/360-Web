@@ -20,6 +20,7 @@ import { UploadModule } from './upload/upload.module';
 import { EmailModule } from './email/email.module';
 import { VideoModule } from './video/video.module';
 import { CryptoModule } from './crypto/crypto.module';
+import { TopupModule } from './topup/topup.module';
 import { PrismaModule } from './prisma/prisma.module';
 import appConfig from './config/app.config';
 import jwtConfig from './config/jwt.config';
@@ -65,6 +66,7 @@ import databaseConfig from './config/database.config';
     EmailModule,
     VideoModule,
     CryptoModule,
+    TopupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
