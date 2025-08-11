@@ -172,6 +172,8 @@ export class UserController {
   }
 
   @Get('profile/me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({
     status: 200,
@@ -183,6 +185,8 @@ export class UserController {
   }
 
   @Put('profile/me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({
     status: 200,
@@ -198,6 +202,8 @@ export class UserController {
   }
 
   @Post('change-password')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Change current user password' })
   @ApiResponse({
     status: 200,
