@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../services/toast.service';
 import { AuthService } from '../service/auth/auth.service';
 import { CryptoService, CryptoAccount } from '../service/crypto/crypto.service';
@@ -47,7 +48,8 @@ export class TopupComponent implements OnInit {
     private router: Router,
     private toastService: ToastService,
     private authService: AuthService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -163,38 +165,69 @@ export class TopupComponent implements OnInit {
     return true;
   }
 
-  submitTopup() {
+  async submitTopup() {
     if (!this.validateForm()) {
       return;
     }
 
     this.isSubmitting = true;
 
-    // Create FormData for file upload
-    const formData = new FormData();
-    formData.append('amount', this.topupAmount.toString());
-    formData.append('cryptoAccountId', this.selectedCrypto!.id);
-    formData.append('paymentProof', this.paymentProofFile!);
+    try {
+      // First upload the payment proof image
+      let paymentProofUrl = '';
+      if (this.paymentProofFile) {
+        const formData = new FormData();
+        formData.append('file', this.paymentProofFile);
+        formData.append('type', 'image');
 
-    // Here you would typically make an API call to submit the topup
-    // For now, I'll simulate the process
-    console.log('Submitting topup:', {
-      amount: this.topupAmount,
-      cryptoAccountId: this.selectedCrypto!.id,
-      paymentProof: this.paymentProofFile!.name
-    });
+        const authHeaders = this.authService.getAuthHeaders();
+        delete authHeaders['Content-Type']; // Remove for multipart upload
 
-    // Simulate API call
-    setTimeout(() => {
+        const uploadResponse: any = await this.http.post(
+          'https://three60-web-gzzw.onrender.com/api/upload/image',
+          formData,
+          { headers: authHeaders }
+        ).toPromise();
+
+        paymentProofUrl = uploadResponse.url;
+        console.log('Payment proof uploaded:', paymentProofUrl);
+      }
+
+      // Create topup request
+      const topupData = {
+        amount: this.topupAmount,
+        cryptoAccountId: this.selectedCrypto!.id,
+        paymentProofUrl: paymentProofUrl
+      };
+
+      console.log('Submitting topup request:', topupData);
+
+      const response: any = await this.http.post(
+        'https://three60-web-gzzw.onrender.com/api/topups',
+        topupData,
+        { headers: this.authService.getAuthHeaders() }
+      ).toPromise();
+
       this.isSubmitting = false;
-      this.topupId = 'TOPUP-' + Date.now();
-      this.toastService.success('Topup request submitted successfully!');
+      this.topupId = response.id;
+      this.toastService.success('Topup request submitted successfully! Your request is now pending admin approval.');
       
       // Navigate back to my account
       setTimeout(() => {
         this.router.navigate(['/my-account']);
       }, 2000);
-    }, 2000);
+
+    } catch (error: any) {
+      console.error('Error submitting topup:', error);
+      this.isSubmitting = false;
+      
+      let errorMessage = 'Failed to submit topup request';
+      if (error?.error?.message) {
+        errorMessage = error.error.message;
+      }
+      
+      this.toastService.error(errorMessage);
+    }
   }
 
   onAmountChange() {
