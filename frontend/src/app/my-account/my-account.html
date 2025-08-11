@@ -83,6 +83,14 @@
                   Loading...
                 </span>
                 <span *ngIf="!isLoading" class="ml-2 text-lg font-semibold text-green-600">${{ (user?.balance || 0).toFixed(2) }} USD</span>
+                <button 
+                  (click)="refreshBalance()" 
+                  class="ml-3 p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-full transition-colors"
+                  title="Refresh Balance">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>

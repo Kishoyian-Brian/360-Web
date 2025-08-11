@@ -304,8 +304,63 @@ export class UserService {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
-    // TODO: Implement balance update logic after database migration
-    return this.mapToUserResponse(user);
+    // Use transaction to ensure data consistency
+    const result = await this.prisma.$transaction(async (prisma) => {
+      const currentUser = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { balance: true }
+      });
+
+      if (!currentUser) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
+      const previousBalance = currentUser.balance || 0;
+      let newBalance = previousBalance;
+
+      // Calculate new balance based on transaction type
+      switch (updateBalanceDto.type) {
+        case 'ADD':
+        case 'PAYMENT_APPROVAL':
+        case 'TOPUP_APPROVAL':
+        case 'REFUND':
+          newBalance = previousBalance + updateBalanceDto.amount;
+          break;
+        case 'SUBTRACT':
+        case 'PURCHASE':
+          if (previousBalance < updateBalanceDto.amount) {
+            throw new BadRequestException('Insufficient balance');
+          }
+          newBalance = previousBalance - updateBalanceDto.amount;
+          break;
+        default:
+          throw new BadRequestException('Invalid transaction type');
+      }
+
+      // Update user balance
+      const updatedUser = await prisma.user.update({
+        where: { id: userId },
+        data: { balance: newBalance }
+      });
+
+      // Create balance history record
+      await prisma.balanceHistory.create({
+        data: {
+          userId,
+          amount: updateBalanceDto.amount,
+          type: updateBalanceDto.type,
+          reason: updateBalanceDto.reason,
+          previousBalance,
+          newBalance,
+          referenceId: updateBalanceDto.referenceId,
+          referenceType: updateBalanceDto.referenceType,
+        }
+      });
+
+      return updatedUser;
+    });
+
+    return this.mapToUserResponse(result);
   }
 
   // Get user balance history

@@ -2364,6 +2364,11 @@ export class Admin implements OnInit {
         // Reload stats
         this.loadTopupStats();
         
+        // If the approved topup is for the current user, refresh their balance
+        if (topup && topup.userId === this.authService.currentUser?.id) {
+          this.userService.refreshBalance();
+        }
+        
         this.toastService.show(`Topup request #${topupId} approved! $${response.amount.toFixed(2)} added to user account.`, 'success');
         this.isProcessingTopup = false;
         this.closeTopupProofModal();

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../service/auth/auth.service';
@@ -6,7 +6,7 @@ import { UserService, UserProfile, BalanceHistory } from '../service/user/user';
 import { Subscription } from 'rxjs';
 
 interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
   balance: number;
@@ -48,11 +48,26 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.loadBalanceHistory();
     }, 1000);
+    
+    // Refresh balance periodically to catch updates from admin actions
+    setInterval(() => {
+      if (this.authService.isAuthenticated) {
+        this.userService.refreshBalance();
+      }
+    }, 30000); // Refresh every 30 seconds
   }
 
   ngOnDestroy() {
     if (this.balanceSubscription) {
       this.balanceSubscription.unsubscribe();
+    }
+  }
+
+  @HostListener('window:focus')
+  onWindowFocus() {
+    // Refresh balance when user returns to the tab
+    if (this.authService.isAuthenticated) {
+      this.userService.refreshBalance();
     }
   }
 
@@ -72,7 +87,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     const currentUser = this.authService.currentUser;
     if (currentUser) {
       this.user = {
-        id: parseInt(currentUser.id),
+        id: currentUser.id,
         username: currentUser.username,
         email: currentUser.email,
         balance: this.userService.getCurrentBalance(), // Get real balance from service
@@ -83,7 +98,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       this.userService.getUserProfile().subscribe({
         next: (profile: UserProfile) => {
           this.user = {
-            id: parseInt(profile.id),
+            id: profile.id,
             username: profile.username,
             email: profile.email,
             balance: profile.balance, // Real balance from API
@@ -95,7 +110,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
           console.error('Failed to load user profile:', error);
           // Fallback to auth service data
           this.user = {
-            id: parseInt(currentUser.id),
+            id: currentUser.id,
             username: currentUser.username,
             email: currentUser.email,
             balance: 0, // Default to 0 if API fails
@@ -107,7 +122,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     } else {
       // Mock user data for demonstration
       this.user = {
-        id: 1,
+        id: '1',
         username: 'peter',
         email: 'peter@example.com',
         balance: 0,
@@ -176,7 +191,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     if (!this.user) return;
     
     this.isLoadingBalanceHistory = true;
-    this.userService.getBalanceHistory(this.user.id.toString(), this.currentPage, this.itemsPerPage).subscribe({
+    this.userService.getBalanceHistory(this.user.id, this.currentPage, this.itemsPerPage).subscribe({
       next: (response) => {
         this.balanceHistory = response.history;
         this.totalItems = response.total;
@@ -217,5 +232,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       default:
         return 'bg-gray-100 text-gray-800';
     }
+  }
+
+  refreshBalance() {
+    this.userService.refreshBalance();
+    this.loadBalanceHistory();
   }
 }

@@ -205,65 +205,81 @@ export class TopupService {
       throw new BadRequestException('Topup request is not pending');
     }
 
-    // Update topup request status
-    const updatedTopup = await this.prisma.topupRequest.update({
-      where: { id },
-      data: {
-        status: TopupStatus.APPROVED,
-        adminNotes: notes,
-        processedAt: new Date(),
-        processedBy: adminId,
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            phone: true,
-            country: true,
-            balance: true,
-          }
+    // Use transaction to ensure data consistency
+    const result = await this.prisma.$transaction(async (prisma) => {
+      // Update topup request status
+      const updatedTopup = await prisma.topupRequest.update({
+        where: { id },
+        data: {
+          status: TopupStatus.APPROVED,
+          adminNotes: notes,
+          processedAt: new Date(),
+          processedBy: adminId,
         },
-        cryptoAccount: {
-          select: {
-            id: true,
-            name: true,
-            symbol: true,
-            address: true,
-            network: true,
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              email: true,
+              firstName: true,
+              lastName: true,
+              phone: true,
+              country: true,
+              balance: true,
+            }
+          },
+          cryptoAccount: {
+            select: {
+              id: true,
+              name: true,
+              symbol: true,
+              address: true,
+              network: true,
+            }
           }
         }
-      }
-    });
+      });
 
-    // Update user balance
-    await this.prisma.user.update({
-      where: { id: topupRequest.userId },
-      data: {
-        balance: {
-          increment: topupRequest.amount
+      // Get current user balance before update
+      const currentUser = await prisma.user.findUnique({
+        where: { id: topupRequest.userId },
+        select: { balance: true }
+      });
+
+      if (!currentUser) {
+        throw new NotFoundException('User not found');
+      }
+
+      const previousBalance = currentUser.balance;
+      const newBalance = previousBalance + topupRequest.amount;
+
+      // Update user balance
+      await prisma.user.update({
+        where: { id: topupRequest.userId },
+        data: {
+          balance: newBalance
         }
-      }
+      });
+
+      // Add balance history record
+      await prisma.balanceHistory.create({
+        data: {
+          userId: topupRequest.userId,
+          amount: topupRequest.amount,
+          type: 'TOPUP_APPROVAL',
+          reason: `Topup request approved - ${topupRequest.amount}`,
+          previousBalance: previousBalance,
+          newBalance: newBalance,
+          referenceId: id,
+          referenceType: 'topup',
+        }
+      });
+
+      return updatedTopup;
     });
 
-    // Add balance history record
-    await this.prisma.balanceHistory.create({
-      data: {
-        userId: topupRequest.userId,
-        amount: topupRequest.amount,
-        type: 'TOPUP_APPROVAL',
-        reason: `Topup request approved - ${topupRequest.amount}`,
-        previousBalance: topupRequest.user.balance,
-        newBalance: topupRequest.user.balance + topupRequest.amount,
-        referenceId: id,
-        referenceType: 'topup',
-      }
-    });
-
-    return this.mapToResponseDto(updatedTopup);
+    return this.mapToResponseDto(result);
   }
 
   async rejectTopupRequest(id: string, adminId: string, notes?: string): Promise<TopupResponseDto> {
