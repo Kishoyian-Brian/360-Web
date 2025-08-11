@@ -105,8 +105,8 @@ export class AdminService {
       if (filters.search) params.search = filters.search;
       if (filters.role) params.role = filters.role;
       if (filters.isActive !== undefined) params.isActive = filters.isActive;
-      if (filters.page) params.page = filters.page;
-      if (filters.limit) params.limit = filters.limit;
+      if (filters.page) params.page = filters.page.toString();
+      if (filters.limit) params.limit = filters.limit.toString();
     }
 
     return this.http.get<UsersResponse>(`${this.API_URL}/users`, {
@@ -145,8 +145,8 @@ export class AdminService {
   getOrders(filters?: OrderFilterDto): Observable<OrdersResponse> {
     const params: any = {};
     if (filters) {
-      if (filters.page) params.page = filters.page;
-      if (filters.limit) params.limit = filters.limit;
+      if (filters.page) params.page = filters.page.toString();
+      if (filters.limit) params.limit = filters.limit.toString();
       if (filters.status) params.status = filters.status;
       if (filters.paymentStatus) params.paymentStatus = filters.paymentStatus;
       if (filters.orderNumber) params.orderNumber = filters.orderNumber;
