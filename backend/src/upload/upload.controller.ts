@@ -23,7 +23,7 @@ import { Express } from 'express';
 
 @ApiTags('upload')
 @Controller('upload')
-@UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class UploadController {
   constructor(private readonly uploadService: UploadService) { }
@@ -33,7 +33,6 @@ export class UploadController {
   @ApiResponse({ status: 201, description: 'Image uploaded successfully', type: FileResponseDto })
   @ApiResponse({ status: 400, description: 'Invalid file or upload failed' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Admin access required' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -81,7 +80,6 @@ export class UploadController {
   @ApiResponse({ status: 201, description: 'Video uploaded successfully', type: FileResponseDto })
   @ApiResponse({ status: 400, description: 'Invalid file or upload failed' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Admin access required' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(
     FileInterceptor('file', {
