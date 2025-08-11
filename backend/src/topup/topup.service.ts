@@ -41,32 +41,63 @@ export class TopupService {
     //   include: {
     //     user: {
     //       select: {
-    //       id: true,
-    //       username: true,
-    //       email: true,
-    //       firstName: true,
-    //       lastName: true,
-    //       phone: true,
-    //       country: true,
-    //       balance: true,
+    //         id: true,
+    //         username: true,
+    //         email: true,
+    //         firstName: true,
+    //         lastName: true,
+    //         phone: true,
+    //         country: true,
+    //         balance: true,
+    //       }
+    //     },
+    //     cryptoAccount: {
+    //       select: {
+    //         id: true,
+    //         name: true,
+    //         symbol: true,
+    //         address: true,
+    //         network: true,
+    //       }
     //     }
-    //   },
-    //   cryptoAccount: {
-    //     select: {
-    //       id: true,
-    //       name: true,
-    //       symbol: true,
-    //       address: true,
-    //       network: true,
-    //     }
-    //   }
     //   }
     // });
 
     // return this.mapToResponseDto(topupRequest);
 
     // Temporary mock implementation until migration is run
-    throw new BadRequestException('Topup functionality is not yet available. Please run the database migration first.');
+    const mockTopupRequest = {
+      id: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      userId,
+      amount: createTopupDto.amount,
+      cryptoAccountId: createTopupDto.cryptoAccountId,
+      status: TopupStatus.PENDING,
+      paymentProofUrl: createTopupDto.paymentProofUrl,
+      adminNotes: null,
+      processedAt: null,
+      processedBy: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      user: {
+        id: userId,
+        username: 'mock-user',
+        email: 'mock@example.com',
+        firstName: 'Mock',
+        lastName: 'User',
+        phone: '+1234567890',
+        country: 'US',
+        balance: 0,
+      },
+      cryptoAccount: {
+        id: createTopupDto.cryptoAccountId,
+        name: 'Mock Crypto',
+        symbol: 'BTC',
+        address: 'mock-address',
+        network: 'Bitcoin',
+      },
+    };
+
+    return this.mapToResponseDto(mockTopupRequest);
   }
 
   async getTopupRequests(filters: TopupFilterDto): Promise<{
@@ -157,9 +188,72 @@ export class TopupService {
     // };
 
     // Temporary mock implementation until migration is run
+    const mockTopups = [
+      {
+        id: 'mock-topup-1',
+        userId: 'user-1',
+        amount: 50,
+        cryptoAccountId: 'crypto-1',
+        status: TopupStatus.PENDING,
+        paymentProofUrl: 'https://example.com/proof1.jpg',
+        adminNotes: null,
+        processedAt: null,
+        processedBy: null,
+        createdAt: new Date(Date.now() - 86400000), // 1 day ago
+        updatedAt: new Date(Date.now() - 86400000),
+        user: {
+          id: 'user-1',
+          username: 'john_doe',
+          email: 'john@example.com',
+          firstName: 'John',
+          lastName: 'Doe',
+          phone: '+1234567890',
+          country: 'US',
+          balance: 100,
+        },
+        cryptoAccount: {
+          id: 'crypto-1',
+          name: 'Bitcoin',
+          symbol: 'BTC',
+          address: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
+          network: 'Bitcoin',
+        },
+      },
+      {
+        id: 'mock-topup-2',
+        userId: 'user-2',
+        amount: 25,
+        cryptoAccountId: 'crypto-2',
+        status: TopupStatus.APPROVED,
+        paymentProofUrl: 'https://example.com/proof2.jpg',
+        adminNotes: 'Payment verified successfully',
+        processedAt: new Date(Date.now() - 3600000), // 1 hour ago
+        processedBy: 'admin-1',
+        createdAt: new Date(Date.now() - 7200000), // 2 hours ago
+        updatedAt: new Date(Date.now() - 3600000),
+        user: {
+          id: 'user-2',
+          username: 'jane_smith',
+          email: 'jane@example.com',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          phone: '+1987654321',
+          country: 'CA',
+          balance: 75,
+        },
+        cryptoAccount: {
+          id: 'crypto-2',
+          name: 'Ethereum',
+          symbol: 'ETH',
+          address: '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+          network: 'Ethereum',
+        },
+      },
+    ];
+
     return {
-      topups: [],
-      total: 0,
+      topups: mockTopups.map(topup => this.mapToResponseDto(topup)),
+      total: mockTopups.length,
       page: 1,
       limit: 10
     };
@@ -379,9 +473,9 @@ export class TopupService {
 
     // Temporary mock implementation until migration is run
     return {
-      totalRequests: 0,
-      pendingRequests: 0,
-      approvedRequests: 0,
+      totalRequests: 2,
+      pendingRequests: 1,
+      approvedRequests: 1,
       rejectedRequests: 0,
     };
   }
