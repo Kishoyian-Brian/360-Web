@@ -103,14 +103,7 @@ export class Admin implements OnInit {
   totalProductPages = 1;
   totalProducts = 0;
   productsPerPage = 10;
-  productFilters = {
-    search: '',
-    categoryId: '',
-    productType: '',
-    isActive: '',
-    minPrice: '',
-    maxPrice: ''
-  };
+
 
   productForm = {
     name: '',
@@ -492,26 +485,6 @@ export class Admin implements OnInit {
     params.append('page', page.toString());
     params.append('limit', this.productsPerPage.toString());
     
-    // Add filters
-    if (this.productFilters.search) {
-      params.append('search', this.productFilters.search);
-    }
-    if (this.productFilters.categoryId) {
-      params.append('categoryId', this.productFilters.categoryId);
-    }
-    if (this.productFilters.productType) {
-      params.append('productType', this.productFilters.productType);
-    }
-    if (this.productFilters.isActive !== '') {
-      params.append('isActive', this.productFilters.isActive);
-    }
-    if (this.productFilters.minPrice) {
-      params.append('minPrice', this.productFilters.minPrice);
-    }
-    if (this.productFilters.maxPrice) {
-      params.append('maxPrice', this.productFilters.maxPrice);
-    }
-    
     this.http.get(`https://three60-web-gzzw.onrender.com/api/products?${params.toString()}`, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
@@ -539,29 +512,7 @@ export class Admin implements OnInit {
     }
   }
 
-  // Product filter methods
-  onProductSearch() {
-    this.currentProductPage = 1;
-    this.loadProducts(1);
-  }
 
-  onProductFilter() {
-    this.currentProductPage = 1;
-    this.loadProducts(1);
-  }
-
-  clearProductFilters() {
-    this.productFilters = {
-      search: '',
-      categoryId: '',
-      productType: '',
-      isActive: '',
-      minPrice: '',
-      maxPrice: ''
-    };
-    this.currentProductPage = 1;
-    this.loadProducts(1);
-  }
 
   // Get page numbers for pagination
   getProductPageNumbers(): number[] {
