@@ -192,155 +192,143 @@ export class TopupService {
   }
 
   async approveTopupRequest(id: string, adminId: string, notes?: string): Promise<TopupResponseDto> {
-    // TODO: Uncomment when migration is run
-    // const topupRequest = await this.prisma.topupRequest.findUnique({
-    //   where: { id },
-    //   include: { user: true }
-    // });
+    const topupRequest = await this.prisma.topupRequest.findUnique({
+      where: { id },
+      include: { user: true }
+    });
 
-    // if (!topupRequest) {
-    //   throw new NotFoundException('Topup request not found');
-    // }
+    if (!topupRequest) {
+      throw new NotFoundException('Topup request not found');
+    }
 
-    // if (topupRequest.status !== TopupStatus.PENDING) {
-    //   throw new BadRequestException('Topup request is not pending');
-    // }
+    if (topupRequest.status !== TopupStatus.PENDING) {
+      throw new BadRequestException('Topup request is not pending');
+    }
 
-    // // Update topup request status
-    // const updatedTopup = await this.prisma.topupRequest.update({
-    //   where: { id },
-    //   data: {
-    //     status: TopupStatus.APPROVED,
-    //     adminNotes: notes,
-    //     processedAt: new Date(),
-    //     processedBy: adminId,
-    //   },
-    //   include: {
-    //     user: {
-    //       select: {
-    //         id: true,
-    //         username: true,
-    //         email: true,
-    //         firstName: true,
-    //         lastName: true,
-    //         phone: true,
-    //         country: true,
-    //         balance: true,
-    //       }
-    //     },
-    //     cryptoAccount: {
-    //       select: {
-    //         id: true,
-    //         name: true,
-    //         symbol: true,
-    //         address: true,
-    //         network: true,
-    //       }
-    //     }
-    //   }
-    // });
+    // Update topup request status
+    const updatedTopup = await this.prisma.topupRequest.update({
+      where: { id },
+      data: {
+        status: TopupStatus.APPROVED,
+        adminNotes: notes,
+        processedAt: new Date(),
+        processedBy: adminId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            country: true,
+            balance: true,
+          }
+        },
+        cryptoAccount: {
+          select: {
+            id: true,
+            name: true,
+            symbol: true,
+            address: true,
+            network: true,
+          }
+        }
+      }
+    });
 
-    // // Update user balance
-    // await this.prisma.user.update({
-    //   where: { id: topupRequest.userId },
-    //   data: {
-    //     balance: {
-    //       increment: topupRequest.amount
-    //     }
-    //   }
-    // });
+    // Update user balance
+    await this.prisma.user.update({
+      where: { id: topupRequest.userId },
+      data: {
+        balance: {
+          increment: topupRequest.amount
+        }
+      }
+    });
 
-    // // Add balance history record
-    // await this.prisma.balanceHistory.create({
-    //   data: {
-    //     userId: topupRequest.userId,
-    //     amount: topupRequest.amount,
-    //     type: 'TOPUP_APPROVAL',
-    //     reason: `Topup request approved - ${topupRequest.amount}`,
-    //     previousBalance: topupRequest.user.balance,
-    //     newBalance: topupRequest.user.balance + topupRequest.amount,
-    //     referenceId: id,
-    //     referenceType: 'topup',
-    //   }
-    // });
+    // Add balance history record
+    await this.prisma.balanceHistory.create({
+      data: {
+        userId: topupRequest.userId,
+        amount: topupRequest.amount,
+        type: 'TOPUP_APPROVAL',
+        reason: `Topup request approved - ${topupRequest.amount}`,
+        previousBalance: topupRequest.user.balance,
+        newBalance: topupRequest.user.balance + topupRequest.amount,
+        referenceId: id,
+        referenceType: 'topup',
+      }
+    });
 
-    // return this.mapToResponseDto(updatedTopup);
-
-    // Temporary mock implementation until migration is run
-    throw new BadRequestException('Topup functionality is not yet available. Please run the database migration first.');
+    return this.mapToResponseDto(updatedTopup);
   }
 
   async rejectTopupRequest(id: string, adminId: string, notes?: string): Promise<TopupResponseDto> {
-    // TODO: Uncomment when migration is run
-    // const topupRequest = await this.prisma.topupRequest.findUnique({
-    //   where: { id }
-    // });
+    const topupRequest = await this.prisma.topupRequest.findUnique({
+      where: { id }
+    });
 
-    // if (!topupRequest) {
-    //   throw new NotFoundException('Topup request not found');
-    // }
+    if (!topupRequest) {
+      throw new NotFoundException('Topup request not found');
+    }
 
-    // if (topupRequest.status !== TopupStatus.PENDING) {
-    //   throw new BadRequestException('Topup request is not pending');
-    // }
+    if (topupRequest.status !== TopupStatus.PENDING) {
+      throw new BadRequestException('Topup request is not pending');
+    }
 
-    // const updatedTopup = await this.prisma.topupRequest.update({
-    //   where: { id },
-    //   data: {
-    //     status: TopupStatus.REJECTED,
-    //     adminNotes: notes,
-    //     processedAt: new Date(),
-    //     processedBy: adminId,
-    //   },
-    //   include: {
-    //     user: {
-    //       select: {
-    //         id: true,
-    //         username: true,
-    //         email: true,
-    //         firstName: true,
-    //         lastName: true,
-    //         phone: true,
-    //         country: true,
-    //         balance: true,
-    //       }
-    //     },
-    //     cryptoAccount: {
-    //       select: {
-    //         id: true,
-    //         name: true,
-    //         symbol: true,
-    //         address: true,
-    //         network: true,
-    //       }
-    //     }
-    //   }
-    // });
+    const updatedTopup = await this.prisma.topupRequest.update({
+      where: { id },
+      data: {
+        status: TopupStatus.REJECTED,
+        adminNotes: notes,
+        processedAt: new Date(),
+        processedBy: adminId,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            country: true,
+            balance: true,
+          }
+        },
+        cryptoAccount: {
+          select: {
+            id: true,
+            name: true,
+            symbol: true,
+            address: true,
+            network: true,
+          }
+        }
+      }
+    });
 
-    // return this.mapToResponseDto(updatedTopup);
-
-    // Temporary mock implementation until migration is run
-    throw new BadRequestException('Topup functionality is not yet available. Please run the database migration first.');
+    return this.mapToResponseDto(updatedTopup);
   }
 
   async deleteTopupRequest(id: string): Promise<{ message: string }> {
-    // TODO: Uncomment when migration is run
-    // const topupRequest = await this.prisma.topupRequest.findUnique({
-    //   where: { id }
-    // });
+    const topupRequest = await this.prisma.topupRequest.findUnique({
+      where: { id }
+    });
 
-    // if (!topupRequest) {
-    //   throw new NotFoundException('Topup request not found');
-    // }
+    if (!topupRequest) {
+      throw new NotFoundException('Topup request not found');
+    }
 
-    // await this.prisma.topupRequest.delete({
-    //   where: { id }
-    // });
+    await this.prisma.topupRequest.delete({
+      where: { id }
+    });
 
-    // return { message: 'Topup request deleted successfully' };
-
-    // Temporary mock implementation until migration is run
-    throw new BadRequestException('Topup functionality is not yet available. Please run the database migration first.');
+    return { message: 'Topup request deleted successfully' };
   }
 
   async getTopupStats(): Promise<{
