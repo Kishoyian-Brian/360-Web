@@ -1181,6 +1181,43 @@
                   </tbody>
                 </table>
               </div>
+
+              <!-- User Pagination -->
+              <div *ngIf="!isLoadingUsers && users.length > 0" class="mt-6 flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                  Showing {{ (currentUserPage - 1) * usersPerPage + 1 }} to {{ Math.min(currentUserPage * usersPerPage, totalUsers) }} of {{ totalUsers }} users
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                  <!-- Previous Page -->
+                  <button 
+                    (click)="onUserPageChange(currentUserPage - 1)"
+                    [disabled]="currentUserPage === 1"
+                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Previous
+                  </button>
+                  
+                  <!-- Page Numbers -->
+                  <div class="flex space-x-1">
+                    <button 
+                      *ngFor="let page of getUserPageNumbers()"
+                      (click)="onUserPageChange(page)"
+                      [class]="page === currentUserPage 
+                        ? 'px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md' 
+                        : 'px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50'">
+                      {{ page }}
+                    </button>
+                  </div>
+                  
+                  <!-- Next Page -->
+                  <button 
+                    (click)="onUserPageChange(currentUserPage + 1)"
+                    [disabled]="currentUserPage === totalUserPages"
+                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -204,6 +204,12 @@ export class Admin implements OnInit {
   isLoadingUsers = false;
   searchTerm = '';
   selectedStatus = '';
+  
+  // User pagination
+  currentUserPage = 1;
+  totalUserPages = 1;
+  totalUsers = 0;
+  usersPerPage = 10;
 
   roleOptions = [
     { value: 'USER', label: 'User' },
@@ -770,9 +776,14 @@ export class Admin implements OnInit {
   }
 
   // User Management Methods
-  loadUsers() {
+  loadUsers(page: number = 1) {
     this.isLoadingUsers = true;
-    const filters: any = {};
+    this.currentUserPage = page;
+    
+    const filters: any = {
+      page: page,
+      limit: this.usersPerPage
+    };
 
     if (this.searchTerm) {
       filters.search = this.searchTerm;
@@ -784,6 +795,8 @@ export class Admin implements OnInit {
     this.adminService.getUsers(filters).subscribe({
       next: (response) => {
         this.users = response.users || [];
+        this.totalUsers = response.total || 0;
+        this.totalUserPages = Math.ceil(this.totalUsers / this.usersPerPage);
         this.isLoadingUsers = false;
       },
       error: (error) => {
@@ -798,7 +811,7 @@ export class Admin implements OnInit {
     this.adminService.updateUserRole(userId, role).subscribe({
       next: (response) => {
         this.toastService.success('User role updated successfully');
-        this.loadUsers();
+        this.loadUsers(this.currentUserPage);
       },
       error: (error) => {
         console.error('Error updating user role:', error);
@@ -811,7 +824,7 @@ export class Admin implements OnInit {
     this.adminService.toggleUserStatus(userId, isActive).subscribe({
       next: (response) => {
         this.toastService.success(`User ${isActive ? 'activated' : 'suspended'} successfully`);
-        this.loadUsers();
+        this.loadUsers(this.currentUserPage);
       },
       error: (error) => {
         console.error('Error updating user status:', error);
@@ -825,7 +838,7 @@ export class Admin implements OnInit {
       this.adminService.deleteUser(userId).subscribe({
         next: (response) => {
           this.toastService.success('User deleted successfully');
-          this.loadUsers();
+          this.loadUsers(this.currentUserPage);
         },
         error: (error) => {
           console.error('Error deleting user:', error);
@@ -838,11 +851,32 @@ export class Admin implements OnInit {
   }
 
   onUserSearch() {
-    this.loadUsers();
+    this.currentUserPage = 1;
+    this.loadUsers(1);
   }
 
   onStatusFilter() {
-    this.loadUsers();
+    this.currentUserPage = 1;
+    this.loadUsers(1);
+  }
+
+  // User pagination methods
+  onUserPageChange(page: number) {
+    if (page >= 1 && page <= this.totalUserPages) {
+      this.loadUsers(page);
+    }
+  }
+
+  getUserPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPages = Math.min(5, this.totalUserPages);
+    const startPage = Math.max(1, this.currentUserPage - Math.floor(maxPages / 2));
+    const endPage = Math.min(this.totalUserPages, startPage + maxPages - 1);
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   getRoleBadgeClass(role: string): string {
