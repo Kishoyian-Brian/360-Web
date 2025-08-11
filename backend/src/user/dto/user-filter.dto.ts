@@ -1,4 +1,5 @@
 import { IsOptional, IsString, IsEnum, IsBoolean, IsNumber, Min, Max } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRole } from './create-user.dto';
 
@@ -27,6 +28,7 @@ export class UserFilterDto {
     required: false,
   })
   @IsOptional()
+  @Transform(({ value }) => value === 'true')
   @IsBoolean()
   isActive?: boolean;
 
@@ -37,6 +39,7 @@ export class UserFilterDto {
     required: false,
   })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @Min(1)
   page?: number = 1;
@@ -49,6 +52,7 @@ export class UserFilterDto {
     required: false,
   })
   @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNumber()
   @Min(1)
   @Max(100)
