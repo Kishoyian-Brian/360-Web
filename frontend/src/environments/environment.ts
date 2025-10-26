@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://three60-web-gzzw.onrender.com/api'
+  apiUrl: 'http://localhost:3000/api'
 };

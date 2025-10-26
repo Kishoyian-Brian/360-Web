@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
 
 export interface ConnectionTestResult {
   endpoint: string;
@@ -14,7 +15,7 @@ export interface ConnectionTestResult {
   providedIn: 'root'
 })
 export class ConnectionTestService {
-  private readonly API_URL = 'https://three60-web-gzzw.onrender.com/api';
+  private readonly API_URL = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

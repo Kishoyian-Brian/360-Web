@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Video {
   id: string;
@@ -27,7 +28,7 @@ export interface VideoResponse {
   providedIn: 'root'
 })
 export class VideoService {
-  private apiUrl = 'https://three60-web-gzzw.onrender.com/api/videos';
+  private apiUrl = `${environment.apiUrl}/videos`;
 
   constructor(private http: HttpClient) {}
 

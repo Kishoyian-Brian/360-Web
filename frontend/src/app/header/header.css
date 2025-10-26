@@ -1,6 +1,4 @@
-/* Header Component Styles */
 
-/* Mobile Menu Animations */
 .mobile-menu-enter {
   opacity: 0;
   transform: translateX(-100%);
@@ -52,23 +50,13 @@
   transform: translateX(0);
 }
 
-/* Ensure mobile menu overlay is visible */
-.fixed.inset-0.z-50.lg\:hidden {
-  display: block !important;
-  z-index: 9999 !important;
+/* Mobile menu base styles */
+.mobile-menu-overlay {
+  z-index: 9999;
 }
 
-/* Ensure backdrop is visible */
-.fixed.inset-0.bg-black.bg-opacity-50 {
-  display: block !important;
-  background-color: rgba(0, 0, 0, 0.5) !important;
-}
-
-/* Ensure side menu is visible */
-.fixed.top-0.left-0.h-full.w-64.bg-white.shadow-lg {
-  display: block !important;
-  transform: translateX(0) !important;
-  z-index: 10000 !important;
+.mobile-menu-sidebar {
+  z-index: 10000;
 }
 
 /* Custom Brand Color */
@@ -137,15 +125,68 @@ body.menu-open {
   }
 }
 
-/* Debug styles - ensure mobile menu is visible */
-[class*="fixed inset-0 z-50"] {
-  display: block !important;
-  visibility: visible !important;
+/* Mobile menu compact width adjustments */
+@media (max-width: 1023px) {
+  .fixed.top-0.left-0.h-full.w-1\/6 {
+    width: 15% !important;
+    min-width: 200px; /* Compact minimum width */
+    max-width: 250px; /* Keep it narrow */
+  }
 }
 
-[class*="fixed top-0 left-0 h-full w-64"] {
-  display: block !important;
-  visibility: visible !important;
-  transform: translateX(0) !important;
+/* Extra small screens - slightly wider for usability */
+@media (max-width: 480px) {
+  .fixed.top-0.left-0.h-full.w-1\/6 {
+    width: 18% !important;
+    min-width: 180px;
+    max-width: 220px;
+  }
 }
+
+/* Very small screens - ensure it's still usable */
+@media (max-width: 360px) {
+  .fixed.top-0.left-0.h-full.w-1\/6 {
+    width: 20% !important;
+    min-width: 160px;
+    max-width: 200px;
+  }
+}
+
+/* Ensure proper spacing for compact menu */
+.mobile-menu-nav {
+  padding: 1rem;
+}
+
+.mobile-menu-nav ul {
+  padding-bottom: 1rem;
+}
+
+/* Adjust close button positioning for compact menu */
+.mobile-menu-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Compact menu item styling */
+.mobile-menu-nav li a {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+}
+
+.mobile-menu-nav li button {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Compact dropdown styling */
+.mobile-menu-nav ul ul {
+  margin-left: 0.75rem !important;
+}
+
+.mobile-menu-nav ul ul li a {
+  padding: 0.375rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+/* Mobile menu visibility - removed debug styles that were causing Angular errors */
 

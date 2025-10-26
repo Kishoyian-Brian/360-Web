@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../services/toast.service';
 import { AuthService } from '../service/auth/auth.service';
 import { CryptoService, CryptoAccount } from '../service/crypto/crypto.service';
+import { environment } from '../../environments/environment';
 
 export interface TopupRequest {
   amount: number;
@@ -184,7 +185,7 @@ export class TopupComponent implements OnInit {
         delete authHeaders['Content-Type']; // Remove for multipart upload
 
         const uploadResponse: any = await this.http.post(
-          'https://three60-web-gzzw.onrender.com/api/upload/image',
+          `${environment.apiUrl}/upload/image`,
           formData,
           { headers: authHeaders }
         ).toPromise();
@@ -203,7 +204,7 @@ export class TopupComponent implements OnInit {
       console.log('Submitting topup request:', topupData);
 
       const response: any = await this.http.post(
-        'https://three60-web-gzzw.onrender.com/api/topups',
+        `${environment.apiUrl}/topups`,
         topupData,
         { headers: this.authService.getAuthHeaders() }
       ).toPromise();

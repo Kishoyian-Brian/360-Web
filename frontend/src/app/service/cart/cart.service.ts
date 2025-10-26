@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 export interface CartItem {
   id: string;
@@ -37,7 +38,7 @@ export interface UpdateCartItemRequest {
   providedIn: 'root'
 })
 export class CartService {
-  private readonly API_URL = 'https://three60-web-gzzw.onrender.com/api';
+  private readonly API_URL = environment.apiUrl;
   private cartSubject = new BehaviorSubject<Cart | null>(null);
   public cart$ = this.cartSubject.asObservable();
   private readonly GUEST_CART_KEY = 'guest_cart';

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 export interface Vouch {
     id: string;
@@ -68,7 +69,7 @@ export interface VouchStats {
     providedIn: 'root'
 })
 export class VouchService {
-    private readonly API_URL = 'https://three60-web-gzzw.onrender.com/api/vouches';
+    private readonly API_URL = `${environment.apiUrl}/vouches`;
 
     constructor(
         private http: HttpClient,
