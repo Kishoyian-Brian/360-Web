@@ -19,7 +19,11 @@ async function bootstrap() {
 
   // CORS
   const corsOrigin = configService.get<string>('app.corsOrigin');
-  const allowedOrigins = corsOrigin ? corsOrigin.split(',').map(origin => origin.trim()) : ['http://localhost:4200'];
+  const allowedOrigins = corsOrigin ? corsOrigin.split(',').map(origin => origin.trim()) : [
+    'http://localhost:4200',
+    'https://williamsmith.store',
+    'https://www.williamsmith.store'
+  ];
   
   app.enableCors({
     origin: (origin, callback) => {
@@ -65,11 +69,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = configService.get<number>('app.port') || 3000;
-  await app.listen(port);
+  const port = process.env.PORT || configService.get<number>('app.port') || 3000;
+  await app.listen(port, '0.0.0.0');
   
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger documentation: http://localhost:${port}/api/docs`);
+  console.log(`🚀 Application is running on: http://0.0.0.0:${port}`);
+  console.log(`📚 Swagger documentation: http://0.0.0.0:${port}/api/docs`);
+  console.log(`🌐 Health check: http://0.0.0.0:${port}/api/health`);
 }
 
 bootstrap();
