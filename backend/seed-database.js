@@ -1,133 +1,117 @@
 const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
-async function main() {
-    console.log('🌱 Starting database seeding...');
-
-    try {
-        // Create admin user
-        await createAdminUser();
-        
-        // Create categories
-        await createCategories();
-        
-        console.log('✅ Database seeding completed!');
-    } catch (error) {
-        console.error('❌ Seeding failed:', error);
-        throw error;
-    }
-}
-
-async function createAdminUser() {
-    const username = 'alfredkaizen30';
-    const email = 'alfredkaizen30@gmail.com';
-    const password = '@gmail2020k';
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Check if admin already exists
-    const existing = await prisma.user.findFirst({
-        where: { email: email }
-    });
+async function seedDatabase() {
+  try {
+    console.log('🌱 Starting database seeding for Neon...');
     
-    if (existing) {
-        console.log('👤 Admin user already exists:', existing.username);
-    } else {
-        const admin = await prisma.user.create({
-            data: {
-                username,
-                email,
-                password: hashedPassword,
-                role: 'ADMIN',
-                isActive: true,
-                firstName: 'Alfred',
-                lastName: 'Kaizen',
-            },
-        });
-        console.log('👤 Admin user created:', admin.username);
-    }
-}
+    // Test database connection
+    await prisma.$connect();
+    console.log('✅ Connected to Neon database successfully');
 
-async function createCategories() {
+    // Seed categories
     const categories = [
-        // MAIN categories
-        { name: 'Bank Logs', slug: 'bank-logs', type: 'MAIN', order: 1 },
-        { name: 'Bitcoin Log', slug: 'bitcoin-log', type: 'MAIN', order: 2 },
-        { name: 'Carded', slug: 'carded', type: 'MAIN', order: 3 },
-        { name: 'Carded Products', slug: 'carded-products', type: 'MAIN', order: 4 },
-        { name: 'Cashapp Log', slug: 'cashapp-log', type: 'MAIN', order: 5 },
-        { name: 'CC CVV', slug: 'cc-cvv', type: 'MAIN', order: 6 },
-        { name: 'Clips', slug: 'clips', type: 'MAIN', order: 7 },
-        { name: 'Clone', slug: 'clone', type: 'MAIN', order: 8 },
-        { name: 'Deposit Check', slug: 'deposit-check', type: 'MAIN', order: 9 },
-        { name: 'E-Gift Cards', slug: 'e-gift-cards', type: 'MAIN', order: 10 },
-        { name: 'Fraud Cards', slug: 'fraud-cards', type: 'MAIN', order: 11 },
-        { name: 'Fullz', slug: 'fullz', type: 'MAIN', order: 12 },
-        { name: 'Linkable', slug: 'linkable', type: 'MAIN', order: 13 },
-        { name: 'Paypal Log', slug: 'paypal-log', type: 'MAIN', order: 14 },
-        { name: 'Shake', slug: 'shake', type: 'MAIN', order: 15 },
-        { name: 'Stealth Accounts', slug: 'stealth-accounts', type: 'MAIN', order: 16 },
-        { name: 'Tools', slug: 'tools', type: 'MAIN', order: 17 },
-        { name: 'Transfers', slug: 'transfers', type: 'MAIN', order: 18 },
-        
-        // LINKABLES categories
-        { name: 'Apple Pay', slug: 'applepay', type: 'LINKABLES', order: 19 },
-        { name: 'Cashapp', slug: 'cashapp', type: 'LINKABLES', order: 20 },
-        { name: 'Google Pay', slug: 'googlepay', type: 'LINKABLES', order: 21 },
-        { name: 'Paypal', slug: 'paypal', type: 'LINKABLES', order: 22 },
-        { name: 'Venmo', slug: 'venmo', type: 'LINKABLES', order: 23 },
-        
-        // MORE_LOGS categories
-        { name: 'Africa Cards', slug: 'africa-cards', type: 'MORE_LOGS', order: 24 },
-        { name: 'Australia Cards', slug: 'australia-cards', type: 'MORE_LOGS', order: 25 },
-        { name: 'Canada Banks', slug: 'canada-banks', type: 'MORE_LOGS', order: 26 },
-        { name: 'Canada Cards', slug: 'canada-cards', type: 'MORE_LOGS', order: 27 },
-        { name: 'Credit Unions', slug: 'credit-unions', type: 'MORE_LOGS', order: 28 },
-        { name: 'Crypto Logs', slug: 'crypto-logs', type: 'MORE_LOGS', order: 29 },
-        { name: 'Europe Cards', slug: 'europe-cards', type: 'MORE_LOGS', order: 30 },
-        { name: 'UK Banks', slug: 'uk-banks', type: 'MORE_LOGS', order: 31 },
-        { name: 'UK Cards', slug: 'uk-cards', type: 'MORE_LOGS', order: 32 },
-        { name: 'USA Banks', slug: 'usa-banks', type: 'MORE_LOGS', order: 33 },
-        { name: 'USA Cards', slug: 'usa-cards', type: 'MORE_LOGS', order: 34 },
-        
-        // TRANSFERS categories
-        { name: 'International Transfers', slug: 'international-transfers', type: 'TRANSFERS', order: 35 },
-        { name: 'Local Transfers', slug: 'local-transfers', type: 'TRANSFERS', order: 36 },
-        { name: 'Wire Transfers', slug: 'wire-transfers', type: 'TRANSFERS', order: 37 },
-        { name: 'Zelle Transfers', slug: 'zelle-transfers', type: 'TRANSFERS', order: 38 },
-        { name: 'ACH Transfers', slug: 'ach-transfers', type: 'TRANSFERS', order: 39 },
-        { name: 'SEPA Transfers', slug: 'sepa-transfers', type: 'TRANSFERS', order: 40 }
+      { name: 'Bank Logs', description: 'Bank account login credentials', slug: 'bank-logs' },
+      { name: 'Bitcoin Logs', description: 'Bitcoin wallet login credentials', slug: 'bitcoin-log' },
+      { name: 'Carded', description: 'Carded products and services', slug: 'carded' },
+      { name: 'CC CVV', description: 'Credit card information', slug: 'cc-cvv' },
+      { name: 'Clips', description: 'Video clips and tutorials', slug: 'clips' },
+      { name: 'Clone', description: 'Cloned accounts and services', slug: 'clone' },
+      { name: 'Deposit Check', description: 'Deposit verification services', slug: 'deposit-check' },
+      { name: 'E-Gift Cards', description: 'Electronic gift cards', slug: 'e-gift-cards' },
+      { name: 'Fraud Cards', description: 'Fraudulent card services', slug: 'fraud-cards' },
+      { name: 'Fullz', description: 'Complete personal information packages', slug: 'fullz' },
+      { name: 'Linkable', description: 'Linkable payment methods', slug: 'linkable' },
+      { name: 'PayPal Logs', description: 'PayPal account credentials', slug: 'paypal-log' },
+      { name: 'Shake', description: 'Shake services and tools', slug: 'shake' },
+      { name: 'Stealth Accounts', description: 'Stealth account services', slug: 'stealth-accounts' },
+      { name: 'Tools', description: 'Various tools and utilities', slug: 'tools' },
+      { name: 'Transfers', description: 'Money transfer services', slug: 'transfers' }
     ];
 
-    for (const categoryData of categories) {
-        // Check if category already exists
-        const existing = await prisma.category.findFirst({
-            where: { slug: categoryData.slug }
-        });
-        
-        if (existing) {
-            console.log(`📂 Category '${categoryData.name}' already exists`);
-        } else {
-            const category = await prisma.category.create({
-                data: {
-                    name: categoryData.name,
-                    slug: categoryData.slug,
-                    type: categoryData.type,
-                    order: categoryData.order,
-                    isActive: true
-                }
-            });
-            console.log(`📂 Category '${category.name}' created`);
-        }
+    for (const category of categories) {
+      await prisma.category.upsert({
+        where: { slug: category.slug },
+        update: category,
+        create: category
+      });
     }
+
+    // Seed crypto accounts
+    const cryptoAccounts = [
+      {
+        name: 'Bitcoin',
+        symbol: 'BTC',
+        address: '1AGbgzEPd14hzLoDyYoDzwEH1MP5ZekmBi',
+        order: 1
+      },
+      {
+        name: 'USDT',
+        symbol: 'USDT',
+        address: 'TKieHKDKegGjW2HojHxKgsNkZAota5CuDz',
+        network: 'TRC20',
+        order: 2
+      },
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        address: '0x3C774Adef37D1D6ee2180D7845AE7020e5d79B29',
+        order: 3
+      },
+      {
+        name: 'Litecoin',
+        symbol: 'LTC',
+        address: 'LdLygre8cKg7ak1tk3LTFTkTtBbhiUiCQn',
+        order: 4
+      }
+    ];
+
+    for (const account of cryptoAccounts) {
+      await prisma.cryptoAccount.upsert({
+        where: { symbol: account.symbol },
+        update: account,
+        create: account
+      });
+    }
+
+    // Create admin user
+    const bcrypt = require('bcryptjs');
+    const hashedPassword = await bcrypt.hash('@gmail2020k', 12);
+
+    await prisma.user.upsert({
+      where: { email: 'alfredkaizen30@gmail.com' },
+      update: {},
+      create: {
+        email: 'admin@360web.com',
+        username: 'admin',
+        password: hashedPassword,
+        role: 'ADMIN',
+        isEmailVerified: true,
+        balance: 0
+      }
+    });
+
+    console.log('✅ Database seeding completed successfully!');
+  } catch (error) {
+    console.error('❌ Database seeding failed:', error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-    .catch((e) => {
-        console.error(e);
-        process.exit(1);
+// Run if called directly
+if (require.main === module) {
+  seedDatabase()
+    .then(() => {
+      console.log('🌱 Seeding process completed');
+      process.exit(0);
     })
-    .finally(async () => {
-        await prisma.$disconnect();
+    .catch((error) => {
+      console.error('💥 Seeding process failed:', error);
+      process.exit(1);
     });
+}
+
+module.exports = { seedDatabase };
