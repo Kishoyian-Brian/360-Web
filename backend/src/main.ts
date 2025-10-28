@@ -65,12 +65,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.PORT || configService.get<number>('app.port') || 3000;
-  await app.listen(port, '0.0.0.0');
+  const port = configService.get<number>('app.port') || 3000;
+  await app.listen(port);
   
-  console.log(`🚀 Application is running on port: ${port}`);
+  console.log(`🚀 Application is running on: http://localhost:${port}`);
   console.log(`📚 Swagger documentation: http://localhost:${port}/api/docs`);
-  console.log(`🏥 Health check: http://localhost:${port}/api/health`);
 }
 
 bootstrap();
