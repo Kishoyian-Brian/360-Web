@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # Backend API (Production)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 360-web-backend-prod
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_PREFIX: api
+      # Set these via environment variables or .env file
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      DATABASE_URL: postgresql://neondb_owner:npg_Rjk8dMDi2PEr@ep-raspy-wildflower-a907ry4p-pooler.gwc.azure.neon.tech/neondb?sslmode=require&channel_binding=require
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-30d}
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      UPLOAD_MAX_SIZE: ${UPLOAD_MAX_SIZE:-10485760}
+      UPLOAD_PATH: ${UPLOAD_PATH:-uploads}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_FROM: ${SMTP_FROM}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads_data:/app/uploads
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  uploads_data:
+
+networks:
+  default:
+    driver: bridge
