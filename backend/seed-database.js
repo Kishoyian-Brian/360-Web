@@ -12,29 +12,38 @@ async function seedDatabase() {
 
     // Seed categories
     const categories = [
-      { name: 'Bank Logs', description: 'Bank account login credentials', slug: 'bank-logs' },
-      { name: 'Bitcoin Logs', description: 'Bitcoin wallet login credentials', slug: 'bitcoin-log' },
-      { name: 'Carded', description: 'Carded products and services', slug: 'carded' },
-      { name: 'CC CVV', description: 'Credit card information', slug: 'cc-cvv' },
-      { name: 'Clips', description: 'Video clips and tutorials', slug: 'clips' },
-      { name: 'Clone', description: 'Cloned accounts and services', slug: 'clone' },
-      { name: 'Deposit Check', description: 'Deposit verification services', slug: 'deposit-check' },
-      { name: 'E-Gift Cards', description: 'Electronic gift cards', slug: 'e-gift-cards' },
-      { name: 'Fraud Cards', description: 'Fraudulent card services', slug: 'fraud-cards' },
-      { name: 'Fullz', description: 'Complete personal information packages', slug: 'fullz' },
-      { name: 'Linkable', description: 'Linkable payment methods', slug: 'linkable' },
-      { name: 'PayPal Logs', description: 'PayPal account credentials', slug: 'paypal-log' },
-      { name: 'Shake', description: 'Shake services and tools', slug: 'shake' },
-      { name: 'Stealth Accounts', description: 'Stealth account services', slug: 'stealth-accounts' },
-      { name: 'Tools', description: 'Various tools and utilities', slug: 'tools' },
-      { name: 'Transfers', description: 'Money transfer services', slug: 'transfers' }
+      { name: 'Bank Logs', description: 'Bank account login credentials', slug: 'bank-logs', type: 'MAIN' },
+      { name: 'Bitcoin Logs', description: 'Bitcoin wallet login credentials', slug: 'bitcoin-log', type: 'MAIN' },
+      { name: 'Carded', description: 'Carded products and services', slug: 'carded', type: 'MAIN' },
+      { name: 'CC CVV', description: 'Credit card information', slug: 'cc-cvv', type: 'MAIN' },
+      { name: 'Clips', description: 'Video clips and tutorials', slug: 'clips', type: 'MAIN' },
+      { name: 'Clone', description: 'Cloned accounts and services', slug: 'clone', type: 'MAIN' },
+      { name: 'Deposit Check', description: 'Deposit verification services', slug: 'deposit-check', type: 'MAIN' },
+      { name: 'E-Gift Cards', description: 'Electronic gift cards', slug: 'e-gift-cards', type: 'MAIN' },
+      { name: 'Fraud Cards', description: 'Fraudulent card services', slug: 'fraud-cards', type: 'MAIN' },
+      { name: 'Fullz', description: 'Complete personal information packages', slug: 'fullz', type: 'MAIN' },
+      { name: 'Linkable', description: 'Linkable payment methods', slug: 'linkable', type: 'LINKABLES' },
+      { name: 'PayPal Logs', description: 'PayPal account credentials', slug: 'paypal-log', type: 'MAIN' },
+      { name: 'Shake', description: 'Shake services and tools', slug: 'shake', type: 'MAIN' },
+      { name: 'Stealth Accounts', description: 'Stealth account services', slug: 'stealth-accounts', type: 'MAIN' },
+      { name: 'Tools', description: 'Various tools and utilities', slug: 'tools', type: 'MAIN' },
+      { name: 'Transfers', description: 'Money transfer services', slug: 'transfers', type: 'TRANSFERS' }
     ];
 
-    for (const category of categories) {
+    for (let i = 0; i < categories.length; i++) {
+      const category = categories[i];
       await prisma.category.upsert({
         where: { slug: category.slug },
-        update: category,
-        create: category
+        update: {
+          ...category,
+          isActive: true,
+          order: i + 1
+        },
+        create: {
+          ...category,
+          isActive: true,
+          order: i + 1
+        }
       });
     }
 
