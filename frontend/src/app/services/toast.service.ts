@@ -1,73 +1,83 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface Toast {
-  id: number;
+  id: string;
   message: string;
   type: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
+  timestamp: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastService {
-  private toasts: Toast[] = [];
-  private nextId = 1;
+  private toastsSubject = new BehaviorSubject<Toast[]>([]);
+  public toasts$ = this.toastsSubject.asObservable();
 
-  getToasts() {
-    return this.toasts;
-  }
+  private toastIdCounter = 0;
 
-  show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration: number = 3000) {
+  constructor() {}
+
+  // Show a toast message
+  show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration: number = 5000): string {
+    const id = `toast-${++this.toastIdCounter}`;
     const toast: Toast = {
-      id: this.nextId++,
+      id,
       message,
       type,
-      duration
+      duration,
+      timestamp: new Date()
     };
 
-    this.toasts.push(toast);
+    const currentToasts = this.toastsSubject.value;
+    this.toastsSubject.next([...currentToasts, toast]);
 
-    // Auto remove after duration (only if duration > 0)
+    // Auto remove after duration
     if (duration > 0) {
       setTimeout(() => {
-        this.remove(toast.id);
+        this.remove(id);
       }, duration);
     }
 
-    return toast.id;
+    return id;
   }
 
-  success(message: string, duration?: number) {
+  // Show success toast
+  success(message: string, duration?: number): string {
     return this.show(message, 'success', duration);
   }
 
-  error(message: string, duration?: number) {
+  // Show error toast
+  error(message: string, duration?: number): string {
     return this.show(message, 'error', duration);
   }
 
-  warning(message: string, duration?: number) {
+  // Show warning toast
+  warning(message: string, duration?: number): string {
     return this.show(message, 'warning', duration);
   }
 
-  info(message: string, duration?: number) {
+  // Show info toast
+  info(message: string, duration?: number): string {
     return this.show(message, 'info', duration);
   }
 
-  remove(id: number) {
-    this.toasts = this.toasts.filter(toast => toast.id !== id);
+  // Remove a specific toast
+  remove(id: string): void {
+    const currentToasts = this.toastsSubject.value;
+    const updatedToasts = currentToasts.filter(toast => toast.id !== id);
+    this.toastsSubject.next(updatedToasts);
   }
 
-  removeAll() {
-    this.toasts = [];
+  // Clear all toasts
+  clear(): void {
+    this.toastsSubject.next([]);
   }
 
-  clear() {
-    this.toasts = [];
+  // Get current toasts
+  getToasts(): Toast[] {
+    return this.toastsSubject.value;
   }
-
-  // Method to show a toast that doesn't auto-remove
-  showPersistent(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') {
-    return this.show(message, type, 0); // 0 means no auto-remove
-  }
-} 
+}

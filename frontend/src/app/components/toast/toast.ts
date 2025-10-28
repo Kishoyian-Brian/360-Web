@@ -284,7 +284,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeToast(id: number) {
+  removeToast(id: string) {
     // Add removing class for animation
     const toastElement = document.querySelector(`[data-toast-id="${id}"]`) as HTMLElement;
     if (toastElement) {
