@@ -92,11 +92,11 @@ async function seedDatabase() {
       where: { email: 'alfredkaizen30@gmail.com' },
       update: {},
       create: {
-        email: 'admin@360web.com',
+        email: 'alfredkaizen30@gmail.com',
         username: 'admin',
         password: hashedPassword,
         role: 'ADMIN',
-        isEmailVerified: true,
+        isActive: true,
         balance: 0
       }
     });
