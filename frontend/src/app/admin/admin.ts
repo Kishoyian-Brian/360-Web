@@ -563,7 +563,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('${environment.apiUrl}/upload/image', formData, {
+      this.http.post(`${environment.apiUrl}/upload/image`, formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -642,7 +642,7 @@ export class Admin implements OnInit {
 
       console.log('Sending product data to backend:', productData);
 
-      this.http.post('${environment.apiUrl}/products', productData, {
+      this.http.post(`${environment.apiUrl}/products`, productData, {
         headers: this.authService.getAuthHeaders()
       }).subscribe({
         next: (response) => {
@@ -1064,7 +1064,7 @@ export class Admin implements OnInit {
   // Video Management Methods
   loadVideos() {
     this.isLoadingVideos = true;
-          this.http.get('${environment.apiUrl}/videos', {
+          this.http.get(`${environment.apiUrl}/videos`, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
@@ -1106,7 +1106,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('${environment.apiUrl}/upload/video', formData, {
+      this.http.post(`${environment.apiUrl}/upload/video`, formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -1147,7 +1147,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      this.http.post('${environment.apiUrl}/upload/image', formData, {
+      this.http.post(`${environment.apiUrl}/upload/image`, formData, {
         headers: authHeaders,
         reportProgress: true,
         observe: 'events'
@@ -1263,7 +1263,7 @@ export class Admin implements OnInit {
       videoData.thumbnailUrl = this.videoForm.thumbnailUrl;
     }
 
-          this.http.post('${environment.apiUrl}/videos', videoData, {
+          this.http.post(`${environment.apiUrl}/videos`, videoData, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response) => {
@@ -1336,7 +1336,7 @@ export class Admin implements OnInit {
     this.isLoadingAnalytics = true;
     const params = { timeRange: this.selectedTimeRange };
 
-          this.http.get('${environment.apiUrl}/analytics/dashboard', {
+          this.http.get(`${environment.apiUrl}/analytics/dashboard`, {
       headers: this.authService.getAuthHeaders(),
       params
     }).subscribe({
@@ -1509,7 +1509,7 @@ export class Admin implements OnInit {
   }
 
   exportAnalytics() {
-          this.http.get('${environment.apiUrl}/analytics/export', {
+          this.http.get(`${environment.apiUrl}/analytics/export`, {
       headers: this.authService.getAuthHeaders(),
       responseType: 'blob'
     }).subscribe({
@@ -1537,7 +1537,7 @@ export class Admin implements OnInit {
 
   seedCategories() {
     this.isLoadingCategories = true;
-          this.http.post('${environment.apiUrl}/categories/seed/all', {}, {
+          this.http.post(`${environment.apiUrl}/categories/seed/all`, {}, {
       headers: this.authService.getAuthHeaders()
     }).subscribe({
       next: (response: any) => {
@@ -2067,7 +2067,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      const req = this.http.post('${environment.apiUrl}/upload/image', formData, {
+      const req = this.http.post(`${environment.apiUrl}/upload/image`, formData, {
         reportProgress: true,
         observe: 'events',
         headers: authHeaders
@@ -2116,7 +2116,7 @@ export class Admin implements OnInit {
       // Remove Content-Type header for multipart uploads
       delete authHeaders['Content-Type'];
 
-      const req = this.http.post('${environment.apiUrl}/upload/image', formData, {
+      const req = this.http.post(`${environment.apiUrl}/upload/image`, formData, {
         reportProgress: true,
         observe: 'events',
         headers: authHeaders
