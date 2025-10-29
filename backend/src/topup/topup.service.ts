@@ -207,15 +207,55 @@ export class TopupService {
 
     // Use transaction to ensure data consistency
     const result = await this.prisma.$transaction(async (prisma) => {
+      // Get current user balance before update
+      const currentUser = await prisma.user.findUnique({
+        where: { id: topupRequest.userId },
+        select: { balance: true }
+      });
+
+      if (!currentUser) {
+        throw new NotFoundException('User not found');
+      }
+
+      const previousBalance = currentUser.balance;
+      const newBalance = previousBalance + topupRequest.amount;
+
+      // Update user balance first
+      await prisma.user.update({
+        where: { id: topupRequest.userId },
+        data: {
+          balance: newBalance
+        }
+      });
+
+      // Add balance history record
+      await prisma.balanceHistory.create({
+        data: {
+          userId: topupRequest.userId,
+          amount: topupRequest.amount,
+          type: 'TOPUP_APPROVAL',
+          reason: `Topup request approved - ${topupRequest.amount}`,
+          previousBalance: previousBalance,
+          newBalance: newBalance,
+          referenceId: id,
+          referenceType: 'topup',
+        }
+      });
+
       // Update topup request status
-      const updatedTopup = await prisma.topupRequest.update({
+      await prisma.topupRequest.update({
         where: { id },
         data: {
           status: TopupStatus.APPROVED,
           adminNotes: notes,
           processedAt: new Date(),
           processedBy: adminId,
-        },
+        }
+      });
+
+      // Fetch the updated topup with fresh user balance data
+      const updatedTopup = await prisma.topupRequest.findUnique({
+        where: { id },
         include: {
           user: {
             select: {
@@ -238,41 +278,6 @@ export class TopupService {
               network: true,
             }
           }
-        }
-      });
-
-      // Get current user balance before update
-      const currentUser = await prisma.user.findUnique({
-        where: { id: topupRequest.userId },
-        select: { balance: true }
-      });
-
-      if (!currentUser) {
-        throw new NotFoundException('User not found');
-      }
-
-      const previousBalance = currentUser.balance;
-      const newBalance = previousBalance + topupRequest.amount;
-
-      // Update user balance
-      await prisma.user.update({
-        where: { id: topupRequest.userId },
-        data: {
-          balance: newBalance
-        }
-      });
-
-      // Add balance history record
-      await prisma.balanceHistory.create({
-        data: {
-          userId: topupRequest.userId,
-          amount: topupRequest.amount,
-          type: 'TOPUP_APPROVAL',
-          reason: `Topup request approved - ${topupRequest.amount}`,
-          previousBalance: previousBalance,
-          newBalance: newBalance,
-          referenceId: id,
-          referenceType: 'topup',
         }
       });
 
