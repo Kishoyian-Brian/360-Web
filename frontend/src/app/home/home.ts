@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
   searchTerm = '';
   
   // Notice message
-  noticeMessage = "NOTICE: All orders and payments must be made through our website or to our telegram support @Charlie_7O ONLY. Avoid paying to any third-party user claiming to represent us.";
+  noticeMessage = "NOTICE: All orders and payments must be made through our website or to our telegram support @SNOWDENEMPIRE ONLY. Avoid paying to any third-party user claiming to represent us.";
 
   // Math for template
   Math = Math;
