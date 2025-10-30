@@ -125,4 +125,32 @@ export class AuthService {
   async logout(userId: string) {
     return { message: 'Logged out successfully' };
   }
+
+  async verifyToken(token: string) {
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: this.configService.get<string>('jwt.secret'),
+      });
+
+      const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });
+      if (!user || !user.isActive) {
+        throw new UnauthorizedException('Invalid token');
+      }
+
+      return {
+        valid: true,
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          isActive: user.isActive,
+          balance: user.balance,
+        },
+        payload,
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+  }
 }

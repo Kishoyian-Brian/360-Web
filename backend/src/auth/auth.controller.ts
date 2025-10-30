@@ -54,4 +54,12 @@ export class AuthController {
   async getProfile(@Req() req: any) {
     return req.user;
   }
+
+  @Post('verify')
+  @ApiOperation({ summary: 'Verify access token' })
+  @ApiResponse({ status: 200, description: 'Token is valid' })
+  @ApiResponse({ status: 401, description: 'Invalid or expired token' })
+  async verify(@Body() body: { token: string }) {
+    return this.authService.verifyToken(body.token);
+  }
 } 
