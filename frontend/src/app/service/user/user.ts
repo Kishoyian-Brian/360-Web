@@ -58,7 +58,7 @@ export class UserService {
 
   // Get user profile including balance
   getUserProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${this.baseUrl}/profile`, {
+    return this.http.get<UserProfile>(`${this.baseUrl}/profile/me`, {
       headers: this.authService.getAuthHeaders()
     }).pipe(
       tap(profile => {
