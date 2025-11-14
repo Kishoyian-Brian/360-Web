@@ -1,2 +1,252 @@
-/* Blog component uses Tailwind CSS only - no custom styles needed */
+/* Blog Component - Neon Cyberpunk Styles */
 
+/* Blog Cards */
+.blog-card {
+  background: #0a001f;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(255, 51, 204, 0.2),
+    inset 0 0 15px rgba(157, 0, 255, 0.1);
+}
+
+.blog-card:hover {
+  border-color: #FF33CC;
+  box-shadow: 
+    0 0 25px rgba(255, 51, 204, 0.8),
+    0 0 50px rgba(157, 0, 255, 0.6),
+    inset 0 0 25px rgba(255, 51, 204, 0.2);
+}
+
+/* Neon Badges */
+.neon-badge {
+  color: #000000;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+.neon-badge-cyan {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(0, 255, 255, 0.7));
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.8),
+    0 0 20px rgba(0, 255, 255, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.neon-badge-pink {
+  background: linear-gradient(135deg, rgba(255, 51, 204, 0.9), rgba(255, 51, 204, 0.7));
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.8),
+    0 0 20px rgba(255, 51, 204, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.neon-badge-purple {
+  background: linear-gradient(135deg, rgba(157, 0, 255, 0.9), rgba(157, 0, 255, 0.7));
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.8),
+    0 0 20px rgba(157, 0, 255, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Neon Buttons */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8));
+  border: 2px solid #00FFFF;
+  color: #000000;
+  font-weight: 600;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(157, 0, 255, 0.4),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.neon-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 1), rgba(255, 51, 204, 1));
+  border-color: #FF33CC;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(255, 51, 204, 0.8),
+    0 0 75px rgba(0, 255, 255, 0.6),
+    inset 0 0 25px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.neon-button-sm {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.6), rgba(157, 0, 255, 0.6));
+  border: 2px solid #00FFFF;
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.neon-button-sm:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(255, 51, 204, 0.9));
+  border-color: #FF33CC;
+  color: #FF33CC;
+  text-shadow: 0 0 10px #FF33CC;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(255, 51, 204, 0.6),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.neon-button-sm:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.neon-button-page {
+  background: transparent;
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  color: #00FFFF;
+  text-shadow: 0 0 3px #00FFFF;
+  transition: all 0.3s ease;
+}
+
+.neon-button-page:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  border-color: #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.neon-button-active {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9));
+  border: 2px solid #00FFFF;
+  color: #000000;
+  font-weight: 700;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 1),
+    0 0 40px rgba(157, 0, 255, 0.8),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.neon-button-active:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 1), rgba(255, 51, 204, 1));
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(255, 51, 204, 1),
+    0 0 75px rgba(0, 255, 255, 0.8),
+    inset 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+/* Neon Prose Styles for Article Content */
+.neon-prose h1,
+.neon-prose h2,
+.neon-prose h3,
+.neon-prose h4,
+.neon-prose h5,
+.neon-prose h6 {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF;
+}
+
+.neon-prose a {
+  color: #FF33CC;
+  text-shadow: 0 0 5px #FF33CC;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.neon-prose a:hover {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-prose blockquote {
+  border-left: 4px solid #00FFFF;
+  padding-left: 1rem;
+  margin: 2rem 0;
+  font-style: italic;
+  color: #00FFFF;
+  text-shadow: 0 0 3px #00FFFF;
+  background: rgba(0, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.2),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.neon-prose code {
+  background: rgba(0, 255, 255, 0.1);
+  color: #00FFFF;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  text-shadow: 0 0 3px #00FFFF;
+}
+
+.neon-prose pre {
+  background: #0a001f;
+  color: #00FFFF;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+.neon-prose pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  border: none;
+}
+
+.neon-prose img {
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.3),
+    0 0 30px rgba(255, 51, 204, 0.2);
+}
+
+.neon-prose ul,
+.neon-prose ol {
+  padding-left: 1.5rem;
+}
+
+.neon-prose li {
+  margin-bottom: 0.5rem;
+  color: #00FFFF;
+  text-shadow: 0 0 3px #00FFFF;
+}
+
+.neon-prose strong {
+  color: #FF33CC;
+  text-shadow: 0 0 5px #FF33CC;
+  font-weight: 700;
+}
+
+.neon-prose em {
+  color: #9d00ff;
+  text-shadow: 0 0 3px #9d00ff;
+  font-style: italic;
+}
+
+/* Blog Article Card */
+.blog-article-card {
+  background: #0a001f;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.5),
+    0 0 40px rgba(255, 51, 204, 0.3),
+    inset 0 0 20px rgba(157, 0, 255, 0.1);
+}

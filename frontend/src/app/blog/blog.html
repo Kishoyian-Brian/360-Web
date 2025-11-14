@@ -1,11 +1,11 @@
 <!-- Blog Page Content -->
-<main>
+<main class="bg-[#050017] min-h-screen">
   <!-- Blog Header Section -->
-  <section class="mt-8">
+  <section class="mt-8 pt-8">
     <div class="max-w-7xl mx-auto px-4">
       <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-        <p class="text-lg text-gray-600">
+        <h1 class="text-4xl font-bold neon-text mb-4" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF;">Blog</h1>
+        <p class="text-lg text-[#00FFFF]" style="text-shadow: 0 0 5px #00FFFF;">
           Latest tutorials, guides, and insights about carding methods and
           procedures
         </p>
@@ -18,14 +18,14 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Blog Article Cards -->
-        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-          *ngFor="let article of articles">
+        <div class="blog-card neon-border bg-[#0a001f] rounded-xl shadow-neon overflow-hidden transition-all duration-300 hover:shadow-neonPink hover:scale-105"
+          *ngFor="let article of articles; let i = index">
           <!-- Article Image -->
           <div class="relative overflow-hidden group">
             <img [src]="getArticleImage(article)" [alt]="getArticleAltText(article)"
-              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
               (click)="viewArticle(article)" />
-            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a001f]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
             </div>
           </div>
 
@@ -34,20 +34,22 @@
             <!-- Category Tag -->
             <div class="mb-3">
               <span
-                class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide">
+                class="inline-block neon-badge text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wide"
+                [ngClass]="(i % 3 === 0) ? 'neon-badge-cyan' : (i % 3 === 1) ? 'neon-badge-pink' : 'neon-badge-purple'">
                 {{ article.category?.name || 'Uncategorized' }}
               </span>
             </div>
 
             <!-- Article Title -->
             <h2
-              class="text-xl font-bold text-gray-900 mb-4 leading-tight cursor-pointer hover:text-blue-600 transition-colors duration-200"
+              class="text-xl font-bold text-[#00FFFF] mb-4 leading-tight cursor-pointer hover:text-[#FF33CC] transition-colors duration-200"
+              style="text-shadow: 0 0 5px #00FFFF;"
               (click)="viewArticle(article)">
               {{ article.title }}
             </h2>
 
             <!-- Article Meta -->
-            <div class="flex justify-between items-center text-sm text-gray-500">
+            <div class="flex justify-between items-center text-sm text-[#00FFFF]" style="text-shadow: 0 0 3px #00FFFF;">
               <span class="flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd"
@@ -61,14 +63,14 @@
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 Read time:
-                <span class="font-semibold text-gray-700 ml-1">{{ getReadTime(article) }}</span>
+                <span class="font-semibold ml-1">{{ getReadTime(article) }}</span>
               </span>
             </div>
 
             <!-- Read More Button -->
             <div class="mt-4">
               <button
-                class="w-full bg-brand text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 font-semibold"
+                class="w-full neon-button py-2 px-4 rounded-md transition-all duration-200 font-semibold"
                 (click)="viewArticle(article)">
                 Read Article
               </button>
@@ -82,7 +84,7 @@
         <nav class="flex items-center space-x-2">
           <!-- Previous Button -->
           <button
-            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 rounded-md neon-button-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             [disabled]="currentPage === 1" (click)="previousPage()">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"
@@ -93,8 +95,8 @@
 
           <!-- Page Numbers -->
           <div class="flex space-x-1">
-            <button *ngFor="let page of pageNumbers" class="px-3 py-2 rounded-md transition-colors duration-200"
-              [class]="page === currentPage ? 'bg-brand text-white' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
+            <button *ngFor="let page of pageNumbers" class="px-3 py-2 rounded-md transition-all duration-200"
+              [class]="page === currentPage ? 'neon-button-active' : 'neon-button-page'"
               (click)="goToPage(page)">
               {{ page }}
             </button>
@@ -102,7 +104,7 @@
 
           <!-- Next Button -->
           <button
-            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-3 py-2 rounded-md neon-button-sm transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
             [disabled]="currentPage === totalPages" (click)="nextPage()">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"
