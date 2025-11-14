@@ -1,27 +1,166 @@
-/* Login Component Styles */
-.bg-brand {
-  background-color: #32529d;
+/* Login Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+.min-h-screen {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
 }
 
-.text-brand {
-  color: #32529d;
+/* Neon Card Styles */
+.neon-card {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(0, 255, 255, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  border-radius: 0.75rem;
+  padding: 2rem;
 }
 
-.hover\:text-brand:hover {
-  color: #32529d;
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
 }
 
-.focus\:ring-brand:focus {
-  --tw-ring-color: #32529d;
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
 }
 
-.focus\:border-brand:focus {
-  border-color: #32529d;
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .max-w-md {
-    max-width: 90%;
+/* Neon Input Styles */
+.neon-input {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(10, 0, 31, 0.5)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 3px #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.05);
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.neon-input::placeholder {
+  color: rgba(0, 255, 255, 0.5);
+  text-shadow: none;
+}
+
+.neon-input:focus {
+  outline: none !important;
+  border-color: #FF33CC !important;
+  box-shadow: 
+    0 0 15px rgba(255, 51, 204, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    inset 0 0 15px rgba(255, 51, 204, 0.1) !important;
+  color: #FF33CC !important;
+}
+
+/* Neon Button Styles */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.neon-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.7),
+    0 0 30px rgba(0, 255, 255, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
+}
+
+.neon-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05) !important;
+}
+
+/* Neon Link */
+.neon-link {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+}
+
+.neon-link:hover {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+}
+
+/* Neon Loading Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Error Message Neon Style */
+.neon-error {
+  background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px solid #ff4444;
+  color: #ff4444;
+  text-shadow: 0 0 5px #ff4444;
+  box-shadow: 
+    0 0 15px rgba(255, 68, 68, 0.4),
+    inset 0 0 15px rgba(255, 68, 68, 0.1);
+  border-radius: 0.5rem;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 640px) {
+  .neon-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .neon-input {
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 }

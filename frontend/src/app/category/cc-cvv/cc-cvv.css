@@ -1,4 +1,10 @@
-/* CC & CVV Component - Tailwind CSS Custom Styles */
+/* Category Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
 
 /* Marquee Animation */
 @keyframes marquee {
@@ -14,15 +20,236 @@
   animation: marquee 20s linear infinite;
 }
 
-/* Custom Brand Color */
-.bg-brand {
-  background-color: #32529d;
+/* Notice Banner Neon Style */
+.neon-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
 }
 
-.hover\:text-brand:hover {
-  color: #32529d;
+.neon-banner::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
 }
 
-.text-brand {
-  color: #32529d;
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Category Header Neon Style */
+.neon-category-header {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+/* Neon Button Styles */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+/* Sale Badge Neon Style */
+.neon-sale-badge {
+  background: linear-gradient(135deg, #FF33CC, #9d00ff);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4);
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 
+      0 0 10px rgba(255, 51, 204, 0.5),
+      0 0 20px rgba(255, 51, 204, 0.3);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 
+      0 0 15px rgba(255, 51, 204, 0.8),
+      0 0 30px rgba(255, 51, 204, 0.6);
+  }
+}
+
+/* Alternating Neon Borders for Product Cards */
+.product-card-neon-1 {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%);
+  border-radius: 0.75rem;
+}
+
+.product-card-neon-1:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-2 {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%);
+  border-radius: 0.75rem;
+}
+
+.product-card-neon-2:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.8),
+    0 0 40px rgba(255, 51, 204, 0.6),
+    0 0 60px rgba(255, 51, 204, 0.4),
+    inset 0 0 15px rgba(255, 51, 204, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-3 {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.5),
+    0 0 20px rgba(157, 0, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%);
+  border-radius: 0.75rem;
+}
+
+.product-card-neon-3:hover {
+  box-shadow: 
+    0 0 20px rgba(157, 0, 255, 0.8),
+    0 0 40px rgba(157, 0, 255, 0.6),
+    0 0 60px rgba(157, 0, 255, 0.4),
+    inset 0 0 15px rgba(157, 0, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Mobile Sidebar Neon Style */
+.neon-mobile-sidebar {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
+  border-right: 2px solid #FF33CC !important;
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.neon-mobile-sidebar-header {
+  background-color: transparent !important;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+/* Ensure no white backgrounds */
+.neon-mobile-sidebar * {
+  background-color: transparent !important;
+}
+
+.neon-mobile-sidebar button {
+  background-color: transparent !important;
+}
+
+/* Mobile Sidebar Toggle Button */
+.neon-toggle-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 5px #00FFFF !important;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.2) !important;
+  transition: all 0.3s ease;
+}
+
+.neon-toggle-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 640px) {
+  .neon-button, .neon-toggle-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
