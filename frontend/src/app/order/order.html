@@ -1,19 +1,19 @@
 <!-- Order History Page Content -->
-<main class="min-h-screen bg-gray-50 py-8">
+<main style="background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%); min-height: 100vh;" class="py-8">
   <div class="max-w-7xl mx-auto px-4">
     <!-- Header -->
     <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Order History</h1>
-      <p class="text-gray-600 mt-2">View and manage your past orders</p>
+      <h1 class="text-3xl font-bold neon-text" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;">Order History</h1>
+      <p class="neon-text-pink mt-2">View and manage your past orders</p>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-      <h2 class="text-lg font-semibold text-gray-800 mb-4">Filters</h2>
+    <div class="neon-card p-6 mb-6">
+      <h2 class="text-lg font-semibold neon-text mb-4">Filters</h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Search -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
+          <label class="block text-sm font-medium neon-text-purple mb-2"
             >Search Orders</label
           >
           <input
@@ -21,39 +21,42 @@
             [(ngModel)]="searchTerm"
             (input)="applyFilters()"
             placeholder="Search by order ID or item name..."
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            class="neon-file-input w-full px-3 py-2 border rounded-md"
+            style="border-color: rgba(0, 255, 255, 0.5); background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));"
           />
         </div>
 
         <!-- Status Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
+          <label class="block text-sm font-medium neon-text-purple mb-2"
             >Status</label
           >
           <select
             [(ngModel)]="statusFilter"
             (change)="applyFilters()"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            class="neon-file-input w-full px-3 py-2 border rounded-md"
+            style="border-color: rgba(0, 255, 255, 0.5); background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05)); color: #00FFFF;"
           >
-            <option value="">All Statuses</option>
-            <option value="pending">Pending Payment</option>
-            <option value="paid">Payment Received</option>
-            <option value="processing">Processing Order</option>
-            <option value="completed">Order Completed</option>
-            <option value="cancelled">Order Cancelled</option>
+            <option value="" style="background: #0a001f; color: #00FFFF;">All Statuses</option>
+            <option value="pending" style="background: #0a001f; color: #00FFFF;">Pending Payment</option>
+            <option value="paid" style="background: #0a001f; color: #00FFFF;">Payment Received</option>
+            <option value="processing" style="background: #0a001f; color: #00FFFF;">Processing Order</option>
+            <option value="completed" style="background: #0a001f; color: #00FFFF;">Order Completed</option>
+            <option value="cancelled" style="background: #0a001f; color: #00FFFF;">Order Cancelled</option>
           </select>
         </div>
 
         <!-- Date Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"
+          <label class="block text-sm font-medium neon-text-purple mb-2"
             >Date</label
           >
           <input
             type="date"
             [(ngModel)]="dateFilter"
             (change)="applyFilters()"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
+            class="neon-file-input w-full px-3 py-2 border rounded-md"
+            style="border-color: rgba(0, 255, 255, 0.5); background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05)); color: #00FFFF;"
           />
         </div>
 
@@ -61,7 +64,8 @@
         <div class="flex items-end">
           <button
             (click)="clearFilters()"
-            class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition-colors"
+            class="neon-button w-full py-2 px-4 rounded-md transition-colors"
+            style="background: linear-gradient(135deg, rgba(255, 51, 204, 0.8), rgba(157, 0, 255, 0.8)) !important; border-color: #FF33CC !important; color: #ffffff !important;"
           >
             Clear Filters
           </button>
@@ -72,38 +76,40 @@
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex justify-center items-center py-12">
       <div
-        class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"
+        class="animate-spin rounded-full h-12 w-12 border-b-2 neon-spinner"
       ></div>
+      <span class="ml-3 neon-text">Loading orders...</span>
     </div>
 
     <!-- Orders List -->
     <div *ngIf="!isLoading" class="space-y-6">
       <!-- Results Summary -->
       <div class="flex justify-between items-center">
-        <p class="text-gray-600">
+        <p class="neon-text-purple">
           Showing {{ getCurrentPageOrders().length }} of {{
           filteredOrders.length }} orders
         </p>
-        <p class="text-gray-600">Page {{ currentPage }} of {{ totalPages }}</p>
+        <p class="neon-text-purple">Page {{ currentPage }} of {{ totalPages }}</p>
       </div>
 
       <!-- Orders Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div
-          *ngFor="let order of getCurrentPageOrders()"
-          class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+          *ngFor="let order of getCurrentPageOrders(); let i = index"
+          class="neon-card p-6 cursor-pointer"
+          [ngClass]="(i % 3 === 0) ? 'product-card-neon-1' : (i % 3 === 1) ? 'product-card-neon-2' : 'product-card-neon-3'"
           (click)="selectOrder(order)"
         >
           <!-- Order Header -->
           <div class="flex justify-between items-start mb-4">
             <div>
-              <h3 class="font-semibold text-gray-900">{{ order.id }}</h3>
-              <p class="text-sm text-gray-600">
+              <h3 class="font-semibold neon-text">{{ order.id }}</h3>
+              <p class="text-sm neon-text-purple">
                 {{ order.createdAt | date:'medium' }}
               </p>
             </div>
             <span
-              class="px-3 py-1 rounded-full text-sm font-medium"
+              class="px-3 py-1 rounded-full text-sm font-medium neon-status-badge"
               [class]="getStatusColor(order.status)"
             >
               {{ getStatusText(order.status) }}
@@ -113,8 +119,8 @@
           <!-- Order Items Preview -->
           <div class="mb-4">
             <div class="flex items-center space-x-2 mb-2">
-              <span class="text-sm font-medium text-gray-700">Items:</span>
-              <span class="text-sm text-gray-600"
+              <span class="text-sm font-medium neon-text-purple">Items:</span>
+              <span class="text-sm neon-text"
                 >{{ order.items.length }} items</span
               >
             </div>
@@ -123,11 +129,13 @@
                 *ngFor="let item of order.items.slice(0, 3)"
                 [src]="item.image"
                 [alt]="item.name"
-                class="w-12 h-12 object-cover rounded border"
+                class="w-12 h-12 object-cover rounded neon-border-cyan"
+                style="filter: brightness(0.95) contrast(1.1);"
               />
               <div
                 *ngIf="order.items.length > 3"
-                class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-600"
+                class="w-12 h-12 rounded flex items-center justify-center text-xs neon-text-purple"
+                style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)); border: 1px solid rgba(0, 255, 255, 0.3);"
               >
                 +{{ order.items.length - 3 }}
               </div>
@@ -136,12 +144,12 @@
 
           <!-- Order Total -->
           <div class="flex justify-between items-center">
-            <span class="text-lg font-semibold text-brand"
+            <span class="text-lg font-semibold neon-text-pink" style="text-shadow: 0 0 8px #FF33CC;"
               >${{ order.total.toFixed(2) }}</span
             >
             <button
               (click)="copyOrderId(order.id); $event.stopPropagation()"
-              class="text-sm text-brand hover:text-brand/80"
+              class="text-sm quick-action-link"
             >
               Copy ID
             </button>
@@ -152,7 +160,7 @@
       <!-- No Orders Message -->
       <div *ngIf="filteredOrders.length === 0" class="text-center py-12">
         <svg
-          class="mx-auto h-12 w-12 text-gray-400"
+          class="mx-auto h-12 w-12 neon-text-purple"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -164,14 +172,14 @@
             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
           ></path>
         </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900">No orders found</h3>
-        <p class="mt-1 text-sm text-gray-500">
+        <h3 class="mt-2 text-sm font-medium neon-text">No orders found</h3>
+        <p class="mt-1 text-sm neon-text-purple">
           Try adjusting your search or filter criteria.
         </p>
         <div class="mt-6">
           <button
             (click)="goToShop()"
-            class="bg-brand text-white px-4 py-2 rounded-md hover:bg-brand/90 transition-colors"
+            class="neon-button px-4 py-2 rounded-md transition-colors"
           >
             Start Shopping
           </button>
@@ -179,11 +187,11 @@
       </div>
 
       <!-- Pagination -->
-      <div *ngIf="totalPages > 1" class="flex justify-center mt-8">
+      <div *ngIf="totalPages > 1" class="flex justify-center mt-8 pagination-container">
         <nav class="flex items-center space-x-2">
           <!-- Previous Button -->
           <button
-            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="neon-button px-3 py-2 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             [disabled]="currentPage === 1"
             (click)="goToPage(currentPage - 1)"
           >
@@ -201,16 +209,17 @@
             <button
               *ngFor="let page of getPageNumbers()"
               class="px-3 py-2 rounded-md transition-colors duration-200"
-              [class]="page === currentPage ? 'bg-brand text-white' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'"
+              [class]="page === currentPage ? 'neon-button-active' : 'neon-button'"
               (click)="goToPage(page)"
             >
-              {{ page }}
+              <span *ngIf="page === currentPage" class="neon-button-text" style="color: #000000 !important; text-shadow: none !important;">{{ page }}</span>
+              <span *ngIf="page !== currentPage" class="neon-button-text">{{ page }}</span>
             </button>
           </div>
 
           <!-- Next Button -->
           <button
-            class="px-3 py-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="neon-button px-3 py-2 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             [disabled]="currentPage === totalPages"
             (click)="goToPage(currentPage + 1)"
           >
@@ -230,17 +239,19 @@
   <!-- Order Details Modal -->
   <div
     *ngIf="selectedOrder"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50"
+    style="backdrop-filter: blur(4px);"
   >
     <div
-      class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+      class="neon-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
     >
       <!-- Modal Header -->
-      <div class="flex justify-between items-center p-6 border-b">
-        <h2 class="text-xl font-semibold text-gray-900">Order Details</h2>
+      <div class="flex justify-between items-center p-6 border-b" style="border-color: rgba(0, 255, 255, 0.3); background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));">
+        <h2 class="text-xl font-semibold neon-text">Order Details</h2>
         <button
           (click)="closeOrderDetails()"
-          class="text-gray-400 hover:text-gray-600"
+          class="neon-text hover:neon-text-pink transition-colors"
+          style="text-shadow: 0 0 5px currentColor;"
         >
           <svg
             class="w-6 h-6"
@@ -263,30 +274,30 @@
         <!-- Order Info -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <h3 class="font-medium text-gray-900 mb-2">Order Information</h3>
+            <h3 class="font-medium neon-text mb-2">Order Information</h3>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Order ID:</span>
-                <span class="font-medium">{{ selectedOrder.id }}</span>
+                <span class="neon-text-purple">Order ID:</span>
+                <span class="font-medium neon-text">{{ selectedOrder.id }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Status:</span>
+                <span class="neon-text-purple">Status:</span>
                 <span
-                  class="px-2 py-1 rounded-full text-xs font-medium"
+                  class="px-2 py-1 rounded-full text-xs font-medium neon-status-badge"
                   [class]="getStatusColor(selectedOrder.status)"
                 >
                   {{ getStatusText(selectedOrder.status) }}
                 </span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Created:</span>
-                <span class="font-medium"
+                <span class="neon-text-purple">Created:</span>
+                <span class="font-medium neon-text"
                   >{{ selectedOrder.createdAt | date:'medium' }}</span
                 >
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Updated:</span>
-                <span class="font-medium"
+                <span class="neon-text-purple">Updated:</span>
+                <span class="font-medium neon-text"
                   >{{ selectedOrder.updatedAt | date:'medium' }}</span
                 >
               </div>
@@ -294,18 +305,18 @@
           </div>
 
           <div>
-            <h3 class="font-medium text-gray-900 mb-2">Payment Information</h3>
+            <h3 class="font-medium neon-text mb-2">Payment Information</h3>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Total Amount:</span>
-                <span class="font-medium text-brand"
+                <span class="neon-text-purple">Total Amount:</span>
+                <span class="font-medium neon-text-pink" style="text-shadow: 0 0 8px #FF33CC;"
                   >${{ selectedOrder.total.toFixed(2) }}</span
                 >
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600">Bitcoin Address:</span>
-                <span class="font-mono text-xs"
-                  >{{ selectedOrder.bitcoinAddress }}</span
+                <span class="neon-text-purple">Bitcoin Address:</span>
+                <code class="neon-code font-mono text-xs"
+                  >{{ selectedOrder.bitcoinAddress }}</code
                 >
               </div>
             </div>
@@ -314,28 +325,29 @@
 
         <!-- Order Items -->
         <div class="mb-6">
-          <h3 class="font-medium text-gray-900 mb-4">Order Items</h3>
+          <h3 class="font-medium neon-text mb-4">Order Items</h3>
           <div class="space-y-4">
             <div
               *ngFor="let item of selectedOrder.items"
-              class="flex items-center space-x-4 p-4 border border-gray-200 rounded-lg"
+              class="flex items-center space-x-4 p-4 balance-history-item rounded-lg"
             >
               <img
                 [src]="item.image"
                 [alt]="item.name"
-                class="w-16 h-16 object-cover rounded"
+                class="w-16 h-16 object-cover rounded neon-border-cyan"
+                style="filter: brightness(0.95) contrast(1.1);"
               />
               <div class="flex-1">
-                <h4 class="font-medium text-gray-900">{{ item.name }}</h4>
-                <p class="text-sm text-gray-600">
+                <h4 class="font-medium neon-text">{{ item.name }}</h4>
+                <p class="text-sm neon-text-purple">
                   Quantity: {{ item.quantity }}
                 </p>
               </div>
               <div class="text-right">
-                <p class="font-semibold text-gray-900">
+                <p class="font-semibold neon-text-pink" style="text-shadow: 0 0 8px #FF33CC;">
                   ${{ (item.price * item.quantity).toFixed(2) }}
                 </p>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm neon-text-purple">
                   ${{ item.price.toFixed(2) }} each
                 </p>
               </div>
@@ -345,40 +357,43 @@
 
         <!-- Payment Proof -->
         <div *ngIf="selectedOrder.paymentProof" class="mb-6">
-          <h3 class="font-medium text-gray-900 mb-4">Payment Proof</h3>
+          <h3 class="font-medium neon-text mb-4">Payment Proof</h3>
           <img
             [src]="selectedOrder.paymentProof"
             alt="Payment proof"
-            class="max-w-md rounded-lg border"
+            class="max-w-md rounded-lg neon-border-cyan"
+            style="filter: brightness(0.95) contrast(1.1);"
           />
         </div>
 
         <!-- Notes -->
         <div *ngIf="selectedOrder.notes" class="mb-6">
-          <h3 class="font-medium text-gray-900 mb-2">Notes</h3>
-          <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded">
+          <h3 class="font-medium neon-text mb-2">Notes</h3>
+          <p class="text-sm neon-text-purple neon-info-box p-3 rounded">
             {{ selectedOrder.notes }}
           </p>
         </div>
 
         <!-- Actions -->
-        <div class="flex justify-end space-x-3 pt-6 border-t">
+        <div class="flex justify-end space-x-3 pt-6 border-t" style="border-color: rgba(0, 255, 255, 0.3);">
           <button
             (click)="downloadInvoice(selectedOrder)"
-            class="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-colors"
+            class="neon-button px-4 py-2 rounded-md transition-colors"
+            style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.5), rgba(157, 0, 255, 0.5)) !important;"
           >
             Download Invoice
           </button>
           <button
             (click)="reorder(selectedOrder)"
-            class="px-4 py-2 bg-brand text-white rounded-md hover:bg-brand/90 transition-colors"
+            class="neon-button px-4 py-2 rounded-md transition-colors"
           >
             Reorder
           </button>
           <a
             href="https://t.me/Charlie_7O"
             target="_blank"
-            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors inline-flex items-center"
+            class="neon-support-link px-4 py-2 rounded-md transition-colors inline-flex items-center"
+            style="border: 2px solid #FF33CC; background: linear-gradient(135deg, rgba(255, 51, 204, 0.3), rgba(157, 0, 255, 0.3));"
           >
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
               <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>

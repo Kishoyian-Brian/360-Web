@@ -1,0 +1,292 @@
+/* Order Component - Neon Cyberpunk Styles */
+
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
+
+/* Neon Card */
+.neon-card {
+  background: #0a001f;
+  border: 2px solid #00FFFF;
+  border-image: linear-gradient(135deg, #00FFFF, #FF33CC, #9d00ff) 1;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(255, 51, 204, 0.2),
+    inset 0 0 15px rgba(157, 0, 255, 0.1);
+  border-radius: 0.75rem;
+}
+
+/* Neon Text */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Neon Button */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.neon-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+.neon-button-text {
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 8px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 25px #00FFFF !important;
+}
+
+.neon-button-active {
+  background: linear-gradient(135deg, #00FFFF, #9d00ff) !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  border: 2px solid #00FFFF !important;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.9),
+    0 0 40px rgba(157, 0, 255, 0.7),
+    0 0 60px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: none !important;
+}
+
+/* File Input */
+.neon-file-input {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05)) !important;
+  border: 2px dashed #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 5px #00FFFF;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.1);
+}
+
+.neon-file-input::placeholder {
+  color: rgba(0, 255, 255, 0.5);
+}
+
+.neon-file-input:focus {
+  outline: none;
+  border-color: #FF33CC !important;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    inset 0 0 10px rgba(255, 51, 204, 0.1) !important;
+}
+
+/* Alternating Neon Borders for Order Cards */
+.product-card-neon-1 {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-1:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-2 {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-2:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.8),
+    0 0 40px rgba(255, 51, 204, 0.6),
+    0 0 60px rgba(255, 51, 204, 0.4),
+    inset 0 0 15px rgba(255, 51, 204, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-3 {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.5),
+    0 0 20px rgba(157, 0, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-3:hover {
+  box-shadow: 
+    0 0 20px rgba(157, 0, 255, 0.8),
+    0 0 40px rgba(157, 0, 255, 0.6),
+    0 0 60px rgba(157, 0, 255, 0.4),
+    inset 0 0 15px rgba(157, 0, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Status Badge */
+.neon-status-badge {
+  background: linear-gradient(135deg, rgba(255, 51, 204, 0.3), rgba(157, 0, 255, 0.3));
+  border: 1px solid #FF33CC;
+  color: #FF33CC;
+  text-shadow: 0 0 5px #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.4),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+}
+
+/* Neon Border */
+.neon-border-cyan {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6),
+    0 0 20px rgba(0, 255, 255, 0.4),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+/* Neon Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Balance History Item (for order items in modal) */
+.balance-history-item {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.balance-history-item:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+/* Info Box */
+.neon-info-box {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+/* Code Display */
+.neon-code {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(10, 0, 31, 0.5)) !important;
+  border: 1px solid #00FFFF;
+  color: #00FFFF !important;
+  text-shadow: 0 0 3px #00FFFF;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05);
+}
+
+/* Quick Action Link */
+.quick-action-link {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.quick-action-link:hover {
+  color: #FF33CC;
+  text-shadow: 0 0 8px #FF33CC;
+}
+
+/* Support Link */
+.neon-support-link {
+  color: #FF33CC;
+  text-shadow: 0 0 5px #FF33CC;
+  transition: all 0.3s ease;
+}
+
+.neon-support-link:hover {
+  color: #00FFFF;
+  text-shadow: 0 0 8px #00FFFF;
+}
+
+/* Pagination Container */
+.pagination-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex !important;
+  visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.pagination-container nav {
+  display: flex !important;
+  visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  width: 100%;
+}
+
+.pagination-container button {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  outline: none !important;
+}

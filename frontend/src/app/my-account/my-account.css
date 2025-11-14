@@ -1,106 +1,246 @@
-/* My Account Component - Tailwind CSS Custom Styles */
+/* My Account Component - Neon Cyberpunk Styles */
 
-/* Custom Brand Color */
-.bg-brand {
-  background-color: #32529d;
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
 }
 
-.hover\:text-brand:hover {
-  color: #32529d;
-}
-
-.text-brand {
-  color: #32529d;
-}
-
-/* Sidebar Navigation Styles */
-.sidebar-nav a {
-  transition: all 0.2s ease-in-out;
-}
-
-.sidebar-nav a:hover {
-  background-color: #f3f4f6;
-  transform: translateX(4px);
-}
-
-/* Active Link Styles */
-.sidebar-nav a.active {
-  background-color: #32529d;
-  color: white;
-}
-
-/* Card Hover Effects */
-.account-card {
-  transition: all 0.3s ease-in-out;
-}
-
-.account-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-/* Button Styles */
-.btn-primary {
-  background-color: #32529d;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-primary:hover {
-  background-color: #2a4a8a;
-  transform: translateY(-1px);
-}
-
-/* Status Badge Styles */
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.status-active {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .sidebar-nav {
-    margin-bottom: 1rem;
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
   }
-  
-  .account-info {
-    text-align: center;
+  100% {
+    transform: translateX(-100%);
   }
 }
 
-/* Animation for loading states */
-.loading {
-  opacity: 0.6;
-  pointer-events: none;
+.animate-marquee {
+  animation: marquee 20s linear infinite;
 }
 
-.loading::after {
+/* Neon Banner */
+.neon-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
+  position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+.neon-banner::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border: 2px solid #f3f4f6;
-  border-top: 2px solid #32529d;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Neon Card */
+.neon-card {
+  background: #0a001f;
+  border: 2px solid #00FFFF;
+  border-image: linear-gradient(135deg, #00FFFF, #FF33CC, #9d00ff) 1;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(255, 51, 204, 0.2),
+    inset 0 0 15px rgba(157, 0, 255, 0.1);
+  border-radius: 0.75rem;
+}
+
+/* Neon Text */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Neon Button */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+}
+
+.neon-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.neon-button-text {
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 8px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 25px #00FFFF !important;
+}
+
+/* Neon Info Box */
+.neon-info-box {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
+  position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+.neon-info-box::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
+}
+
+/* Neon Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Account Feature Cards */
+.account-feature-card {
+  background: #0a001f;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.account-feature-card:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Balance History Items */
+.balance-history-item {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.balance-history-item:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+/* Status Badge */
+.status-active {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4);
+}
+
+/* Pagination Buttons */
+.pagination-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
+  border: 1px solid #00FFFF;
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05);
+}
+
+/* Quick Action Links */
+.quick-action-link {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+}
+
+.quick-action-link:hover {
+  color: #FF33CC;
+  text-shadow: 0 0 8px #FF33CC;
 }
