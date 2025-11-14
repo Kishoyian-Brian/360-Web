@@ -1,0 +1,248 @@
+/* Checkout Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+.min-h-screen {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
+
+/* Neon Card Styles */
+.neon-card {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(0, 255, 255, 0.2),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+  border-radius: 0.75rem;
+}
+
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Neon Button Styles */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+.neon-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+/* Crypto Payment Selection Button */
+.neon-crypto-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 5px #00FFFF !important;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1) !important;
+  transition: all 0.3s ease;
+}
+
+.neon-crypto-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2)) !important;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+.neon-crypto-button.selected {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(157, 0, 255, 0.3)) !important;
+  border: 2px solid #FF33CC !important;
+  color: #FF33CC !important;
+  text-shadow: 0 0 8px #FF33CC !important;
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.6),
+    0 0 40px rgba(255, 51, 204, 0.4),
+    inset 0 0 20px rgba(255, 51, 204, 0.2) !important;
+}
+
+/* Info Box Neon Style */
+.neon-info-box {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.neon-info-box-text {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+}
+
+/* QR Code Container */
+.neon-qr-container {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05)) !important;
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+/* Code/Address Display */
+.neon-code {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(10, 0, 31, 0.5)) !important;
+  border: 1px solid #00FFFF;
+  color: #00FFFF !important;
+  text-shadow: 0 0 3px #00FFFF;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05);
+}
+
+/* Copy Button */
+.neon-copy-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.6), rgba(157, 0, 255, 0.6)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 5px #00FFFF !important;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.2) !important;
+  transition: all 0.3s ease;
+}
+
+.neon-copy-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+/* Status Badge */
+.neon-status-badge {
+  background: linear-gradient(135deg, rgba(255, 51, 204, 0.3), rgba(157, 0, 255, 0.3));
+  border: 1px solid #FF33CC;
+  color: #FF33CC;
+  text-shadow: 0 0 5px #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.4),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+}
+
+/* Green amount text */
+.text-green-400 {
+  color: #44ff44;
+  text-shadow: 
+    0 0 5px #44ff44,
+    0 0 10px #44ff44,
+    0 0 15px #44ff44;
+}
+
+/* Blue crypto symbol text */
+.text-blue-400 {
+  color: #4488ff;
+  text-shadow: 
+    0 0 5px #4488ff,
+    0 0 10px #4488ff,
+    0 0 15px #4488ff;
+}
+
+/* File Input Neon Style */
+.neon-file-input {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1)) !important;
+  border: 2px dashed #00FFFF;
+  color: #00FFFF !important;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.05);
+}
+
+.neon-file-input::file-selector-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 0 0 5px #00FFFF !important;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 10px rgba(0, 255, 255, 0.2) !important;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.neon-file-input::file-selector-button:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.8),
+    0 0 30px rgba(0, 255, 255, 0.6),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Support Link Neon Style */
+.neon-support-link {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+}
+
+.neon-support-link:hover {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+}
+
+/* Neon Loading Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}

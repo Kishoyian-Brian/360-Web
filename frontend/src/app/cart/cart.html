@@ -1,10 +1,10 @@
 <!-- Cart Page -->
-<div class="min-h-screen bg-gray-50 py-8">
+<div class="min-h-screen py-8" style="background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Page Header -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-      <p class="mt-2 text-gray-600">
+      <h1 class="text-3xl font-bold neon-text" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;">Shopping Cart</h1>
+      <p class="mt-2 neon-text-pink">
         Review your items and proceed to checkout
       </p>
     </div>
@@ -12,9 +12,9 @@
     <!-- Loading State -->
     <div *ngIf="loading" class="flex justify-center items-center py-20">
       <div
-        class="animate-spin rounded-full h-12 w-12 border-b-2 border-brand"
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 neon-spinner"
       ></div>
-      <span class="ml-3 text-lg text-gray-600">Loading cart...</span>
+      <span class="ml-3 text-lg neon-text">Loading cart...</span>
     </div>
 
     <!-- Empty Cart State -->
@@ -24,7 +24,7 @@
     >
       <div class="mb-6">
         <svg
-          class="mx-auto h-24 w-24 text-gray-400"
+          class="mx-auto h-24 w-24 neon-text"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -37,15 +37,15 @@
           ></path>
         </svg>
       </div>
-      <h2 class="text-2xl font-semibold text-gray-900 mb-4">
+      <h2 class="text-2xl font-semibold neon-text mb-4" style="text-shadow: 0 0 10px #00FFFF;">
         Your cart is empty
       </h2>
-      <p class="text-gray-600 mb-8">
+      <p class="neon-text-pink mb-8">
         Looks like you haven't added any items to your cart yet.
       </p>
       <button
         (click)="continueShopping()"
-        class="bg-brand text-white px-8 py-3 rounded-lg font-medium hover:bg-brand/90 transition-colors"
+        class="neon-button px-8 py-3 rounded-lg font-medium"
       >
         Start Shopping
       </button>
@@ -58,32 +58,33 @@
     >
       <!-- Cart Items List -->
       <div class="lg:col-span-2">
-        <div class="bg-white rounded-lg shadow-sm border">
-          <div class="p-6 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
+        <div class="neon-card overflow-hidden">
+          <div class="p-6 border-b border-cyan-500/30" style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));">
+            <h2 class="text-lg font-semibold neon-text">
               Cart Items ({{ totalItems }})
             </h2>
           </div>
 
-          <div class="divide-y divide-gray-200">
-            <div *ngFor="let item of cart.items" class="p-6">
+          <div class="divide-y divide-cyan-500/20">
+            <div *ngFor="let item of cart.items" class="p-6 cart-item-neon">
               <div class="flex items-center space-x-4">
                 <!-- Product Image -->
                 <div class="flex-shrink-0">
                   <img
                     [src]="item.image"
                     [alt]="item.name"
-                    class="w-20 h-20 object-cover rounded-lg"
+                    class="w-20 h-20 object-cover rounded-lg neon-border-cyan"
+                    style="filter: brightness(0.95) contrast(1.1);"
                     onerror="this.src='https://via.placeholder.com/80x80?text=Product'"
                   />
                 </div>
 
                 <!-- Product Info -->
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-lg font-medium text-gray-900 truncate">
+                  <h3 class="text-lg font-medium neon-text truncate">
                     {{ item.name }}
                   </h3>
-                  <p class="text-lg font-bold text-brand mt-1">
+                  <p class="text-lg font-bold neon-text-pink mt-1">
                     ${{ item.price }}
                   </p>
                 </div>
@@ -92,10 +93,11 @@
                 <div class="flex items-center space-x-3">
                   <button
                     (click)="updateQuantity(item.id, item.quantity - 1)"
-                    class="w-8 h-8 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                    class="neon-quantity-button w-10 h-10 rounded-lg flex items-center justify-center"
+                    style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 44px; min-height: 44px;"
                   >
                     <svg
-                      class="w-4 h-4 text-gray-600"
+                      class="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -109,16 +111,17 @@
                     </svg>
                   </button>
 
-                  <span class="w-12 text-center text-lg font-medium"
+                  <span class="w-12 text-center text-lg font-medium neon-text"
                     >{{ item.quantity }}</span
                   >
 
                   <button
                     (click)="updateQuantity(item.id, item.quantity + 1)"
-                    class="w-8 h-8 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                    class="neon-quantity-button w-10 h-10 rounded-lg flex items-center justify-center"
+                    style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-width: 44px; min-height: 44px;"
                   >
                     <svg
-                      class="w-4 h-4 text-gray-600"
+                      class="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -135,7 +138,7 @@
 
                 <!-- Item Total -->
                 <div class="text-right">
-                  <p class="text-lg font-bold text-gray-900">
+                  <p class="text-lg font-bold neon-text-pink">
                     ${{ item.price * item.quantity }}
                   </p>
                 </div>
@@ -144,6 +147,7 @@
                 <button
                   (click)="removeItem(item.id)"
                   class="text-red-500 hover:text-red-700 transition-colors"
+                  style="text-shadow: 0 0 5px #ff4444; filter: drop-shadow(0 0 3px #ff4444);"
                   title="Remove item"
                 >
                   <svg
@@ -165,10 +169,11 @@
           </div>
 
           <!-- Clear Cart Button -->
-          <div class="p-6 border-t border-gray-200">
+          <div class="p-6 border-t border-cyan-500/30">
             <button
               (click)="clearCart()"
-              class="text-red-600 hover:text-red-800 font-medium transition-colors"
+              class="text-red-500 hover:text-red-700 font-medium transition-colors"
+              style="text-shadow: 0 0 5px #ff4444;"
             >
               Clear Cart
             </button>
@@ -178,28 +183,28 @@
 
       <!-- Order Summary -->
       <div class="lg:col-span-1">
-        <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-4">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">
+        <div class="neon-card p-6 order-summary-sticky">
+          <h2 class="text-lg font-semibold neon-text mb-4">
             Order Summary
           </h2>
 
           <div class="space-y-3 mb-6">
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between neon-text-purple">
               <span>Subtotal ({{ totalItems }} items)</span>
-              <span>${{ subtotal }}</span>
+              <span class="neon-text-pink">${{ subtotal }}</span>
             </div>
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between neon-text-purple">
               <span>Shipping</span>
-              <span>Free</span>
+              <span class="neon-text">Free</span>
             </div>
-            <div class="flex justify-between text-gray-600">
+            <div class="flex justify-between neon-text-purple">
               <span>Tax</span>
-              <span>Calculated at checkout</span>
+              <span class="neon-text">Calculated at checkout</span>
             </div>
-            <div class="border-t border-gray-200 pt-3">
-              <div class="flex justify-between text-lg font-bold text-gray-900">
+            <div class="border-t border-cyan-500/30 pt-3">
+              <div class="flex justify-between text-lg font-bold neon-text">
                 <span>Total</span>
-                <span>${{ subtotal }}</span>
+                <span class="neon-text-pink">${{ subtotal }}</span>
               </div>
             </div>
           </div>
@@ -207,7 +212,7 @@
           <!-- Checkout Button -->
           <button
             (click)="proceedToCheckout()"
-            class="w-full bg-brand text-white py-3 px-6 rounded-lg font-medium hover:bg-brand/90 transition-colors mb-4"
+            class="neon-button w-full py-3 px-6 rounded-lg font-medium mb-4"
           >
             Proceed to Checkout
           </button>
@@ -215,16 +220,16 @@
           <!-- Guest User Message -->
           <div
             *ngIf="isGuest"
-            class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+            class="mb-4 p-3 neon-info-box rounded-lg"
           >
-            <p class="text-sm text-blue-800 mb-2">
+            <p class="text-sm neon-info-box-text mb-2">
               <i class="fas fa-info-circle mr-1"></i>
               You're shopping as a guest. Login to save your cart and complete
               your purchase.
             </p>
             <button
               (click)="loginToSaveCart()"
-              class="w-full bg-blue-600 text-white py-2 px-4 rounded text-sm font-medium hover:bg-blue-700 transition-colors"
+              class="neon-button w-full py-2 px-4 rounded text-sm font-medium"
             >
               Login to Save Cart
             </button>
@@ -233,7 +238,8 @@
           <!-- Continue Shopping -->
           <button
             (click)="continueShopping()"
-            class="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+            class="neon-link w-full py-3 px-6 rounded-lg font-medium border-2 border-cyan-500/50 hover:border-cyan-500 transition-colors"
+            style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
           >
             Continue Shopping
           </button>

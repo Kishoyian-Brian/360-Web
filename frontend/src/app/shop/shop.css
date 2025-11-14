@@ -1,0 +1,382 @@
+/* Shop Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Neon Border Utility */
+.neon-border {
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #00FFFF, #FF33CC, #9d00ff) 1;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+.neon-border-cyan {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6),
+    0 0 20px rgba(0, 255, 255, 0.4),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+
+.neon-border-pink {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(255, 51, 204, 0.4),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+}
+
+.neon-border-purple {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Alternating Neon Borders for Product Cards */
+.product-card-neon-1 {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-1:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-2 {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-2:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.8),
+    0 0 40px rgba(255, 51, 204, 0.6),
+    0 0 60px rgba(255, 51, 204, 0.4),
+    inset 0 0 15px rgba(255, 51, 204, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-3 {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.5),
+    0 0 20px rgba(157, 0, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-3:hover {
+  box-shadow: 
+    0 0 20px rgba(157, 0, 255, 0.8),
+    0 0 40px rgba(157, 0, 255, 0.6),
+    0 0 60px rgba(157, 0, 255, 0.4),
+    inset 0 0 15px rgba(157, 0, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Notice Banner Neon Style */
+.neon-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+.neon-banner::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
+}
+
+/* Sale Badge Neon Style */
+.neon-sale-badge {
+  background: linear-gradient(135deg, #FF33CC, #9d00ff);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4);
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 
+      0 0 10px rgba(255, 51, 204, 0.5),
+      0 0 20px rgba(255, 51, 204, 0.3);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 
+      0 0 15px rgba(255, 51, 204, 0.8),
+      0 0 30px rgba(255, 51, 204, 0.6);
+  }
+}
+
+/* Neon Loading Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Red neon glow for out of stock */
+.text-red-400 {
+  color: #ff4444;
+  text-shadow: 
+    0 0 5px #ff4444,
+    0 0 10px #ff4444,
+    0 0 15px #ff4444;
+}
+
+/* Neon Button Styles */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  border-width: 3px !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 10px #00FFFF,
+    0 0 20px #00FFFF,
+    0 0 30px #00FFFF !important;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+  position: relative;
+  z-index: 1;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  min-height: 38px !important;
+  min-width: 38px !important;
+  padding: 8px 16px !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+  transform: translateY(-2px);
+  border-color: #00FFFF !important;
+  border-width: 3px !important;
+  color: #00FFFF !important;
+}
+
+.neon-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.7),
+    0 0 30px rgba(0, 255, 255, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
+}
+
+.neon-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05) !important;
+}
+
+/* Pagination Container */
+.pagination-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex !important;
+  visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.pagination-container nav {
+  display: flex !important;
+  visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  width: 100%;
+}
+
+/* Override any default button styles */
+.pagination-container button {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  outline: none !important;
+}
+
+/* Make sure neon-button class applies correctly */
+.pagination-container .neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+}
+
+/* Ensure page number wrapper div has no white background */
+.pagination-container nav > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Ensure no white backgrounds anywhere except button gradients */
+.pagination-container *:not(button):not(span) {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Button Text */
+.neon-button-text {
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 8px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 25px #00FFFF !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+/* Neon Ellipsis */
+.neon-ellipsis {
+  background: transparent !important;
+  border: none !important;
+  cursor: default !important;
+  pointer-events: none !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+}
+
+/* Neon Active Page Button */
+.neon-button-active {
+  background: linear-gradient(135deg, #00FFFF, #9d00ff) !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  border: 2px solid #00FFFF !important;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.9),
+    0 0 40px rgba(157, 0, 255, 0.7),
+    0 0 60px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
+  position: relative;
+  z-index: 2;
+  text-shadow: none !important;
+  min-height: 38px !important;
+  min-width: 38px !important;
+  padding: 8px 16px !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+  backdrop-filter: blur(5px);
+}
+
+.neon-button-active:hover {
+  background: linear-gradient(135deg, #00FFFF, #FF33CC) !important;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(255, 51, 204, 0.8),
+    0 0 70px rgba(0, 255, 255, 0.6),
+    inset 0 0 25px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Mobile touch improvements */
+@media (max-width: 640px) {
+  .neon-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
