@@ -191,7 +191,7 @@ main {
 
 /* Neon Button Styles */
 .neon-button {
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.4), rgba(157, 0, 255, 0.4)) !important;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
   border: 3px solid #00FFFF !important;
   border-width: 3px !important;
   color: #00FFFF !important;
@@ -201,10 +201,10 @@ main {
     0 0 30px #00FFFF !important;
   transition: all 0.3s ease;
   box-shadow: 
-    0 0 20px rgba(0, 255, 255, 1),
-    0 0 40px rgba(0, 255, 255, 0.8),
-    0 0 60px rgba(0, 255, 255, 0.6),
-    inset 0 0 20px rgba(0, 255, 255, 0.3) !important;
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
   position: relative;
   z-index: 1;
   display: inline-block !important;
@@ -212,17 +212,22 @@ main {
   opacity: 1 !important;
   cursor: pointer !important;
   font-weight: 600 !important;
+  min-height: 38px !important;
+  min-width: 38px !important;
+  padding: 8px 16px !important;
+  backdrop-filter: blur(5px);
 }
 
 .neon-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(157, 0, 255, 0.3)) !important;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
   box-shadow: 
-    0 0 20px rgba(0, 255, 255, 0.9),
-    0 0 40px rgba(0, 255, 255, 0.7),
-    0 0 60px rgba(0, 255, 255, 0.5),
-    inset 0 0 15px rgba(0, 255, 255, 0.2) !important;
+    0 0 30px rgba(0, 255, 255, 1),
+    0 0 60px rgba(0, 255, 255, 0.9),
+    0 0 90px rgba(0, 255, 255, 0.7),
+    inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
   transform: translateY(-2px);
   border-color: #00FFFF !important;
+  border-width: 3px !important;
   color: #00FFFF !important;
 }
 
@@ -248,19 +253,52 @@ main {
   position: relative;
   z-index: 10;
   width: 100%;
-  display: block !important;
+  display: flex !important;
   visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .pagination-container nav {
   display: flex !important;
   visibility: visible !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  width: 100%;
 }
 
+/* Override any default button styles */
 .pagination-container button {
   display: inline-block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  /* Background and border are set by neon-button class - don't override here */
+  outline: none !important;
+}
+
+/* Make sure neon-button class applies correctly */
+.pagination-container .neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
+  border: 3px solid #00FFFF !important;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.9),
+    0 0 75px rgba(0, 255, 255, 0.7),
+    inset 0 0 25px rgba(0, 255, 255, 0.4) !important;
+}
+
+/* Ensure page number wrapper div has no white background */
+.pagination-container nav > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Don't override button backgrounds - they need their gradients */
+
+/* Ensure no white backgrounds anywhere except button gradients */
+.pagination-container *:not(button):not(span) {
+  background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* Button Text */
