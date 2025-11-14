@@ -1,6 +1,6 @@
 <!-- Header Component -->
 <header>
-  <div class="bg-brand py-4 pt-3 pb-0">
+  <div class="neon-header-bg py-4 pt-3 pb-0">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between">
         <!-- Mobile Logo -->
@@ -12,7 +12,7 @@
               >
                 <img src="https://i.pinimg.com/originals/6c/7b/29/6c7b296c4a3e4c0ca659e85c29a2c7da.png" alt="" style="max-width: 100%; max-height: 100%">
               </div>
-              <div class="font-bold text-sm text-white uppercase">SNOWDEN EMPIRE</div>
+              <div class="font-bold text-sm neon-text-logo uppercase">SNOWDEN EMPIRE</div>
             </div>  
           </a>
         </div>
@@ -27,8 +27,8 @@
                 <img src="https://i.pinimg.com/originals/6c/7b/29/6c7b296c4a3e4c0ca659e85c29a2c7da.png" alt="" style="max-width: 100%; max-height: 100%">
               </div>
               <div>
-                <div class="font-bold text-2xl text-white">SNOWDEN EMPIRE</div>
-                <div class="text-gray-300 text-sm">Daily Updated & Checked</div>
+                <div class="font-bold text-2xl neon-text-logo">SNOWDEN EMPIRE</div>
+                <div class="neon-text-subtitle text-sm">Daily Updated & Checked</div>
               </div>
             </div>
           </a>
@@ -42,7 +42,7 @@
           <a
             routerLink="/login"
             (click)="onLoginClick()"
-            class="text-white"
+            class="neon-icon"
           >
             <svg
               width="20"
@@ -58,7 +58,7 @@
           </a>
 
           <!-- Mobile Cart Icon -->
-          <a *ngIf="!isAdmin" routerLink="/cart" class="text-white relative" role="button">
+          <a *ngIf="!isAdmin" routerLink="/cart" class="neon-icon relative" role="button">
             <svg
               width="20"
               height="20"
@@ -74,7 +74,7 @@
               <path d="M16 10a4 4 0 0 1-8 0"></path>
             </svg>
             <span
-              class="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold"
+              class="absolute -top-1 -right-1 neon-cart-badge rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold"
             >
               {{ cartItemCount }}
             </span>
@@ -83,7 +83,7 @@
           <!-- Mobile Menu Button -->
           <button
             (click)="toggleMobileMenu()"
-            class="text-white p-2"
+            class="neon-icon p-2"
             aria-label="Toggle mobile menu"
           >
             <svg
@@ -125,7 +125,7 @@
               </a>
             </div>
             <div>
-              <a *ngIf="!isAdmin" routerLink="/cart" class="text-white relative" role="button">
+              <a *ngIf="!isAdmin" routerLink="/cart" class="neon-icon relative" role="button">
                 <svg
                   width="20"
                   height="20"
@@ -165,14 +165,14 @@
   
   <!-- Side Menu -->
   <div 
-    class="mobile-menu-sidebar fixed top-0 left-0 h-full w-1/6 bg-white shadow-lg transform transition-transform duration-300 flex flex-col overflow-hidden"
+    class="mobile-menu-sidebar fixed top-0 left-0 h-full w-1/6 shadow-lg transform transition-transform duration-300 flex flex-col overflow-hidden"
     (click)="$event.stopPropagation()"
   >
     <!-- Mobile Menu Header -->
     <div class="mobile-menu-header flex items-center justify-end flex-shrink-0">
       <button
         (click)="closeMobileMenu()"
-        class="text-gray-400 hover:text-gray-600 p-2"
+        class="mobile-menu-close p-2"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -185,26 +185,26 @@
       <ul class="space-y-1 pb-8">
         <!-- Main Navigation -->
         <li>
-          <a routerLink="/" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <a routerLink="/" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-3 rounded-lg">
             <span class="font-medium">Home</span>
           </a>
         </li>
         
         <li>
-          <a routerLink="/shop" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <a routerLink="/shop" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 mobile-menu-item rounded-lg">
             <span class="font-medium">Shop</span>
           </a>
         </li>
         
         <li>
-          <a routerLink="/blog" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <a routerLink="/blog" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 mobile-menu-item rounded-lg">
             <span class="font-medium">Blog</span>
           </a>
         </li>
         
         <!-- Pages Section -->
         <li>
-          <button (click)="togglePagesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <button (click)="togglePagesDropdown()" class="mobile-menu-item flex items-center justify-between w-full px-4 py-3 rounded-lg">
             <div class="flex items-center">
               <span class="font-medium">Pages</span>
             </div>
@@ -215,35 +215,35 @@
           <!-- Pages Dropdown -->
           <ul *ngIf="isPagesDropdownOpen" class="ml-6 mt-2 space-y-1">
             <li>
-              <a routerLink="/register" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/register" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
                 <span class="font-medium">Register</span>
               </a>
             </li>
             <li>
-              <a routerLink="/login" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/login" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Log In</span>
               </a>
             </li>
             <li *ngIf="!isAdmin">
-              <a routerLink="/cart" (click)="closeMobileMenu()" class="flex items-center justify-between px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/cart" (click)="closeMobileMenu()" class="flex items-center justify-between px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Cart</span>
-                <span class="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                <span class="neon-cart-badge rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                   {{ cartItemCount }}
                 </span>
               </a>
             </li>
             <li>
-              <a routerLink="/cashout-clips" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/cashout-clips" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Cashout Clips</span>
               </a>
             </li>
             <li>
-              <a routerLink="/checkout" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/checkout" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Checkout</span>
               </a>
             </li>
             <li>
-              <a routerLink="/voucher" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/voucher" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Vouches</span>
               </a>
             </li>
@@ -251,11 +251,11 @@
         </li>
         
         <!-- Divider -->
-        <li class="border-t border-blue-100 my-4"></li>
+        <li class="border-t border-cyan-500/30 my-4"></li>
         
         <!-- Categories Section -->
         <li>
-          <button (click)="toggleCategoriesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <button (click)="toggleCategoriesDropdown()" class="mobile-menu-item flex items-center justify-between w-full px-4 py-3 rounded-lg">
             <div class="flex items-center">
               <span class="font-medium">Categories</span>
             </div>
@@ -266,52 +266,52 @@
           <!-- Categories Dropdown -->
           <ul *ngIf="isCategoriesDropdownOpen" class="ml-6 mt-2 space-y-1">
             <li>
-              <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
                 <span class="font-medium">CC & CVV</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Bank Logs</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Stealth Accounts</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Fullz</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Fraud Guides</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/tools" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/tools" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Tools</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">E-Gift Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Deposit Checks</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Transfers</span>
               </a>
             </li>
             <li>
-              <a routerLink="/category/clones" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/category/clones" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Clones</span>
               </a>
             </li>
@@ -320,7 +320,7 @@
         
         <!-- More Logs Section -->
         <li>
-          <button (click)="toggleMoreLogsDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <button (click)="toggleMoreLogsDropdown()" class="mobile-menu-item flex items-center justify-between w-full px-4 py-3 rounded-lg">
             <div class="flex items-center">
               <span class="font-medium">More Logs</span>
             </div>
@@ -331,57 +331,57 @@
           <!-- More Logs Dropdown -->
           <ul *ngIf="isMoreLogsDropdownOpen" class="ml-6 mt-2 space-y-1">
             <li>
-              <a routerLink="/more-logs/usa-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/usa-banks" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
                 <span class="font-medium">USA Banks</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/uk-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/uk-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">UK Banks</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/canada-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/canada-banks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Canada Banks</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/usa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/usa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">USA Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/uk-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/uk-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">UK Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/europe-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/europe-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Europe Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/africa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/africa-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Africa Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/canada-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/canada-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Canada Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/australia-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/australia-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Australia Cards</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/credit-union" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/credit-union" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Credit Union</span>
               </a>
             </li>
             <li>
-              <a routerLink="/more-logs/crypto-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/more-logs/crypto-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Crypto Logs</span>
               </a>
             </li>
@@ -390,7 +390,7 @@
         
         <!-- Linkables Section -->
         <li>
-          <button (click)="toggleLinkablesDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <button (click)="toggleLinkablesDropdown()" class="mobile-menu-item flex items-center justify-between w-full px-4 py-3 rounded-lg">
             <div class="flex items-center">
               <span class="font-medium">Linkables</span>
             </div>
@@ -401,27 +401,27 @@
           <!-- Linkables Dropdown -->
           <ul *ngIf="isLinkablesDropdownOpen" class="ml-6 mt-2 space-y-1">
             <li>
-              <a routerLink="/linkable/cashapp" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/linkable/cashapp" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
                 <span class="font-medium">CashApp</span>
               </a>
             </li>
             <li>
-              <a routerLink="/linkable/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/linkable/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">PayPal</span>
               </a>
             </li>
             <li>
-              <a routerLink="/linkable/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/linkable/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Venmo</span>
               </a>
             </li>
             <li>
-              <a routerLink="/linkable/applepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/linkable/applepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">ApplePay</span>
               </a>
             </li>
             <li>
-              <a routerLink="/linkable/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/linkable/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">GooglePay</span>
               </a>
             </li>
@@ -430,7 +430,7 @@
         
         <!-- Transfers Section -->
         <li>
-          <button (click)="toggleTransfersDropdown()" class="flex items-center justify-between w-full px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <button (click)="toggleTransfersDropdown()" class="mobile-menu-item flex items-center justify-between w-full px-4 py-3 rounded-lg">
             <div class="flex items-center">
               <span class="font-medium">Transfers</span>
             </div>
@@ -441,27 +441,27 @@
           <!-- Transfers Dropdown -->
           <ul *ngIf="isTransfersDropdownOpen" class="ml-6 mt-2 space-y-1">
             <li>
-              <a routerLink="/transfers/cashapp" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/transfers/cashapp" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
                 <span class="font-medium">CashApp</span>
               </a>
             </li>
             <li>
-              <a routerLink="/transfers/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/transfers/paypal" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">PayPal</span>
               </a>
             </li>
             <li>
-              <a routerLink="/transfers/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/transfers/venmo" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Venmo</span>
               </a>
             </li>
             <li>
-              <a routerLink="/transfers/zelle" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/transfers/zelle" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">Zelle</span>
               </a>
             </li>
             <li>
-              <a routerLink="/transfers/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 text-blue-600 hover:bg-blue-50 rounded transition-colors">
+              <a routerLink="/transfers/googlepay" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
                 <span class="font-medium">GooglePay</span>
               </a>
             </li>
@@ -470,7 +470,7 @@
         
         <!-- My Account Section -->
         <li *ngIf="isAuthenticated">
-          <a routerLink="/my-account" (click)="closeMobileMenu()" class="flex items-center px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">
+          <a routerLink="/my-account" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-3 rounded-lg">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
@@ -484,13 +484,13 @@
   </div>
 </div>
 
-<div class="border-b border-gray-200">
-  <nav class="bg-white py-0">
+<div class="navbar-wrapper border-b border-cyan-500/30">
+  <nav class="neon-nav-bar py-0">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between my-2">
         <div class="mr-3 hidden lg:block">
           <button
-            class="bg-brand text-white px-6 py-2 rounded font-bold flex items-center"
+            class="neon-button-header px-6 py-2 rounded font-bold flex items-center"
             type="button"
           >
             <span class="mr-1">
@@ -517,7 +517,7 @@
           <ul class="flex items-center space-x-6">
             <li>
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                class="neon-nav-link font-bold uppercase"
                 routerLink="/"
                 >Home</a
               >
@@ -525,7 +525,7 @@
            
             <li class="relative group">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                class="neon-nav-link font-bold uppercase flex items-center"
                 href="#"
               >
                 Categories
@@ -542,124 +542,124 @@
                 </svg>
               </a>
               <ul
-                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+                class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
                 <li>
                   <a
                     routerLink="/category/cc-cvv"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >CC & CVV</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/bank-logs"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >BANK LOGS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/stealth-accounts"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >STEALTH ACCOUNTS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/fullz"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >FULLZ</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/fraud-guides"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >FRAUD GUIDES</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/tools"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >TOOLS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/e-gift-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >E-GIFT CARDS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/deposit-checks"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >DEPOSIT CHECKS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/transfers"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >TRANSFERS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/clones"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >CLONES</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/carded-products"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >CARDED PRODUCTS</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/spamming"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >SPAMMING</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/shake"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >SHAKEPAY LOG</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/cashapp-log"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >CASHAPP LOG</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/paypal-log"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >PAYPAL LOG</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/linkable"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >LINKABLES</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/category/bitcoin-log"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >BITCOIN LOG</a
                   >
                 </li>
@@ -667,21 +667,21 @@
             </li>
             <li>
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                class="neon-nav-link font-bold uppercase"
                 routerLink="/shop"
                 >Shop</a
               >
             </li>
             <li>
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                class="neon-nav-link font-bold uppercase"
                 routerLink="/blog"
                 >Blog</a
               >
             </li>
             <li class="relative group">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                class="neon-nav-link font-bold uppercase flex items-center"
                 href="#"
               >
                 Pages
@@ -698,40 +698,40 @@
                 </svg>
               </a>
               <ul
-                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+                class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
                 <li>
                   <a
                     routerLink="/login"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Log In</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/register"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Register</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/cart"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Cart</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/checkout"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Checkout</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/cashout-clips"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Cashout Clips</a
                   >
                 </li>
@@ -739,7 +739,7 @@
             </li>
             <li class="relative group">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                class="neon-nav-link font-bold uppercase flex items-center"
                 href="#"
               >
                 More Logs
@@ -756,26 +756,26 @@
                 </svg>
               </a>
               <ul
-                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+                class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
                 <li>
                   <a
                     routerLink="/more-logs/usa-banks"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >USA Banks</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/uk-banks"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >UK Banks</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/canada-banks"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Canada Banks</a
                   >
                 </li>
@@ -783,42 +783,42 @@
                 <li>
                   <a
                     routerLink="/more-logs/usa-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >USA Cards</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/uk-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >UK Cards</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/europe-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Europe Cards</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/africa-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Africa Cards</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/canada-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Canada Cards</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/australia-cards"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Australia Cards</a
                   >
                 </li>
@@ -826,14 +826,14 @@
                 <li>
                   <a
                     routerLink="/more-logs/credit-union"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Credit Union</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/more-logs/crypto-logs"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    class="neon-dropdown-item block px-4 py-2"
                     >Crypto Logs</a
                   >
                 </li>
@@ -841,7 +841,7 @@
             </li>
             <li class="relative group">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                class="neon-nav-link font-bold uppercase flex items-center"
                 href="#"
               >
                 Linkables
@@ -858,40 +858,40 @@
                 </svg>
               </a>
               <ul
-                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+                class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
                 <li>
                   <a
                     routerLink="/linkable/cashapp"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >Cashapp</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/linkable/paypal"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >PayPal</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/linkable/venmo"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >Venmo</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/linkable/applepay"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >ApplePay</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/linkable/googlepay"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item uppercase"
                     >GooglePay</a
                   >
                 </li>
@@ -899,7 +899,7 @@
             </li>
             <li class="relative group">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800 flex items-center"
+                class="neon-nav-link font-bold uppercase flex items-center"
                 href="#"
               >
                 Transfers
@@ -916,40 +916,40 @@
                 </svg>
               </a>
               <ul
-                class="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-lg min-w-48 z-50 hidden group-hover:block"
+                class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
                 <li>
                   <a
                     routerLink="/transfers/cashapp"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >Cashapp</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/transfers/paypal"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >PayPal</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/transfers/venmo"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >Venmo</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/transfers/zelle"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 border-b border-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item border-b border-cyan-500/20 uppercase"
                     >Zelle</a
                   >
                 </li>
                 <li>
                   <a
                     routerLink="/transfers/googlepay"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-100 uppercase"
+                    class="block px-4 py-2 neon-dropdown-item uppercase"
                     >GooglePay</a
                   >
                 </li>
@@ -957,14 +957,14 @@
             </li>
             <li>
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                class="neon-nav-link font-bold uppercase"
                 routerLink="/voucher"
                 >Vouches</a
               >
             </li>
             <li *ngIf="isAuthenticated">
               <a
-                class="text-gray-800 font-bold uppercase hover:text-blue-800"
+                class="neon-nav-link font-bold uppercase"
                 routerLink="/my-account"
                 >MY ACCOUNT</a
               >

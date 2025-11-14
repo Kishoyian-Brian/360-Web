@@ -1,4 +1,10 @@
-/* Home Component - Tailwind CSS Custom Styles */
+/* Home Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
 
 /* Marquee Animation */
 @keyframes marquee {
@@ -14,427 +20,294 @@
   animation: marquee 20s linear infinite;
 }
 
-/* Modal Animations */
-.modal-enter {
-  opacity: 0;
-  transform: scale(0.9);
+/* Neon Border Utility */
+.neon-border {
+  border: 2px solid;
+  border-image: linear-gradient(135deg, #00FFFF, #FF33CC, #9d00ff) 1;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
 }
 
-.modal-enter-active {
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 200ms ease-out, transform 200ms ease-out;
+.neon-border-cyan {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6),
+    0 0 20px rgba(0, 255, 255, 0.4),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
 }
 
-.modal-exit {
-  opacity: 1;
-  transform: scale(1);
+.neon-border-pink {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(255, 51, 204, 0.4),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
 }
 
-.modal-exit-active {
-  opacity: 0;
-  transform: scale(0.9);
-  transition: opacity 200ms ease-in, transform 200ms ease-in;
+.neon-border-purple {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
 }
 
-/* Success Notification Animation */
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+.neon-text-purple {
+  color: #9d00ff;
+  text-shadow: 
+    0 0 5px #9d00ff,
+    0 0 10px #9d00ff,
+    0 0 15px #9d00ff;
+}
+
+/* Neon Glow Hover Effects */
+.neon-glow:hover {
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.8),
+    0 0 30px rgba(0, 255, 255, 0.6),
+    0 0 45px rgba(0, 255, 255, 0.4);
+}
+
+.neon-glow-pink:hover {
+  box-shadow: 
+    0 0 15px rgba(255, 51, 204, 0.8),
+    0 0 30px rgba(255, 51, 204, 0.6),
+    0 0 45px rgba(255, 51, 204, 0.4);
+}
+
+.neon-glow-purple:hover {
+  box-shadow: 
+    0 0 15px rgba(157, 0, 255, 0.8),
+    0 0 30px rgba(157, 0, 255, 0.6),
+    0 0 45px rgba(157, 0, 255, 0.4);
+}
+
+/* Alternating Neon Borders for Product Cards */
+.product-card-neon-1 {
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-1:hover {
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.8),
+    0 0 40px rgba(0, 255, 255, 0.6),
+    0 0 60px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-2 {
+  border: 2px solid #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.5),
+    0 0 20px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-2:hover {
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.8),
+    0 0 40px rgba(255, 51, 204, 0.6),
+    0 0 60px rgba(255, 51, 204, 0.4),
+    inset 0 0 15px rgba(255, 51, 204, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.product-card-neon-3 {
+  border: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 10px rgba(157, 0, 255, 0.5),
+    0 0 20px rgba(157, 0, 255, 0.3),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.product-card-neon-3:hover {
+  box-shadow: 
+    0 0 20px rgba(157, 0, 255, 0.8),
+    0 0 40px rgba(157, 0, 255, 0.6),
+    0 0 60px rgba(157, 0, 255, 0.4),
+    inset 0 0 15px rgba(157, 0, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Pulsing Animation */
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 
+      0 0 10px rgba(255, 51, 204, 0.5),
+      0 0 20px rgba(255, 51, 204, 0.3);
   }
-  to {
-    transform: translateX(0);
+  50% {
+    opacity: 0.8;
+    box-shadow: 
+      0 0 15px rgba(255, 51, 204, 0.8),
+      0 0 30px rgba(255, 51, 204, 0.6);
   }
 }
 
-@keyframes slideOut {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
+.pulse-neon {
+  animation: pulse-neon 2s ease-in-out infinite;
 }
 
-.notification-enter {
-  animation: slideIn 0.3s ease-out;
+/* Neon Loading Spinner */
+.neon-spinner {
+  border: 3px solid rgba(0, 255, 255, 0.3);
+  border-top: 3px solid #00FFFF;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 }
 
-.notification-exit {
-  animation: slideOut 0.3s ease-in;
+/* Gradient Backgrounds */
+.neon-gradient-bg {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 51, 204, 0.1), rgba(157, 0, 255, 0.1));
 }
 
-/* Custom Brand Color */
-.bg-brand {
-  background-color: #32529d;
+/* Neon Button Styles */
+.neon-button {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
+  border: 2px solid #00FFFF;
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
 }
 
-.hover\:text-brand:hover {
-  color: #32529d;
+.neon-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.8),
+    0 0 30px rgba(0, 255, 255, 0.6),
+    inset 0 0 15px rgba(0, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
-.text-brand {
-  color: #32529d;
+.neon-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6),
+    inset 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
-/* Custom Product Card Hover Effects */
-.hover\:shadow-lg:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+.neon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: rgba(0, 255, 255, 0.3);
 }
 
-.hover\:-translate-y-1:hover {
-  transform: translateY(-0.25rem);
+/* Neon Active Page Button */
+.neon-button-active {
+  background: linear-gradient(135deg, #00FFFF, #9d00ff);
+  color: #000000;
+  font-weight: bold;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.8),
+    0 0 30px rgba(157, 0, 255, 0.6),
+    inset 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-/* Custom Transition Effects */
-.transition-shadow {
-  transition-property: box-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
-
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-/* Custom Grid Responsive */
-@media (min-width: 640px) {
-  .sm\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 768px) {
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .lg\:grid-cols-5 {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-
-/* Custom Container Max Width */
-.max-w-7xl {
-  max-width: 80rem;
-}
-
-/* Custom Gap */
-.gap-6 {
-  gap: 1.5rem;
-}
-
-/* Custom Negative Margin */
-.-mt-16 {
-  margin-top: -4rem;
-}
-
-/* Custom Opacity */
-.bg-opacity-10 {
-  background-color: rgba(37, 99, 235, 0.1);
-}
-
-/* Custom Shadow */
-.shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-/* Custom Border Radius */
-.rounded-lg {
+/* Notice Banner Neon Style */
+.neon-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
   border-radius: 0.5rem;
-}
-
-.rounded {
-  border-radius: 0.25rem;
-}
-
-/* Custom Spacing */
-.space-x-2 > * + * {
-  margin-left: 0.5rem;
-}
-
-.space-x-4 > * + * {
-  margin-left: 1rem;
-}
-
-.space-y-1 > * + * {
-  margin-top: 0.25rem;
-}
-
-.space-y-2 > * + * {
-  margin-top: 0.5rem;
-}
-
-/* Custom Text Sizes */
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
-/* Custom Font Weights */
-.font-medium {
-  font-weight: 500;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-/* Custom Colors */
-.text-gray-300 {
-  color: #d1d5db;
-}
-
-.text-gray-600 {
-  color: #4b5563;
-}
-
-.text-gray-900 {
-  color: #111827;
-}
-
-.text-blue-600 {
-  color: #2563eb;
-}
-
-.text-white {
-  color: #ffffff;
-}
-
-.bg-blue-600 {
-  background-color: #2563eb;
-}
-
-.bg-red-500 {
-  background-color: #ef4444;
-}
-
-.bg-white {
-  background-color: #ffffff;
-}
-
-.border-gray-200 {
-  border-color: #e5e7eb;
-}
-
-/* Custom Hover States */
-.hover\:bg-green-600:hover {
-  background-color: #059669;
-}
-
-.hover\:text-blue-600:hover {
-  color: #2563eb;
-}
-
-.hover\:text-white:hover {
-  color: #ffffff;
-}
-
-.hover\:shadow-lg:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-/* Custom Display */
-.hidden {
-  display: none;
-}
-
-.block {
-  display: block;
-}
-
-.inline-flex {
-  display: inline-flex;
-}
-
-.flex {
-  display: flex;
-}
-
-.grid {
-  display: grid;
-}
-
-/* Custom Position */
-.relative {
   position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
 }
 
-.absolute {
+.neon-banner::before {
+  content: '';
   position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
 }
 
-.fixed {
-  position: fixed;
+/* Sale Badge Neon Style */
+.neon-sale-badge {
+  background: linear-gradient(135deg, #FF33CC, #9d00ff);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4);
+  animation: pulse-neon 2s ease-in-out infinite;
 }
 
-/* Custom Z-index */
-.z-50 {
-  z-index: 50;
+/* Red neon glow for out of stock */
+.text-red-400 {
+  color: #ff4444;
+  text-shadow: 
+    0 0 5px #ff4444,
+    0 0 10px #ff4444,
+    0 0 15px #ff4444;
 }
 
-/* Custom Top/Right/Bottom/Left */
-.top-1\/4 {
-  top: 25%;
-}
-
-.right-4 {
-  right: 1rem;
-}
-
-.bottom-0 {
-  bottom: 0;
-}
-
-.top-2 {
-  top: 0.5rem;
-}
-
-.left-2 {
-  left: 0.5rem;
-}
-
-/* Custom Padding */
-.p-3 {
-  padding: 0.75rem;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-
-/* Custom Margin */
-.mb-0 {
-  margin-bottom: 0;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.mb-3 {
-  margin-bottom: 0.75rem;
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
-
-.mt-3 {
-  margin-top: 0.75rem;
-}
-
-.my-8 {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.mr-1 {
-  margin-right: 0.25rem;
-}
-
-.mx-auto {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Custom Width/Height */
-.h-36 {
-  height: 9rem;
-}
-
-.w-full {
-  width: 100%;
-}
-
-/* Custom Object Fit */
-.object-contain {
-  object-fit: contain;
-}
-
-/* Custom Text Alignment */
-.text-center {
-  text-align: center;
-}
-
-/* Custom Cursor */
-.cursor-pointer {
-  cursor: pointer;
-}
-
-/* Custom Overflow */
-.overflow-hidden {
-  overflow: hidden;
-}
-
-/* Custom Whitespace */
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
-/* Custom No Underline */
-.no-underline {
-  text-decoration: none;
-}
-
-/* Custom Items Center */
-.items-center {
-  align-items: center;
-}
-
-/* Custom Justify Between */
-.justify-between {
-  justify-content: space-between;
-}
-
-/* Custom Col Span */
-.col-span-1 {
-  grid-column: span 1 / span 1;
-}
-
-/* Custom Responsive */
-@media (min-width: 1024px) {
-  .lg\:my-14 {
-    margin-top: 3.5rem;
-    margin-bottom: 3.5rem;
+/* Mobile touch improvements */
+@media (max-width: 640px) {
+  .neon-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* Custom Scrollbar for Neon Theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #00FFFF, #FF33CC);
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #FF33CC, #9d00ff);
+  box-shadow: 0 0 10px rgba(255, 51, 204, 0.6);
 }

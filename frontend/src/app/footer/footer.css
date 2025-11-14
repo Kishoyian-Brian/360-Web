@@ -1,43 +1,80 @@
-/* Footer Component - Tailwind CSS Custom Styles */
+/* Footer Component - Neon Cyberpunk Styles */
 
-/* Custom Brand Color */
-.bg-brand {
-  background-color: #32529d;
+/* Neon Footer Background */
+.neon-footer-bg {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  border-top: 2px solid #9d00ff;
+  box-shadow: 
+    0 0 15px rgba(157, 0, 255, 0.4),
+    0 0 30px rgba(157, 0, 255, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Custom Footer Background */
-.bg-blue-600 {
-  background-color: #2563eb;
+/* Neon Footer Border */
+.neon-footer-border {
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
 }
 
-/* Custom Text Colors */
-.text-white {
-  color: #ffffff;
+/* Neon Text Styles */
+.neon-text-footer {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF;
 }
 
-.text-gray-300 {
-  color: #d1d5db;
+.neon-text-footer-sub {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 3px #FF33CC,
+    0 0 6px #FF33CC;
 }
 
-/* Custom Hover Effects */
-.hover\:text-gray-300:hover {
-  color: #d1d5db;
+.neon-text-footer-link {
+  color: #00FFFF;
+  text-shadow: 0 0 3px #00FFFF;
+  transition: all 0.3s ease;
 }
 
-/* Custom Transition Effects */
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+.neon-text-footer-link:hover {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
 }
 
-/* Custom Border */
-.border-t {
-  border-top-width: 1px;
+/* Neon Social Icons */
+.neon-social-icon {
+  color: #00FFFF;
+  filter: drop-shadow(0 0 3px #00FFFF);
+  transition: all 0.3s ease;
 }
 
-.border-gray-300 {
-  border-color: #d1d5db;
+.neon-social-icon:hover {
+  color: #FF33CC;
+  filter: drop-shadow(0 0 5px #FF33CC);
+  transform: scale(1.2);
+}
+
+/* Neon Telegram Floating Button */
+.neon-telegram-button {
+  background: linear-gradient(135deg, #00FFFF, #9d00ff);
+  color: #000000;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 40px rgba(157, 0, 255, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.neon-telegram-button:hover {
+  background: linear-gradient(135deg, #FF33CC, #00FFFF);
+  box-shadow: 
+    0 0 30px rgba(255, 51, 204, 0.8),
+    0 0 60px rgba(0, 255, 255, 0.6),
+    inset 0 0 30px rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
 /* Custom Spacing */

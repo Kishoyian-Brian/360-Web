@@ -1,34 +1,36 @@
 <!-- Home Page Content -->
-<main>
+<main class="min-h-screen" style="background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);">
   <!-- Notice Banner -->
   <section class="my-4 lg:my-8">
     <div class="max-w-7xl mx-auto px-2 sm:px-4">
       <div class="mb-6">
         <h1 class="hidden">Homepage</h1>
         <div class="mt-0 mb-2">
-          <div class="bg-brand text-white p-2 sm:p-3 overflow-hidden">
-            <div class="animate-marquee whitespace-nowrap text-sm sm:text-base">
+          <div class="neon-banner p-2 sm:p-3 overflow-hidden rounded-lg">
+            <div class="animate-marquee whitespace-nowrap text-sm sm:text-base neon-text">
               <span>
                 {{ noticeMessage }}
                 <a
                   href="https://t.me/SNOWDENEMPIRE"
                   target="_blank"
-                  class="text-gray-300 hover:text-white"
+                  class="neon-text-pink hover:neon-text transition-colors"
                   >@SNOWDENEMPIRE</a
                 >
               </span>
             </div>
           </div>
         </div>
-        <h3 class="text-center mb-0 text-xl sm:text-2xl font-bold">Latest Deals</h3>
+        <h3 class="text-center mb-0 text-xl sm:text-2xl font-bold neon-text-purple" style="text-shadow: 0 0 10px #9d00ff, 0 0 20px #9d00ff;">
+          Latest Deals
+        </h3>
       </div>
 
       <!-- Loading State -->
       <div *ngIf="loading" class="text-center py-8">
         <div
-          class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand"
+          class="inline-block animate-spin rounded-full h-8 w-8 neon-spinner"
         ></div>
-        <p class="mt-2 text-gray-600 text-sm sm:text-base">Loading products...</p>
+        <p class="mt-2 neon-text text-sm sm:text-base">Loading products...</p>
       </div>
 
       <!-- Products Grid -->
@@ -37,33 +39,36 @@
         class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6"
         id="cl-body"
       >
-        <div class="col-span-1" *ngFor="let product of products">
+        <div class="col-span-1" *ngFor="let product of products; let i = index">
           <div
-            class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 hover:-translate-y-1"
+            class="bg-dark-4 rounded-xl cursor-pointer overflow-hidden"
+            [ngClass]="(i % 3 === 0) ? 'product-card-neon-1' : (i % 3 === 1) ? 'product-card-neon-2' : 'product-card-neon-3'"
+            (click)="viewProduct(product)"
           >
             <div class="p-0">
               <!-- Product Image Section -->
               <div class="text-center relative p-2 sm:p-4">
-                <div class="absolute top-1 sm:top-2 left-1 sm:left-2">
-                  <span class="bg-red-500 text-white text-xs px-1 sm:px-2 py-1 rounded"
+                <div class="absolute top-1 sm:top-2 left-1 sm:left-2 z-10">
+                  <span class="neon-sale-badge text-xs px-1 sm:px-2 py-1 rounded font-bold"
                     >Sale</span
                   >
                 </div>
-                <a (click)="viewProduct(product)" class="cursor-pointer block">
+                <a (click)="viewProduct(product); $event.stopPropagation()" class="cursor-pointer block">
                   <img
                     [src]="ProductUtils.getProductImage(product)"
                     [alt]="ProductUtils.getProductAltText(product)"
                     class="mb-2 sm:mb-3 mx-auto h-32 sm:h-40 w-full object-cover rounded-md"
+                    style="filter: brightness(0.95) contrast(1.1);"
                   />
                 </a>
               </div>
 
               <!-- Product Info Section -->
-              <div class="p-2 sm:p-4 bg-gray-100">
+              <div class="p-2 sm:p-4 bg-dark-4 rounded-b-xl">
                 <div class="text-xs sm:text-sm mb-1">
                   <a
-                    (click)="viewProduct(product)"
-                    class="text-gray-600 hover:text-brand cursor-pointer"
+                    (click)="viewProduct(product); $event.stopPropagation()"
+                    class="neon-text-pink hover:neon-text cursor-pointer transition-colors"
                   >
                     <small
                       >{{ ProductUtils.getProductCategory(product) }}</small
@@ -72,10 +77,10 @@
                 </div>
 
                 <div class="mb-2 sm:mb-3">
-                  <h2 class="text-sm sm:text-base font-medium text-gray-900">
+                  <h2 class="text-sm sm:text-base font-medium neon-text">
                     <a
-                      (click)="viewProduct(product)"
-                      class="text-inherit no-underline hover:text-brand cursor-pointer"
+                      (click)="viewProduct(product); $event.stopPropagation()"
+                      class="text-inherit no-underline hover:neon-text-pink cursor-pointer transition-colors"
                     >
                       {{ product.name }}
                     </a>
@@ -85,8 +90,9 @@
                 <!-- Stock Status -->
                 <div class="mb-1 sm:mb-2">
                   <span
-                    [class]="ProductUtils.getStockStatusClass(product)"
                     class="text-xs font-medium"
+                    [ngClass]="product.stockQuantity > 0 ? 'neon-text' : 'text-red-400'"
+                    style="text-shadow: 0 0 5px currentColor;"
                   >
                     {{ ProductUtils.getStockStatus(product) }}
                   </span>
@@ -94,7 +100,7 @@
 
                 <!-- Price Section -->
                 <div class="mt-2 sm:mt-3 flex justify-between items-center">
-                  <span class="text-gray-900 font-bold text-sm sm:text-base">
+                  <span class="neon-text-pink font-bold text-sm sm:text-base" style="text-shadow: 0 0 8px #FF33CC;">
                     {{ ProductUtils.getProductPrice(product) }}
                   </span>
                 </div>
@@ -106,7 +112,7 @@
 
       <!-- No Products Message -->
       <div *ngIf="!loading && products.length === 0" class="text-center py-8">
-        <p class="text-gray-600 text-sm sm:text-base">No products found.</p>
+        <p class="neon-text text-sm sm:text-base">No products found.</p>
       </div>
 
       <!-- Pagination -->
@@ -117,7 +123,7 @@
             (click)="previousPage()"
             [disabled]="currentPage === 1"
             type="button"
-            class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
             style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px;"
           >
             <span class="hidden sm:inline">Previous</span>
@@ -131,16 +137,16 @@
               (click)="page > 0 ? goToPage(page) : null"
               [disabled]="page < 0"
               [class]="page === currentPage 
-                ? 'bg-brand text-white border-brand hover:bg-brand/90' 
+                ? 'neon-button-active' 
                 : page < 0
                 ? 'cursor-default border-transparent bg-transparent pointer-events-none'
-                : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 active:bg-gray-100'"
-              class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border rounded-md transition-colors disabled:cursor-not-allowed"
+                : 'neon-button'"
+              class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border rounded-md transition-all"
               style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 38px;"
               type="button"
             >
-              <span *ngIf="page > 0">{{ page }}</span>
-              <span *ngIf="page < 0" class="text-gray-400">...</span>
+              <span *ngIf="page > 0" [class]="page === currentPage ? '' : 'neon-text'">{{ page }}</span>
+              <span *ngIf="page < 0" class="neon-text-purple">...</span>
             </button>
           </div>
 
@@ -149,7 +155,7 @@
             (click)="nextPage()"
             [disabled]="currentPage === totalPages"
             type="button"
-            class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 active:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            class="neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
             style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px;"
           >
             Next
@@ -160,7 +166,8 @@
       <!-- Page Info -->
       <div
         *ngIf="!loading && total > 0"
-        class="mt-4 text-center text-xs sm:text-sm text-gray-600 px-2"
+        class="mt-4 text-center text-xs sm:text-sm neon-text-purple px-2"
+        style="text-shadow: 0 0 5px #9d00ff;"
       >
         Showing {{ (currentPage - 1) * pageSize + 1 }} to {{
         Math.min(currentPage * pageSize, total) }} of {{ total }} products

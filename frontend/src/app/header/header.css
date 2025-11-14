@@ -1,3 +1,4 @@
+/* Header Component - Neon Cyberpunk Styles */
 
 .mobile-menu-enter {
   opacity: 0;
@@ -59,46 +60,234 @@
   z-index: 10000;
 }
 
-/* Custom Brand Color */
-.bg-brand {
-  background-color: #32529d;
+/* Neon Header Background */
+.neon-header-bg {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%) !important;
+  border-bottom: 2px solid #9d00ff !important;
+  box-shadow: 
+    0 0 15px rgba(157, 0, 255, 0.4),
+    0 0 30px rgba(157, 0, 255, 0.2) !important;
 }
 
-.text-brand {
-  color: #32529d;
+/* Navbar Wrapper */
+.navbar-wrapper {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
 }
 
-.hover\:text-brand:hover {
-  color: #32529d;
+/* Neon Navigation Bar */
+.neon-nav-bar {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
+  border-bottom: 2px solid #00FFFF !important;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    0 0 20px rgba(0, 255, 255, 0.1) !important;
 }
 
-/* Mobile Menu Item Hover */
+/* Ensure all child divs in navbar are dark */
+.navbar-wrapper > div,
+.neon-nav-bar > div,
+.neon-nav-bar > div > div {
+  background-color: transparent !important;
+}
+
+/* Neon Text Styles */
+.neon-text-white {
+  color: #ffffff;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF;
+}
+
+.neon-text-logo {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF;
+}
+
+.neon-text-subtitle {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+}
+
+/* Neon Icon Styles */
+.neon-icon {
+  color: #00FFFF;
+  filter: drop-shadow(0 0 3px #00FFFF);
+  transition: all 0.3s ease;
+}
+
+.neon-icon:hover {
+  color: #FF33CC;
+  filter: drop-shadow(0 0 5px #FF33CC);
+}
+
+/* Neon Cart Badge */
+.neon-cart-badge {
+  background: linear-gradient(135deg, #FF33CC, #9d00ff);
+  color: #ffffff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.6),
+    0 0 20px rgba(157, 0, 255, 0.4);
+}
+
+/* Neon Button */
+.neon-button-header {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
+  border: 2px solid #00FFFF;
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.neon-button-header:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Mobile Menu Dark Theme */
+.mobile-menu-sidebar {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%) !important;
+  border-right: 2px solid #FF33CC !important;
+  box-shadow: 
+    0 0 20px rgba(255, 51, 204, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Ensure no white background on mobile menu */
+.mobile-menu-sidebar ul,
+.mobile-menu-sidebar li {
+  background-color: transparent !important;
+}
+
+.mobile-menu-header {
+  background-color: transparent !important;
+}
+
+.mobile-menu-nav {
+  background-color: transparent !important;
+}
+
+/* Ensure list items don't have white backgrounds */
+.mobile-menu-nav ul li {
+  background-color: transparent !important;
+}
+
+.mobile-menu-nav ul li a,
+.mobile-menu-nav ul li button {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* But allow hover gradients */
+.mobile-menu-nav ul li a:hover,
+.mobile-menu-nav ul li button:hover {
+  background-image: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 51, 204, 0.1)) !important;
+}
+
+.mobile-menu-overlay .fixed.inset-0 {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+/* Mobile Menu Items */
+.mobile-menu-item {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+}
+
 .mobile-menu-item:hover {
-  background-color: #f3f4f6;
-  transition: background-color 0.2s ease-in-out;
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 51, 204, 0.1)) !important;
+  background-color: transparent !important;
+  color: #FF33CC !important;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1) !important;
 }
 
-/* Mobile Menu Section Headers */
-.mobile-menu-section {
-  color: #6b7280;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Mobile Menu Close Button */
 .mobile-menu-close {
-  transition: color 0.2s ease-in-out;
+  color: #FF33CC;
+  filter: drop-shadow(0 0 3px #FF33CC);
+  transition: all 0.3s ease;
 }
 
 .mobile-menu-close:hover {
-  color: #374151;
+  color: #00FFFF;
+  filter: drop-shadow(0 0 5px #00FFFF);
 }
 
-/* Ensure mobile menu is above other content */
-.mobile-menu-overlay {
-  z-index: 9999;
+/* Desktop Navigation Links */
+.neon-nav-link {
+  color: #00FFFF;
+  text-shadow: 0 0 5px #00FFFF;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.neon-nav-link:hover {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+}
+
+.neon-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC);
+  box-shadow: 0 0 5px #FF33CC;
+  transition: width 0.3s ease;
+}
+
+.neon-nav-link:hover::after {
+  width: 100%;
+}
+
+/* Desktop Dropdown Menu */
+.neon-dropdown {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%);
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.4),
+    0 0 40px rgba(0, 255, 255, 0.2),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.neon-dropdown-item {
+  color: #00FFFF;
+  text-shadow: 0 0 3px #00FFFF;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.neon-dropdown-item:hover {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 51, 204, 0.1));
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC;
+  box-shadow: 
+    0 0 10px rgba(255, 51, 204, 0.3),
+    inset 0 0 10px rgba(255, 51, 204, 0.1);
 }
 
 /* Prevent body scroll when menu is open */
@@ -115,7 +304,7 @@ body.menu-open {
 
 /* Ensure dropdowns don't break scrolling */
 .mobile-menu-nav ul {
-  padding-bottom: 2rem; /* Extra padding at bottom for easier scrolling */
+  padding-bottom: 2rem;
 }
 
 /* Better touch scrolling on iOS */
@@ -129,12 +318,11 @@ body.menu-open {
 @media (max-width: 1023px) {
   .fixed.top-0.left-0.h-full.w-1\/6 {
     width: 15% !important;
-    min-width: 200px; /* Compact minimum width */
-    max-width: 250px; /* Keep it narrow */
+    min-width: 200px;
+    max-width: 250px;
   }
 }
 
-/* Extra small screens - slightly wider for usability */
 @media (max-width: 480px) {
   .fixed.top-0.left-0.h-full.w-1\/6 {
     width: 18% !important;
@@ -143,7 +331,6 @@ body.menu-open {
   }
 }
 
-/* Very small screens - ensure it's still usable */
 @media (max-width: 360px) {
   .fixed.top-0.left-0.h-full.w-1\/6 {
     width: 20% !important;
@@ -164,7 +351,7 @@ body.menu-open {
 /* Adjust close button positioning for compact menu */
 .mobile-menu-header {
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
 }
 
 /* Compact menu item styling */
@@ -187,6 +374,3 @@ body.menu-open {
   padding: 0.375rem 0.5rem !important;
   font-size: 0.8rem !important;
 }
-
-/* Mobile menu visibility - removed debug styles that were causing Angular errors */
-
