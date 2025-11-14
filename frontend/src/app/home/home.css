@@ -191,44 +191,98 @@ main {
 
 /* Neon Button Styles */
 .neon-button {
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));
-  border: 2px solid #00FFFF;
-  color: #00FFFF;
-  text-shadow: 0 0 5px #00FFFF;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.15), rgba(157, 0, 255, 0.15)) !important;
+  border: 2px solid #00FFFF !important;
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF !important;
   transition: all 0.3s ease;
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 255, 255, 0.1) !important;
+  position: relative;
+  z-index: 1;
 }
 
 .neon-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(157, 0, 255, 0.2));
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(157, 0, 255, 0.3)) !important;
   box-shadow: 
-    0 0 15px rgba(0, 255, 255, 0.8),
-    0 0 30px rgba(0, 255, 255, 0.6),
-    inset 0 0 15px rgba(0, 255, 255, 0.1);
+    0 0 20px rgba(0, 255, 255, 0.9),
+    0 0 40px rgba(0, 255, 255, 0.7),
+    0 0 60px rgba(0, 255, 255, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.2) !important;
   transform: translateY(-2px);
+  border-color: #00FFFF !important;
+  color: #00FFFF !important;
 }
 
 .neon-button:active:not(:disabled) {
   transform: translateY(0);
   box-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.6),
-    inset 0 0 10px rgba(0, 255, 255, 0.2);
+    0 0 15px rgba(0, 255, 255, 0.7),
+    0 0 30px rgba(0, 255, 255, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.3) !important;
 }
 
 .neon-button:disabled {
-  opacity: 0.4;
+  opacity: 0.5 !important;
   cursor: not-allowed;
-  border-color: rgba(0, 255, 255, 0.3);
+  border-color: rgba(0, 255, 255, 0.5) !important;
+  box-shadow: 
+    0 0 5px rgba(0, 255, 255, 0.3),
+    inset 0 0 5px rgba(0, 255, 255, 0.05) !important;
+}
+
+/* Pagination Container */
+.pagination-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
+
+/* Button Text */
+.neon-button-text {
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF !important;
+}
+
+/* Neon Ellipsis */
+.neon-ellipsis {
+  background: transparent !important;
+  border: none !important;
+  cursor: default !important;
+  pointer-events: none !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
 }
 
 /* Neon Active Page Button */
 .neon-button-active {
-  background: linear-gradient(135deg, #00FFFF, #9d00ff);
-  color: #000000;
-  font-weight: bold;
+  background: linear-gradient(135deg, #00FFFF, #9d00ff) !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  border: 2px solid #00FFFF !important;
   box-shadow: 
-    0 0 15px rgba(0, 255, 255, 0.8),
-    0 0 30px rgba(157, 0, 255, 0.6),
-    inset 0 0 15px rgba(255, 255, 255, 0.2);
+    0 0 20px rgba(0, 255, 255, 0.9),
+    0 0 40px rgba(157, 0, 255, 0.7),
+    0 0 60px rgba(0, 255, 255, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
+  position: relative;
+  z-index: 2;
+  text-shadow: none !important;
+}
+
+.neon-button-active:hover {
+  background: linear-gradient(135deg, #00FFFF, #FF33CC) !important;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(255, 51, 204, 0.8),
+    0 0 70px rgba(0, 255, 255, 0.6),
+    inset 0 0 25px rgba(255, 255, 255, 0.4) !important;
 }
 
 /* Notice Banner Neon Style */
