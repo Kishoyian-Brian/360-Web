@@ -5,15 +5,15 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="mb-2 hidden sm:block">
         <div class="mt-4 mb-0">
-          <div class="bg-brand text-white p-3 overflow-hidden">
-            <div class="animate-marquee whitespace-nowrap">
+          <div class="neon-banner p-2 sm:p-3 overflow-hidden rounded-lg">
+            <div class="animate-marquee whitespace-nowrap text-sm sm:text-base neon-text">
               <span>
                 NOTICE: All orders and payments must be made through our website
                 or to our telegram support
                 <a
                   href="https://t.me/SNOWDENEMPIRE"
                   target="_blank"
-                  class="text-gray-300 hover:text-white"
+                  class="neon-text-pink hover:neon-text transition-colors"
                   >@SNOWDENEMPIRE</a>
                 ONLY. Avoid paying to any third-party user claiming to represent
                 us.
@@ -25,13 +25,13 @@
 
       <!-- Category Header - Hidden on mobile -->
       <div class="mb-0 hidden sm:block">
-        <div class="flex justify-between items-center bg-gray-100 p-4 rounded">
-          <h1 class="text-2xl font-bold text-gray-900 text-center w-full">
+        <div class="flex justify-between items-center neon-category-header p-4 rounded">
+          <h1 class="text-2xl font-bold neon-text text-center w-full">
             FULLZ
           </h1>
           <a
             href="/cashout-clips"
-            class="bg-brand text-white px-2 py-1 rounded text-sm font-medium"
+            class="neon-button px-2 py-1 rounded text-sm font-medium"
           >
             CASHOUT VIDEOS
           </a>
@@ -42,7 +42,7 @@
       <div class="lg:hidden mb-4">
         <a
           href="/cashout-clips"
-          class="bg-brand text-white px-4 py-2 rounded flex items-center justify-center text-sm font-medium"
+          class="neon-toggle-button px-4 py-2 rounded flex items-center justify-center text-sm font-medium"
         >
           CASHOUT VIDEOS
         </a>
@@ -60,48 +60,50 @@
           <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             <!-- Product Cards -->
             <div
-              class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300"
+              class="rounded-xl cursor-pointer overflow-hidden"
+              [ngClass]="(products.indexOf(product) % 3 === 0) ? 'product-card-neon-1' : (products.indexOf(product) % 3 === 1) ? 'product-card-neon-2' : 'product-card-neon-3'"
               *ngFor="let product of products"
             >
               <div class="p-0">
-                <div class="relative">
+                <div class="relative p-2 sm:p-4">
                   <span
-                    class="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded"
+                    class="absolute top-1 sm:top-2 left-1 sm:left-2 z-10 neon-sale-badge text-xs px-1 sm:px-2 py-1 rounded font-bold"
                     >{{ "Complete" }}</span
                   >
                   <span
-                    class="absolute top-2 right-2 bg-gray-600 text-white text-xs px-2 py-1 rounded"
+                    class="absolute top-1 sm:top-2 right-1 sm:right-2 z-10 neon-sale-badge text-xs px-1 sm:px-2 py-1 rounded font-bold"
                     >{{ "25" }} Data Points</span
                   >
                   <img
                     [src]="ProductUtils.getProductImage(product)"
                     [alt]="ProductUtils.getProductAltText(product)"
                     class="w-full h-32 sm:h-40 object-cover rounded-md mb-2 sm:mb-3 cursor-pointer"
+                    style="filter: brightness(0.95) contrast(1.1);"
                     (click)="viewProduct(product)"
                   />
                 </div>
-                <div class="bg-gray-100 p-2 sm:p-4 rounded">
+                <div class="p-2 sm:p-4 rounded-b-xl" style="background: linear-gradient(135deg, #0a001f 0%, #000015 100%);">
                   <div class="text-xs sm:text-sm mb-1">
-                    <small class="text-gray-600"
+                    <small class="neon-text-pink"
                       >{{ ProductUtils.getProductCategory(product) }}</small
                     >
                   </div>
                   <h3
-                    class="text-base font-medium text-gray-900 mb-2 cursor-pointer"
+                    class="text-base font-medium neon-text mb-2 cursor-pointer hover:neon-text-pink transition-colors"
                     (click)="viewProduct(product)"
                   >
                     {{ product.name }}
                   </h3>
-                  <div class="text-sm text-orange-600 mb-2">
+                  <div class="text-sm neon-text-purple mb-2" style="text-shadow: 0 0 5px #9d00ff;">
                     <strong>{{ "USA" }}</strong>
                   </div>
-                  <div class="text-xs text-gray-500 mb-2">
+                  <div class="text-xs neon-text-purple mb-2">
                     <span *ngFor="let item of []; let last = last">
                       {{ item }}{{ !last ? ' • ' : '' }}
                     </span>
                   </div>
                   <div class="flex justify-center items-center">
-                    <span class="text-gray-900 font-bold"
+                    <span class="neon-text-pink font-bold" style="text-shadow: 0 0 8px #FF33CC;"
                       >{{ ProductUtils.getProductPrice(product) }}</span
                     >
                   </div>
