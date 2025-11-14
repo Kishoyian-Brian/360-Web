@@ -105,7 +105,8 @@ export class ProductComponent implements OnInit {
           this.cartService.updateGuestCartItemDetails(this.product.id, {
             name: this.product.name,
             price: this.product.price,
-            image: this.product.images && this.product.images.length > 0 ? this.product.images[0] : undefined,
+            // Use ProductUtils to ensure HTTPS URL
+            image: ProductUtils.getProductImage(this.product),
             stockQuantity: this.product.stockQuantity
           });
         }

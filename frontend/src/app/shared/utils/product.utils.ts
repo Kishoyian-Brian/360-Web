@@ -2,20 +2,42 @@ import { Product } from '../../service/product/product.service';
 
 export class ProductUtils {
   /**
+   * Ensures a URL uses HTTPS protocol (required for Telegram WebView and security)
+   * @param url - The URL to ensure is HTTPS
+   * @returns The URL with HTTPS protocol
+   */
+  static ensureHttps(url: string): string {
+    if (!url) return url;
+    // Convert HTTP to HTTPS for Cloudinary URLs and other image URLs
+    if (url.startsWith('http://')) {
+      return url.replace('http://', 'https://');
+    }
+    return url;
+  }
+
+  /**
    * Get the primary image for a product
    * @param product - The product object
-   * @returns The image URL or a placeholder
+   * @returns The image URL or a placeholder (always HTTPS)
    */
   static getProductImage(product: Product): string {
+    let imageUrl: string | undefined;
+    
     // Check if product has images array and it's not empty
     if (product.images && product.images.length > 0) {
-      return product.images[0];
+      imageUrl = product.images[0];
     }
     // Fallback to single image field if available
-    if (product.image) {
-      return product.image;
+    else if (product.image) {
+      imageUrl = product.image;
     }
-    // Default placeholder
+    
+    // Ensure HTTPS and return, or use default placeholder
+    if (imageUrl) {
+      return this.ensureHttps(imageUrl);
+    }
+    
+    // Default placeholder (already HTTPS)
     return 'https://via.placeholder.com/300x200/cccccc/666666?text=No+Image';
   }
 

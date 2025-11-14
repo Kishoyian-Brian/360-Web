@@ -10,6 +10,7 @@ import { BlogService, BlogPost, CreateBlogPostDto, UpdateBlogPostDto, BlogCatego
 import { VouchService, Vouch, CreateVouchDto, UpdateVouchDto, VouchResponse, VouchStats } from '../service/vouch/vouch.service';
 import { CryptoService, CryptoAccount, CreateCryptoAccountRequest } from '../service/crypto/crypto.service';
 import { UserService } from '../service/user/user';
+import { ProductUtils } from '../shared/utils/product.utils';
 import { environment } from '../../environments/environment';
 
 export interface Product {
@@ -89,8 +90,9 @@ export class Admin implements OnInit {
   currentSection = 'dashboard';
   isSidebarCollapsed = false;
   
-  // Make Math available in template
+  // Make Math and ProductUtils available in template
   Math = Math;
+  ProductUtils = ProductUtils;
 
   // Product management
   products: Product[] = [];

@@ -4,10 +4,10 @@ export class FileResponseDto {
   @ApiProperty({ description: 'Cloudinary public ID' })
   publicId: string;
 
-  @ApiProperty({ description: 'File URL' })
+  @ApiProperty({ description: 'File URL (always HTTPS for security and Telegram WebView compatibility)' })
   url: string;
 
-  @ApiProperty({ description: 'File secure URL' })
+  @ApiProperty({ description: 'File secure URL (HTTPS). Both url and secureUrl contain the same HTTPS URL.' })
   secureUrl: string;
 
   @ApiProperty({ description: 'File format' })

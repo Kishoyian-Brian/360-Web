@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { tap, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { ProductUtils } from '../../shared/utils/product.utils';
 import { environment } from '../../../environments/environment';
 
 export interface CartItem {
@@ -349,7 +350,8 @@ export class CartService {
         if (item) {
           item.name = productDetails.name;
           item.price = productDetails.price;
-          item.image = productDetails.image;
+          // Ensure HTTPS for image URL (required for Telegram WebView)
+          item.image = productDetails.image ? ProductUtils.ensureHttps(productDetails.image) : undefined;
           item.stockQuantity = productDetails.stockQuantity;
           
           // Recalculate totals

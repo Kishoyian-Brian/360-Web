@@ -35,7 +35,7 @@ export class UploadService {
 
       return {
         publicId: result.public_id,
-        url: result.url,
+        url: result.secure_url, // Always use HTTPS for security and Telegram WebView compatibility
         secureUrl: result.secure_url,
         format: result.format,
         bytes: result.bytes,
@@ -67,7 +67,7 @@ export class UploadService {
 
       return {
         publicId: result.public_id,
-        url: result.url,
+        url: result.secure_url, // Always use HTTPS for security and Telegram WebView compatibility
         secureUrl: result.secure_url,
         format: result.format,
         bytes: result.bytes,
@@ -114,7 +114,7 @@ export class UploadService {
 
       return {
         publicId: result.public_id,
-        url: result.url,
+        url: result.secure_url, // Always use HTTPS for security and Telegram WebView compatibility
         secureUrl: result.secure_url,
         format: result.format,
         bytes: result.bytes,

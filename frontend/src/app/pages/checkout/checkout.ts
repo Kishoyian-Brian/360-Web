@@ -8,6 +8,7 @@ import { CartService, Cart, CartItem } from '../../service/cart/cart.service';
 import { OrderService, Order, CreateOrderRequest } from '../../service/order/order.service';
 import { ProductService } from '../../service/product/product.service';
 import { CryptoService, CryptoAccount } from '../../service/crypto/crypto.service';
+import { ProductUtils } from '../../shared/utils/product.utils';
 
 // Remove the old interface as we now use CryptoAccount from the service
 
@@ -106,7 +107,8 @@ export class Checkout implements OnInit {
             this.cartService.updateGuestCartItemDetails(item.productId, {
               name: product.name,
               price: product.price,
-              image: product.images && product.images.length > 0 ? product.images[0] : undefined,
+              // Use ProductUtils to ensure HTTPS URL
+              image: ProductUtils.getProductImage(product),
               stockQuantity: product.stockQuantity
             });
           }
@@ -328,7 +330,8 @@ export class Checkout implements OnInit {
 
   getItemImage(item: CartItem): string {
     if (item.image) {
-      return item.image;
+      // Ensure HTTPS for image URL (required for Telegram WebView)
+      return ProductUtils.ensureHttps(item.image);
     }
     return 'https://via.placeholder.com/64x64/cccccc/666666?text=No+Image';
   }
