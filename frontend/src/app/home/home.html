@@ -116,15 +116,15 @@
       </div>
 
       <!-- Pagination -->
-      <div *ngIf="!loading && totalPages > 1" class="pagination-container mt-6 sm:mt-8 flex justify-center py-4">
-        <nav class="flex items-center space-x-1 sm:space-x-2 flex-wrap justify-center gap-2">
+      <div *ngIf="!loading && totalPages > 1" class="pagination-container mt-6 sm:mt-8 flex justify-center py-4" style="display: flex !important; visibility: visible !important;">
+        <nav class="flex items-center space-x-1 sm:space-x-2 flex-wrap justify-center gap-2" style="display: flex !important; visibility: visible !important;">
           <!-- Previous Button -->
           <button
             (click)="previousPage()"
             [disabled]="currentPage === 1"
             type="button"
             class="neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
-            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px;"
+            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px; display: inline-block !important; visibility: visible !important; opacity: 1 !important;"
           >
             <span class="hidden sm:inline neon-button-text">Previous</span>
             <span class="sm:hidden neon-button-text">Prev</span>
@@ -142,7 +142,7 @@
                 ? 'neon-ellipsis'
                 : 'neon-button'"
               class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all"
-              style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 38px;"
+              style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 38px; display: inline-block !important; visibility: visible !important; opacity: 1 !important;"
               type="button"
             >
               <span *ngIf="page > 0" [class]="page === currentPage ? '' : 'neon-text'">{{ page }}</span>
@@ -156,7 +156,7 @@
             [disabled]="currentPage === totalPages"
             type="button"
             class="neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
-            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px;"
+            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 70px; display: inline-block !important; visibility: visible !important; opacity: 1 !important;"
           >
             <span class="neon-button-text">Next</span>
           </button>
