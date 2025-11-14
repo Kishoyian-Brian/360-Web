@@ -37,7 +37,7 @@ export class PaypalLog implements OnInit {
     this.loading = true;
     
     const filters = { 
-      categoryId: 'paypal-log',
+      categorySlug: 'paypal-log',
       isActive: true 
     };
 

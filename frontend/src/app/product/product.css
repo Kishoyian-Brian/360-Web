@@ -1,0 +1,20 @@
+/* Mobile-friendly touch targets and interactions */
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px; /* Minimum touch target size for mobile */
+}
+
+/* Prevent double-tap zoom on buttons */
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s;
+}
+
+/* Ensure buttons are clickable on mobile */
+button:not(:disabled) {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+

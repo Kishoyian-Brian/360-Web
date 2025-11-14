@@ -35,7 +35,7 @@ export class Transfers implements OnInit {
     this.loading = true;
     
     const filters = { 
-      categoryId: 'transfers',
+      categorySlug: 'transfers',
       isActive: true 
     };
 

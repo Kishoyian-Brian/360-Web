@@ -37,7 +37,7 @@ export class StealthAccounts implements OnInit {
     this.loading = true;
     
     const filters = { 
-      categoryId: 'stealth-accounts',
+      categorySlug: 'stealth-accounts',
       isActive: true 
     };
 

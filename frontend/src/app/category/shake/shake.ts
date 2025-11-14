@@ -35,7 +35,7 @@ export class Shake implements OnInit {
     this.loading = true;
     
     const filters = { 
-      categoryId: 'shake',
+      categorySlug: 'shake',
       isActive: true 
     };
 

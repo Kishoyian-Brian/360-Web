@@ -20,6 +20,7 @@ export class ProductComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
   addingToCart: boolean = false;
+  private lastClickTime: number = 0;
 
   // Expose ProductUtils to template
   ProductUtils = ProductUtils;
@@ -81,11 +82,29 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  addToCart() {
+  addToCart(event?: Event) {
+    // Prevent default and stop propagation for better mobile handling
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    // Debounce rapid clicks/touches (prevent double-firing on mobile)
+    const now = Date.now();
+    if (now - this.lastClickTime < 500) {
+      return;
+    }
+    this.lastClickTime = now;
+
     if (!this.product) return;
 
     if (this.quantity > this.product.stockQuantity) {
       this.toastService.error('Not enough stock available');
+      return;
+    }
+
+    // Prevent multiple rapid clicks
+    if (this.addingToCart) {
       return;
     }
 

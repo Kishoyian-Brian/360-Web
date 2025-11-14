@@ -37,7 +37,7 @@ export class Tools implements OnInit {
     this.loading = true;
     
     const filters = { 
-      categoryId: 'tools',
+      categorySlug: 'tools',
       isActive: true 
     };
 

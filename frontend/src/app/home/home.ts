@@ -166,11 +166,52 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/product', product.id]);
   }
 
-  get pageNumbers() {
-    const pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
+  get pageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5; // Show maximum 5 page numbers at a time (excluding first/last)
+    
+    if (this.totalPages <= maxVisiblePages + 2) {
+      // If total pages is small, show all pages
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first page
+      pages.push(1);
+      
+      // Calculate range around current page
+      let startPage = Math.max(2, this.currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(this.totalPages - 1, this.currentPage + Math.floor(maxVisiblePages / 2));
+      
+      // Adjust if near start
+      if (startPage <= 2) {
+        startPage = 2;
+        endPage = Math.min(this.totalPages - 1, startPage + maxVisiblePages - 1);
+      }
+      
+      // Adjust if near end
+      if (endPage >= this.totalPages - 1) {
+        endPage = this.totalPages - 1;
+        startPage = Math.max(2, endPage - maxVisiblePages + 1);
+      }
+      
+      // Add ellipsis and pages before current range
+      if (startPage > 2) {
+        pages.push(-1); // Ellipsis
+      }
+      
+      // Add page numbers in range
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+      
+      // Add ellipsis and last page
+      if (endPage < this.totalPages - 1) {
+        pages.push(-1); // Ellipsis
+      }
+      pages.push(this.totalPages);
     }
+    
     return pages;
   }
 }
