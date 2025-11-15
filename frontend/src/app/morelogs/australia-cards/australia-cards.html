@@ -1,105 +1,99 @@
-<!-- Notice Banner - Hidden on mobile -->
-<div class="bg-brand text-white p-4 mb-6 hidden md:block">
-  <div class="container">
-    <div class="text-center">
-      <p class="mb-0">
-        <strong>NOTICE:</strong> All orders and payments must be made through
-        our website or to our telegram support
-        <a href="https://t.me/SNOWDENEMPIRE" target="_blank" class="text-gray-300"
-          >@SNOWDENEMPIRE</a
-        >
-        ONLY. Avoid paying to any third-party user claiming to represent us.
-      </p>
-    </div>
-  </div>
-</div>
+<!-- More Logs Page Content -->
+<main>
+  <!-- Notice Banner - Hidden on mobile -->
+  <section class="my-0 lg:my-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="mb-2 hidden sm:block">
+        <div class="mt-4 mb-0">
+          <div class="neon-banner p-2 sm:p-3 overflow-hidden rounded-lg">
+            <div class="animate-marquee whitespace-nowrap text-sm sm:text-base neon-text">
+              <span>
+                NOTICE: All orders and payments must be made through our website
+                or to our telegram support
+                <a
+                  href="https://t.me/SNOWDENEMPIRE"
+                  target="_blank"
+                  class="neon-text-pink hover:neon-text transition-colors"
+                  >@SNOWDENEMPIRE</a>
+                ONLY. Avoid paying to any third-party user claiming to represent
+                us.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<div class="container mx-auto px-4">
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-    <!-- Sidebar -->
-    <div class="lg:col-span-1">
-      <app-sidebar></app-sidebar>
-    </div>
-
-    <!-- Main Content -->
-    <div class="lg:col-span-3">
-      <!-- Header Section - Hidden on mobile -->
-      <div class="bg-gray-100 p-4 rounded mb-6 hidden sm:block">
-        <div class="flex items-center justify-between">
-          <h1 class="text-2xl font-bold uppercase">Australia Cards</h1>
-          <button
-            class="bg-brand text-white px-4 py-2 rounded hover:bg-brand-dark transition-colors"
+      <!-- Category Header - Hidden on mobile -->
+      <div class="mb-0 hidden sm:block">
+        <div class="flex justify-between items-center neon-category-header p-4 rounded">
+          <h1 class="text-2xl font-bold neon-text text-center w-full">
+            AUSTRALIA CARDS
+          </h1>
+          <a
+            href="/cashout-clips"
+            class="neon-button px-2 py-1 rounded text-sm font-medium"
           >
             CASHOUT VIDEOS
-          </button>
+          </a>
         </div>
       </div>
 
-      <!-- Products Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-        <div
-          *ngFor="let product of products"
-          class="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-          (click)="viewProduct(product)"
-        >
-          <!-- Product Image Section -->
-          <div class="relative p-2 sm:p-4">
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="hidden lg:block lg:col-span-1 -mt-20">
+          <app-sidebar></app-sidebar>
+        </aside>
+
+        <!-- Products Grid -->
+        <div class="col-span-1 lg:col-span-3 mt-4">
+          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
+            <!-- Product Cards -->
             <div
-              class="bg-gray-200 h-32 sm:h-48 rounded flex items-center justify-center overflow-hidden"
+              class="rounded-xl cursor-pointer overflow-hidden"
+              [ngClass]="(products.indexOf(product) % 3 === 0) ? 'product-card-neon-1' : (products.indexOf(product) % 3 === 1) ? 'product-card-neon-2' : 'product-card-neon-3'"
+              *ngFor="let product of products"
             >
-              <img [src]="ProductUtils.getProductImage(product)" [alt]="ProductUtils.getProductAltText(product)" class="w-full h-full object-cover rounded-md" (error)="$event.target.style.display='none'" />
-              <span *ngIf="!ProductUtils.getProductImage(product)" class="text-gray-500 text-lg">{{ product.name }}</span>
-            </div>
-            <div class="absolute top-2 right-2">
-              <span class="bg-red-500 text-white text-xs px-2 py-1 rounded"
-                >SALE</span
-              >
-            </div>
-            <div class="absolute top-2 left-2">
-              <span class="bg-gray-700 text-white text-xs px-2 py-1 rounded"
-                >{{ ProductUtils.getProductCategory(product) }}</span
-              >
-            </div>
-          </div>
-
-          <!-- Product Info Section -->
-          <div class="flex-1 flex flex-col bg-gray-50 p-4">
-            <h3 class="font-bold text-lg uppercase mb-2">{{ product.name }}</h3>
-            <p class="text-gray-600 text-sm flex-1 mb-4">
-              {{ product.description }}
-            </p>
-
-            <!-- Card Details -->
-            <div class="space-y-2 mb-4">
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Type:</span>
-                <span class="font-medium">{{ product.cardType }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Bank:</span>
-                <span class="font-medium">{{ "Chase" }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-500">Country:</span>
-                <span class="font-medium">{{ product.country }}</span>
-              </div>
-              <div class="flex justify-between text-sm">
-                <span class="text-gray-500">CVV:</span>
-                <span class="font-medium">{{ "Yes" }}</span>
-              </div>
-            </div>
-
-            <!-- Price -->
-            <div class="mt-auto">
-              <div class="text-right">
-                <span class="text-2xl font-bold text-brand"
-                  >{{ ProductUtils.getProductPrice(product) }}</span
-                >
+              <div class="p-0">
+                <div class="relative p-2 sm:p-4">
+                  <span
+                    class="absolute top-1 sm:top-2 left-1 sm:left-2 z-10 neon-sale-badge text-xs px-1 sm:px-2 py-1 rounded font-bold"
+                    >Verified</span
+                  >
+                  <img
+                    [src]="ProductUtils.getProductImage(product)"
+                    [alt]="ProductUtils.getProductAltText(product)"
+                    class="w-full h-32 sm:h-40 object-cover rounded-md mb-2 sm:mb-3 cursor-pointer"
+                    style="filter: brightness(0.95) contrast(1.1);"
+                    (click)="viewProduct(product)"
+                  />
+                </div>
+                <div class="p-2 sm:p-4 rounded-b-xl" style="background: linear-gradient(135deg, #0a001f 0%, #000015 100%);">
+                  <div class="text-xs sm:text-sm mb-1">
+                    <small class="neon-text-pink"
+                      >{{ ProductUtils.getProductCategory(product) }}</small
+                    >
+                  </div>
+                  <h3
+                    class="text-sm sm:text-base font-medium neon-text mb-1 sm:mb-2 cursor-pointer hover:neon-text-pink transition-colors"
+                    (click)="viewProduct(product)"
+                  >
+                    {{ product.name }}
+                  </h3>
+                  <div class="text-sm neon-text mb-2" style="text-shadow: 0 0 5px #00FFFF;">
+                    <strong>{{ ProductUtils.getProductBalance(product) }}</strong>
+                  </div>
+                  <div class="flex justify-center items-center">
+                    <span class="neon-text-pink font-bold" style="text-shadow: 0 0 8px #FF33CC;"
+                      >${{ product.price.toFixed(2) }}</span
+                    >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </section>
+</main>
