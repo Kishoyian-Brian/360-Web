@@ -175,10 +175,19 @@
 
           <button
             (click)="addToCart($event)"
+            (touchend)="addToCart($event)"
             [disabled]="product.stockQuantity <= 0 || addingToCart"
             type="button"
             class="neon-button w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center space-x-2"
-            style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 44px;"
+            style="
+              touch-action: manipulation !important;
+              -webkit-tap-highlight-color: rgba(0, 255, 255, 0.3) !important;
+              min-height: 44px !important;
+              position: relative !important;
+              z-index: 10 !important;
+              pointer-events: auto !important;
+              cursor: pointer !important;
+            "
           >
             <svg
               *ngIf="!addingToCart"

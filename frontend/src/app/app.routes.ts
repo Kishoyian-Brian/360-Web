@@ -23,7 +23,7 @@ import { CashappLog } from './category/cashapp-log/cashapp-log';
 import { PaypalLog } from './category/paypal-log/paypal-log';
 import { Linkable } from './category/linkable/linkable';
 import { BitcoinLog } from './category/bitcoin-log/bitcoin-log';
-import { ShopComponent } from './shop/shop-fixed';
+import { ShopComponent } from './shop/shop';
 import { Voucher } from './voucher/voucher';
 import { Blog } from './blog/blog';
 import { BlogArticle } from './blog/blog-article/blog-article';

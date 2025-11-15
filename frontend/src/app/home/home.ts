@@ -146,8 +146,21 @@ export class HomeComponent implements OnInit {
   }
 
   // Add to cart functionality
-  addToCart(product: Product) {
+  addToCart(product: Product, event?: Event) {
+    // Prevent default and stop propagation to prevent card click navigation
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+
     console.log('Adding to cart:', product);
+    
+    if (product.stockQuantity <= 0) {
+      this.toastService.error('Product is out of stock');
+      return;
+    }
+
     this.cartService.addToCart({ productId: product.id, quantity: 1 }).subscribe({
       next: (cart) => {
         this.toastService.success('Product added to cart successfully!');

@@ -87,6 +87,7 @@ export class ProductComponent implements OnInit {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
+      event.stopImmediatePropagation();
     }
 
     // Debounce rapid clicks/touches (prevent double-firing on mobile)

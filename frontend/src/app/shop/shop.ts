@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService, Product } from '../service/product/product.service';
 import { CategoryService, Category } from '../service/category/category.service';
+import { CartService } from '../service/cart/cart.service';
 import { ToastService } from '../services/toast.service';
 import { ProductUtils } from '../shared/utils/product.utils';
 
@@ -35,6 +36,7 @@ export class ShopComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private categoryService: CategoryService,
+    private cartService: CartService,
     private toastService: ToastService
   ) { }
 
@@ -130,6 +132,34 @@ export class ShopComponent implements OnInit {
 
   viewProduct(product: Product) {
     this.router.navigate(['/product', product.id]);
+  }
+
+  // Add to cart functionality
+  addToCart(product: Product, event?: Event) {
+    // Prevent default and stop propagation to prevent card click navigation
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+
+    console.log('Adding to cart:', product);
+    
+    if (product.stockQuantity <= 0) {
+      this.toastService.error('Product is out of stock');
+      return;
+    }
+
+    this.cartService.addToCart({ productId: product.id, quantity: 1 }).subscribe({
+      next: (cart) => {
+        this.toastService.success('Product added to cart successfully!');
+        console.log('Cart updated:', cart);
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this.toastService.error('Failed to add product to cart');
+      }
+    });
   }
 
   get pageNumbers(): number[] {
