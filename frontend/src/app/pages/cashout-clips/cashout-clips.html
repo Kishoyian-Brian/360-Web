@@ -1,38 +1,48 @@
 <!-- Cashout Clips Page Content -->
-<div class="min-h-screen bg-gray-100">
+<main class="min-h-screen bg-[#050017]">
   <!-- Notice Banner -->
-  <div class="bg-brand text-white text-center py-3 px-4">
-    <p class="text-sm">
-      NOTICE: All orders and payments must be made through our website
-      or to our telegram support
-      <a
-        href="https://t.me/SNOWDENEMPIRE"
-        target="_blank"
-        class="text-gray-300 hover:text-white"
-        >@SNOWDENEMPIRE</a
-      >
-      ONLY. Avoid paying to any third-party user claiming to represent
-      us.
-    </p>
-  </div>
+  <section class="my-0 lg:my-0">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="mb-2 hidden sm:block">
+        <div class="mt-4 mb-0">
+          <div class="neon-banner p-2 sm:p-3 overflow-hidden rounded-lg">
+            <div class="animate-marquee whitespace-nowrap text-sm sm:text-base neon-text">
+              <span>
+                NOTICE: All orders and payments must be made through our website
+                or to our telegram support
+                <a
+                  href="https://t.me/SNOWDENEMPIRE"
+                  target="_blank"
+                  class="neon-text-pink hover:neon-text transition-colors"
+                  >@SNOWDENEMPIRE</a>
+                ONLY. Avoid paying to any third-party user claiming to represent
+                us.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Main Content -->
-  <div class="container mx-auto px-4 py-8">
+  <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Loading State -->
     <div *ngIf="loading" class="text-center py-8">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-brand"></div>
-      <p class="mt-2 text-gray-600">Loading videos...</p>
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#00FFFF]" style="border-top-color: #FF33CC; border-right-color: #9d00ff;"></div>
+      <p class="mt-2 text-[#00FFFF]" style="text-shadow: 0 0 5px #00FFFF;">Loading videos...</p>
     </div>
 
     <!-- Error State -->
     <div *ngIf="error" class="text-center py-8">
-      <p class="text-red-600">Failed to load videos. Please try again later.</p>
+      <p class="text-[#FF33CC]" style="text-shadow: 0 0 10px #FF33CC;">Failed to load videos. Please try again later.</p>
     </div>
 
     <!-- Videos Grid -->
     <div *ngIf="!loading && !error" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
-      <div *ngFor="let video of videos" class="space-y-2 w-full max-w-sm">
-        <div class="bg-white rounded-lg shadow-md overflow-hidden w-full">
+      <div *ngFor="let video of videos; let i = index" class="space-y-2 w-full max-w-sm">
+        <div class="neon-video-card rounded-xl overflow-hidden w-full transition-all duration-300"
+             [ngClass]="(i % 3 === 0) ? 'video-card-neon-1' : (i % 3 === 1) ? 'video-card-neon-2' : 'video-card-neon-3'">
           <!-- Video Container -->
           <div class="relative">
             <!-- YouTube Video (if videoUrl contains youtube) -->
@@ -46,8 +56,8 @@
               </iframe>
               <!-- YouTube Play Button Overlay -->
               <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                <button class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg">
-                  <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <button class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg neon-play-button">
+                  <svg class="w-12 h-12 text-[#00FFFF]" fill="currentColor" viewBox="0 0 24 24" style="filter: drop-shadow(0 0 5px #00FFFF);">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                 </button>
@@ -57,8 +67,8 @@
             <!-- Regular Video (if not YouTube) -->
             <div class="relative">
               <!-- Invalid URL Warning -->
-              <div *ngIf="!isYouTubeUrl(video.videoUrl) && !isValidVideoUrl(video.videoUrl)" class="w-full h-[550px] bg-gray-200 flex items-center justify-center">
-                <div class="text-center text-gray-600">
+              <div *ngIf="!isYouTubeUrl(video.videoUrl) && !isValidVideoUrl(video.videoUrl)" class="w-full h-[550px] bg-[#0a001f] flex items-center justify-center neon-border">
+                <div class="text-center text-[#00FFFF]" style="text-shadow: 0 0 5px #00FFFF;">
                   <svg class="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                   </svg>
@@ -86,13 +96,13 @@
               
               <!-- Play/Pause Button Overlay for Regular Videos -->
               <div *ngIf="!isYouTubeUrl(video.videoUrl) && isValidVideoUrl(video.videoUrl)" class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center pointer-events-none">
-                <button (click)="playVideo(video, $event)" class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg pointer-events-auto">
+                <button (click)="playVideo(video, $event)" class="bg-black bg-opacity-80 rounded-full p-6 hover:bg-opacity-90 transition-all duration-300 shadow-lg pointer-events-auto neon-play-button">
                   <!-- Play Icon (when paused) -->
-                  <svg *ngIf="!isVideoPlaying(video.id)" class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg *ngIf="!isVideoPlaying(video.id)" class="w-12 h-12 text-[#00FFFF]" fill="currentColor" viewBox="0 0 24 24" style="filter: drop-shadow(0 0 5px #00FFFF);">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                   <!-- Pause Icon (when playing) -->
-                  <svg *ngIf="isVideoPlaying(video.id)" class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <svg *ngIf="isVideoPlaying(video.id)" class="w-12 h-12 text-[#00FFFF]" fill="currentColor" viewBox="0 0 24 24" style="filter: drop-shadow(0 0 5px #00FFFF);">
                     <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                   </svg>
                 </button>
@@ -103,11 +113,11 @@
         
         <!-- Category Information Below Card -->
         <div class="mt-3 text-center">
-          <span class="inline-block text-gray-800 text-lg font-medium px-3 py-2 rounded">
+          <span class="inline-block neon-text text-lg font-medium px-3 py-2 rounded" style="text-shadow: 0 0 8px #00FFFF;">
             {{ video.category }}
           </span>
         </div>
       </div>
     </div>
   </div>
-</div>
+</main>

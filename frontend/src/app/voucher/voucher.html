@@ -1,36 +1,38 @@
 <!-- Voucher/Reviews Page Content -->
-<main class="min-h-screen bg-white py-8">
+<main class="min-h-screen bg-[#050017] py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Reviews & Vouches</h1>
+            <h1 class="text-3xl font-bold neon-text mb-2" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF;">Reviews & Vouches</h1>
         </div>
 
         <!-- Loading State -->
         <div *ngIf="isLoading" class="flex justify-center items-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <span class="ml-3 text-gray-600">Loading vouches...</span>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#00FFFF]" style="border-top-color: #FF33CC; border-right-color: #9d00ff;"></div>
+            <span class="ml-3 text-[#00FFFF]" style="text-shadow: 0 0 5px #00FFFF;">Loading vouches...</span>
         </div>
 
         <!-- Vouches List -->
         <div *ngIf="!isLoading && vouches.length > 0" class="space-y-6">
-            <div *ngFor="let vouch of vouches" class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+            <div *ngFor="let vouch of vouches; let i = index" 
+                class="neon-vouch-card rounded-xl p-6 shadow-neon transition-all duration-300"
+                [ngClass]="(i % 3 === 0) ? 'vouch-card-neon-1' : (i % 3 === 1) ? 'vouch-card-neon-2' : 'vouch-card-neon-3'">
                 <div class="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4">
                     <!-- Avatar and User Info -->
                     <div class="flex items-center space-x-3 sm:space-x-4">
                         <div class="flex-shrink-0">
                             <img [src]="getAvatarUrl(vouch.avatarSeed)" [alt]="vouch.username"
-                                class="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover" />
+                                class="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover neon-avatar-border" />
                         </div>
                         <div class="flex flex-col">
                             <div class="flex items-center space-x-2">
-                                <h3 class="text-lg font-semibold text-gray-900">{{ vouch.username || 'Anonymous' }}</h3>
+                                <h3 class="text-lg font-semibold neon-text">{{ vouch.username || 'Anonymous' }}</h3>
                                 <span *ngIf="vouch.isVerified"
-                                    class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                    class="px-2 py-1 text-xs font-medium neon-verified-badge rounded-full">
                                     VERIFIED PURCHASE
                                 </span>
                             </div>
-                            <span class="text-sm text-gray-500">{{ formatDate(vouch.createdAt) }}</span>
+                            <span class="text-sm text-[#00FFFF]" style="text-shadow: 0 0 3px #00FFFF;">{{ formatDate(vouch.createdAt) }}</span>
                         </div>
                     </div>
 
@@ -38,9 +40,9 @@
                     <div class="flex items-center space-x-1">
                         <div class="flex items-center space-x-1">
                             <i *ngFor="let star of getRatingStars(vouch.rating).filled; let i = index"
-                                class="fas fa-star text-green-500 text-sm"></i>
+                                class="fas fa-star neon-star-filled text-sm"></i>
                             <i *ngFor="let star of getRatingStars(vouch.rating).empty; let i = index"
-                                class="far fa-star text-gray-300 text-sm"></i>
+                                class="far fa-star neon-star-empty text-sm"></i>
                         </div>
                     </div>
                 </div>
@@ -49,13 +51,13 @@
                 <div class="mt-4 flex flex-col lg:flex-row lg:items-start lg:space-x-6">
                     <!-- Review Text -->
                     <div class="flex-1">
-                        <p class="text-gray-700 text-sm sm:text-base leading-relaxed">{{ vouch.reviewText }}</p>
+                        <p class="text-[#00FFFF] text-sm sm:text-base leading-relaxed" style="text-shadow: 0 0 3px #00FFFF;">{{ vouch.reviewText }}</p>
                     </div>
 
                     <!-- Review Image (if available) -->
                     <div *ngIf="vouch.reviewImage" class="mt-4 lg:mt-0 lg:flex-shrink-0">
                         <img [src]="vouch.reviewImage" alt="Review image"
-                            class="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity border border-gray-200"
+                            class="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity neon-image-border"
                             (click)="showImage(vouch)" />
                     </div>
                 </div>
@@ -64,10 +66,10 @@
 
         <!-- Empty State -->
         <div *ngIf="!isLoading && vouches.length === 0" class="text-center py-12">
-            <div class="text-gray-500">
-                <i class="fas fa-star text-4xl mb-4 text-gray-400"></i>
-                <h3 class="mt-2 text-lg font-medium text-gray-900">No vouches yet</h3>
-                <p class="mt-1 text-sm text-gray-500">Be the first to leave a review!</p>
+            <div class="text-[#00FFFF]" style="text-shadow: 0 0 5px #00FFFF;">
+                <i class="fas fa-star text-4xl mb-4"></i>
+                <h3 class="mt-2 text-lg font-medium">No vouches yet</h3>
+                <p class="mt-1 text-sm">Be the first to leave a review!</p>
             </div>
         </div>
 
@@ -76,23 +78,22 @@
             <nav class="flex items-center space-x-1">
                 <!-- Previous Button -->
                 <button (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1"
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-3 py-2 text-sm font-medium neon-button-page disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-all">
                     Previous
                 </button>
 
                 <!-- Page Numbers -->
                 <ng-container *ngFor="let page of getPageNumbers()">
                     <button (click)="onPageChange(page)"
-                        [class]="page === currentPage 
-              ? 'px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-blue-600 rounded-md' 
-              : 'px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50'">
+                        [class]="page === currentPage ? 'neon-button-active' : 'neon-button-page'"
+                        class="px-3 py-2 text-sm font-medium rounded-md transition-all">
                         {{ page }}
                     </button>
                 </ng-container>
 
                 <!-- Next Button -->
                 <button (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages"
-                    class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-3 py-2 text-sm font-medium neon-button-page disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-all">
                     Next
                 </button>
             </nav>
@@ -101,17 +102,17 @@
 
     <!-- Image Modal -->
     <div *ngIf="showImageModal && selectedVouch"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
         (click)="closeImageModal()">
-        <div class="bg-white rounded-lg max-w-2xl max-h-full overflow-auto" (click)="$event.stopPropagation()">
+        <div class="neon-modal-content rounded-xl max-w-2xl max-h-full overflow-auto" (click)="$event.stopPropagation()">
             <div class="p-4">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold">{{ selectedVouch.username }}'s Review</h3>
-                    <button (click)="closeImageModal()" class="text-gray-500 hover:text-gray-700">
+                    <h3 class="text-lg font-semibold neon-text">{{ selectedVouch.username }}'s Review</h3>
+                    <button (click)="closeImageModal()" class="neon-text-pink hover:neon-text transition-colors">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                <img [src]="selectedVouch.reviewImage" alt="Review image" class="w-full h-auto rounded-lg" />
+                <img [src]="selectedVouch.reviewImage" alt="Review image" class="w-full h-auto rounded-lg neon-image-border" />
             </div>
         </div>
     </div>

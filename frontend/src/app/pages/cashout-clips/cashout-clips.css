@@ -1,116 +1,188 @@
+/* Cashout Clips Component - Neon Cyberpunk Styles */
+
+/* Dark Background */
+main {
+  background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
+  min-height: 100vh;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Notice Banner Neon Style */
+.neon-banner {
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.15), rgba(255, 51, 204, 0.15), rgba(157, 0, 255, 0.15));
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  position: relative;
+  background-clip: padding-box;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 25px rgba(255, 51, 204, 0.3),
+    0 0 35px rgba(157, 0, 255, 0.2),
+    inset 0 0 10px rgba(157, 0, 255, 0.1);
+}
+
+.neon-banner::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(90deg, #00FFFF, #FF33CC, #9d00ff, #00FFFF);
+  border-radius: 0.5rem;
+  z-index: -1;
+  box-shadow: 
+    0 0 20px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(255, 51, 204, 0.4),
+    0 0 40px rgba(157, 0, 255, 0.3);
+}
+
+/* Neon Text Utility */
+.neon-text {
+  color: #00FFFF;
+  text-shadow: 
+    0 0 5px #00FFFF,
+    0 0 10px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 20px #00FFFF;
+}
+
+.neon-text-pink {
+  color: #FF33CC;
+  text-shadow: 
+    0 0 5px #FF33CC,
+    0 0 10px #FF33CC,
+    0 0 15px #FF33CC;
+}
+
+/* Neon Video Cards */
+.neon-video-card {
+  background: linear-gradient(135deg, #0a001f 0%, #000015 100%);
+  border: 2px solid #00FFFF;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.4),
+    0 0 30px rgba(255, 51, 204, 0.2),
+    inset 0 0 15px rgba(157, 0, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.video-card-neon-1 {
+  border-color: #00FFFF;
+}
+
+.video-card-neon-1:hover {
+  border-color: #00FFFF;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 0.8),
+    0 0 50px rgba(0, 255, 255, 0.6),
+    0 0 75px rgba(0, 255, 255, 0.4),
+    inset 0 0 25px rgba(0, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.video-card-neon-2 {
+  border-color: #FF33CC;
+}
+
+.video-card-neon-2:hover {
+  border-color: #FF33CC;
+  box-shadow: 
+    0 0 25px rgba(255, 51, 204, 0.8),
+    0 0 50px rgba(255, 51, 204, 0.6),
+    0 0 75px rgba(255, 51, 204, 0.4),
+    inset 0 0 25px rgba(255, 51, 204, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.video-card-neon-3 {
+  border-color: #9d00ff;
+}
+
+.video-card-neon-3:hover {
+  border-color: #9d00ff;
+  box-shadow: 
+    0 0 25px rgba(157, 0, 255, 0.8),
+    0 0 50px rgba(157, 0, 255, 0.6),
+    0 0 75px rgba(157, 0, 255, 0.4),
+    inset 0 0 25px rgba(157, 0, 255, 0.2);
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Neon Border */
+.neon-border {
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.3),
+    0 0 20px rgba(255, 51, 204, 0.2);
+}
+
+/* Neon Play Button */
+.neon-play-button {
+  box-shadow: 
+    0 0 15px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.4),
+    inset 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.neon-play-button:hover {
+  box-shadow: 
+    0 0 25px rgba(0, 255, 255, 1),
+    0 0 50px rgba(0, 255, 255, 0.8),
+    0 0 75px rgba(0, 255, 255, 0.6),
+    inset 0 0 25px rgba(0, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
 /* Video Player Styles */
 .video-player {
-    width: 100%;
-    height: auto;
-    background: #000;
+  width: 100%;
+  height: auto;
+  background: #000;
 }
 
 .video-player video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Video Card Styles */
-.video-card {
-    transition: all 0.3s ease;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    max-width: 100%;
-}
-
-.video-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Video Title Header */
-.video-card .bg-brand {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-}
-
-/* Clickable Video Player */
-.video-card video {
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.video-card video:hover {
-    opacity: 0.9;
-}
-
-/* Sound Indicator */
-.sound-indicator {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: rgba(0, 0, 0, 0.75);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    z-index: 10;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .video-player video {
-        height: 400px;
-    }
+  .video-player video {
+    height: 400px;
+  }
+  
+  .neon-video-card iframe,
+  .neon-video-card video {
+    height: 400px;
+  }
 }
 
 @media (max-width: 480px) {
-    .video-player video {
-        height: 350px;
-    }
+  .video-player video {
+    height: 350px;
+  }
+  
+  .neon-video-card iframe,
+  .neon-video-card video {
+    height: 350px;
+  }
 }
 
 /* Smooth transitions */
 .transition-all {
-    transition: all 0.3s ease;
-}
-
-/* Duration badge positioning */
-.duration-badge {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    background: rgba(0, 0, 0, 0.75);
-    color: white;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
-/* Compact meta info */
-.video-meta {
-    background-color: #f9fafb;
-    border-top: 1px solid #e5e7eb;
-}
-
-/* Grid layout optimization */
-.video-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-}
-
-@media (min-width: 640px) {
-    .video-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .video-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1280px) {
-    .video-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
+  transition: all 0.3s ease;
 }
