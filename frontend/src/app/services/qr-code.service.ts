@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as QRCode from 'qrcode';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +11,20 @@ export class QrCodeService {
   // Generate QR code as data URL
   async generateQRCodeDataURL(text: string, options?: any): Promise<string> {
     try {
-      // For now, return a placeholder data URL
-      // In a real implementation, you would use a QR code library like 'qrcode'
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = 200;
-      canvas.height = 200;
+      const defaultOptions = {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'M',
+        ...options
+      };
       
-      if (ctx) {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 200, 200);
-        ctx.fillStyle = '#000000';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('QR Code', 100, 100);
-        ctx.fillText(text.substring(0, 20), 100, 120);
-      }
-      
-      return canvas.toDataURL();
+      // Use the qrcode library to generate actual QR code
+      const dataURL = await QRCode.toDataURL(text, defaultOptions);
+      return dataURL;
     } catch (error) {
       console.error('Error generating QR code:', error);
       throw error;
@@ -37,13 +34,20 @@ export class QrCodeService {
   // Generate QR code as SVG
   async generateQRCodeSVG(text: string, options?: any): Promise<string> {
     try {
-      // For now, return a placeholder SVG
-      // In a real implementation, you would use a QR code library like 'qrcode'
-      return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-        <rect width="200" height="200" fill="white"/>
-        <text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="black">QR Code</text>
-        <text x="100" y="120" text-anchor="middle" font-family="Arial" font-size="10" fill="black">${text.substring(0, 20)}</text>
-      </svg>`;
+      const defaultOptions = {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'M',
+        ...options
+      };
+      
+      // Use the qrcode library to generate actual QR code SVG
+      const svg = await QRCode.toString(text, { type: 'svg', ...defaultOptions });
+      return svg;
     } catch (error) {
       console.error('Error generating QR code SVG:', error);
       throw error;

@@ -74,10 +74,18 @@ export class TopupComponent implements OnInit {
   loadCryptoAccounts() {
     this.isLoading = true;
     this.cryptoService.getActiveAccounts().subscribe({
-      next: (accounts) => {
+      next: async (accounts) => {
         this.cryptoPayments = accounts;
         if (accounts.length > 0) {
           this.selectedCrypto = accounts[0];
+          // Ensure QR code is generated for default selected crypto
+          if (this.selectedCrypto.address && !this.selectedCrypto.qrCode) {
+            try {
+              this.selectedCrypto.qrCode = await this.cryptoService.generateQRCodeForAccount(this.selectedCrypto);
+            } catch (error) {
+              console.error('Error generating QR code for default crypto:', error);
+            }
+          }
         }
         this.isLoading = false;
         console.log('Loaded crypto accounts:', accounts);
@@ -90,9 +98,17 @@ export class TopupComponent implements OnInit {
     });
   }
 
-  selectCryptoPayment(crypto: CryptoAccount) {
+  async selectCryptoPayment(crypto: CryptoAccount) {
     this.selectedCrypto = crypto;
     console.log('Selected crypto payment:', crypto);
+    // Ensure QR code is generated for selected crypto
+    if (crypto.address && !crypto.qrCode) {
+      try {
+        crypto.qrCode = await this.cryptoService.generateQRCodeForAccount(crypto);
+      } catch (error) {
+        console.error('Error generating QR code for selected crypto:', error);
+      }
+    }
   }
 
   copyCryptoAddress() {

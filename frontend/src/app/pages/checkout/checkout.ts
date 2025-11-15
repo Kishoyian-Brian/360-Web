@@ -178,10 +178,18 @@ export class Checkout implements OnInit {
 
   loadCryptoAccounts() {
     this.cryptoService.getActiveAccounts().subscribe({
-      next: (accounts) => {
+      next: async (accounts) => {
         this.cryptoPayments = accounts;
         if (accounts.length > 0 && !this.selectedCrypto) {
           this.selectedCrypto = accounts[0]; // Default to first account
+          // Ensure QR code is generated for default selected crypto
+          if (this.selectedCrypto.address && !this.selectedCrypto.qrCode) {
+            try {
+              this.selectedCrypto.qrCode = await this.cryptoService.generateQRCodeForAccount(this.selectedCrypto);
+            } catch (error) {
+              console.error('Error generating QR code for default crypto:', error);
+            }
+          }
         }
         console.log('Loaded crypto accounts:', accounts);
         this.cryptoLoaded = true;
@@ -196,8 +204,16 @@ export class Checkout implements OnInit {
     });
   }
 
-  selectCryptoPayment(crypto: CryptoAccount) {
+  async selectCryptoPayment(crypto: CryptoAccount) {
     this.selectedCrypto = crypto;
+    // Ensure QR code is generated for selected crypto
+    if (crypto.address && !crypto.qrCode) {
+      try {
+        crypto.qrCode = await this.cryptoService.generateQRCodeForAccount(crypto);
+      } catch (error) {
+        console.error('Error generating QR code for selected crypto:', error);
+      }
+    }
   }
 
   copyCryptoAddress() {

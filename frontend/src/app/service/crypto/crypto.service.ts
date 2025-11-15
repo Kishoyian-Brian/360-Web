@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject, from, of } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { QrCodeService } from '../../services/qr-code.service';
@@ -58,10 +58,12 @@ export class CryptoService {
   // Get all crypto accounts
   getAllAccounts(): Observable<CryptoAccount[]> {
     return this.http.get<CryptoAccount[]>(this.baseUrl).pipe(
-      tap(accounts => {
-        // Generate QR codes for all accounts
-        this.generateQRCodesForAccounts(accounts);
-        this.cryptoAccountsSubject.next(accounts);
+      switchMap(accounts => {
+        // Generate QR codes for all accounts and wait for completion
+        return from(this.generateQRCodesForAccounts(accounts)).pipe(
+          tap(() => this.cryptoAccountsSubject.next(accounts)),
+          switchMap(() => of(accounts)) // Return accounts after QR codes are generated
+        );
       })
     );
   }
@@ -69,9 +71,11 @@ export class CryptoService {
   // Get active crypto accounts only
   getActiveAccounts(): Observable<CryptoAccount[]> {
     return this.http.get<CryptoAccount[]>(`${this.baseUrl}/active`).pipe(
-      tap(accounts => {
-        // Generate QR codes for active accounts
-        this.generateQRCodesForAccounts(accounts);
+      switchMap(accounts => {
+        // Generate QR codes for active accounts and wait for completion
+        return from(this.generateQRCodesForAccounts(accounts)).pipe(
+          switchMap(() => of(accounts)) // Return accounts after QR codes are generated
+        );
       })
     );
   }
