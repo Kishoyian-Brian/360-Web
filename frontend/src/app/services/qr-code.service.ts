@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as QRCode from 'qrcode';
+import QRCode from 'qrcode';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +18,12 @@ export class QrCodeService {
           dark: '#000000',
           light: '#FFFFFF'
         },
-        errorCorrectionLevel: 'M',
+        errorCorrectionLevel: 'M' as const,
         ...options
       };
       
       // Use the qrcode library to generate actual QR code
-      const dataURL = await QRCode.toDataURL(text, defaultOptions);
+      const dataURL = await QRCode.toDataURL(text, defaultOptions) as unknown as string;
       return dataURL;
     } catch (error) {
       console.error('Error generating QR code:', error);
@@ -41,12 +41,12 @@ export class QrCodeService {
           dark: '#000000',
           light: '#FFFFFF'
         },
-        errorCorrectionLevel: 'M',
+        errorCorrectionLevel: 'M' as const,
         ...options
       };
       
       // Use the qrcode library to generate actual QR code SVG
-      const svg = await QRCode.toString(text, { type: 'svg', ...defaultOptions });
+      const svg = (await QRCode.toString(text, { type: 'svg', ...defaultOptions })) as unknown as string;
       return svg;
     } catch (error) {
       console.error('Error generating QR code SVG:', error);

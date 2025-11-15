@@ -326,6 +326,19 @@ main {
   font-weight: 600 !important;
   display: inline-block !important;
   visibility: visible !important;
+  opacity: 1 !important;
+  font-size: inherit !important;
+}
+
+/* Active Page Button Text */
+.neon-button-text-active {
+  color: #000000 !important;
+  text-shadow: none !important;
+  font-weight: 700 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: inherit !important;
 }
 
 /* Neon Ellipsis */

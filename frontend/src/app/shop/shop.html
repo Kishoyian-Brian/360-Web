@@ -129,7 +129,8 @@
                             style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 38px; min-width: 38px; display: inline-block !important; visibility: visible !important; opacity: 1 !important;"
                             type="button"
                         >
-                            <span *ngIf="page > 0" [class]="page === currentPage ? '' : 'neon-text'">{{ page }}</span>
+                            <span *ngIf="page > 0 && page === currentPage" class="neon-button-text-active">{{ page }}</span>
+                            <span *ngIf="page > 0 && page !== currentPage" class="neon-button-text">{{ page }}</span>
                             <span *ngIf="page < 0" class="neon-text-purple">...</span>
                         </button>
                     </div>
