@@ -117,17 +117,19 @@
 
       <!-- Pagination -->
       <div 
-        *ngIf="!loading && totalPages > 1" 
+        *ngIf="!loading && totalPages >= 1" 
         class="pagination-container mt-6 sm:mt-8 mb-6 sm:mb-8"
         style="
           display: flex !important; 
           visibility: visible !important; 
           opacity: 1 !important;
           position: relative !important;
-          z-index: 100 !important;
+          z-index: 1000 !important;
           width: 100% !important;
           background: transparent !important;
-          padding: 1rem 0 !important;
+          padding: 2rem 0 !important;
+          margin: 2rem 0 !important;
+          clear: both !important;
         "
       >
         <nav 
@@ -146,27 +148,32 @@
           <!-- Previous Button -->
           <button
             (click)="previousPage()"
-            [disabled]="currentPage === 1"
+            [disabled]="currentPage === 1 || totalPages <= 1"
             type="button"
             class="neon-button-pagination-prev neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
             style="
               touch-action: manipulation !important; 
               -webkit-tap-highlight-color: transparent !important; 
-              min-height: 42px !important; 
-              min-width: 80px !important; 
+              min-height: 48px !important; 
+              min-width: 100px !important; 
               display: inline-flex !important; 
               align-items: center !important;
               justify-content: center !important;
               visibility: visible !important; 
               opacity: 1 !important;
               position: relative !important;
-              z-index: 102 !important;
+              z-index: 1001 !important;
               cursor: pointer !important;
-              margin: 0 4px !important;
+              margin: 0 8px !important;
+              background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+              border: 3px solid #00FFFF !important;
+              box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(0, 255, 255, 0.8), inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+              color: #FFFFFF !important;
+              font-weight: 700 !important;
             "
           >
-            <span class="hidden sm:inline neon-button-text">Previous</span>
-            <span class="sm:hidden neon-button-text">Prev</span>
+            <span class="hidden sm:inline neon-button-text" style="color: #FFFFFF !important; text-shadow: 0 0 5px #000000, 0 0 10px #000000 !important; font-weight: 700 !important;">Previous</span>
+            <span class="sm:hidden neon-button-text" style="color: #FFFFFF !important; text-shadow: 0 0 5px #000000, 0 0 10px #000000 !important; font-weight: 700 !important;">Prev</span>
           </button>
 
           <!-- Page Numbers -->
@@ -185,59 +192,69 @@
             <button
               *ngFor="let page of pageNumbers"
               (click)="page > 0 ? goToPage(page) : null"
-              [disabled]="page < 0"
+              [disabled]="page < 0 || totalPages <= 1"
               [ngClass]="{
                 'neon-button-active': page === currentPage,
                 'neon-ellipsis': page < 0,
                 'neon-button': page > 0 && page !== currentPage
               }"
               class="neon-button-pagination-page px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all"
+              [style.background]="page === currentPage ? 'linear-gradient(135deg, #00FFFF, #9d00ff) !important' : 'linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important'"
+              [style.color]="page === currentPage ? '#000000 !important' : '#FFFFFF !important'"
+              [style.font-weight]="page === currentPage ? '700 !important' : '700 !important'"
               style="
                 touch-action: manipulation !important; 
                 -webkit-tap-highlight-color: transparent !important; 
-                min-height: 42px !important; 
-                min-width: 42px !important; 
+                min-height: 48px !important; 
+                min-width: 48px !important; 
                 display: inline-flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 visibility: visible !important; 
                 opacity: 1 !important;
                 position: relative !important;
-                z-index: 103 !important;
+                z-index: 1002 !important;
                 cursor: pointer !important;
-                margin: 0 2px !important;
+                margin: 0 4px !important;
+                border: 3px solid #00FFFF !important;
+                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(0, 255, 255, 0.8), inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
               "
               type="button"
             >
-              <span *ngIf="page > 0 && page === currentPage" class="neon-button-text-active" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">{{ page }}</span>
-              <span *ngIf="page > 0 && page !== currentPage" class="neon-button-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">{{ page }}</span>
-              <span *ngIf="page < 0" class="neon-text-purple" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">...</span>
+              <span *ngIf="page > 0 && page === currentPage" class="neon-button-text-active" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: #000000 !important; font-weight: 700 !important; text-shadow: none !important;">{{ page }}</span>
+              <span *ngIf="page > 0 && page !== currentPage" class="neon-button-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: #FFFFFF !important; font-weight: 700 !important; text-shadow: 0 0 5px #000000, 0 0 10px #000000 !important;">{{ page }}</span>
+              <span *ngIf="page < 0" class="neon-text-purple" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: #9d00ff !important; font-weight: 700 !important; text-shadow: 0 0 10px #9d00ff !important;">...</span>
             </button>
           </div>
 
           <!-- Next Button -->
           <button
             (click)="nextPage()"
-            [disabled]="currentPage === totalPages"
+            [disabled]="currentPage === totalPages || totalPages <= 1"
             type="button"
             class="neon-button-pagination-next neon-button rounded-md px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium"
             style="
               touch-action: manipulation !important; 
               -webkit-tap-highlight-color: transparent !important; 
-              min-height: 42px !important; 
-              min-width: 80px !important; 
+              min-height: 48px !important; 
+              min-width: 100px !important; 
               display: inline-flex !important;
               align-items: center !important;
               justify-content: center !important;
               visibility: visible !important; 
               opacity: 1 !important;
               position: relative !important;
-              z-index: 102 !important;
+              z-index: 1001 !important;
               cursor: pointer !important;
-              margin: 0 4px !important;
+              margin: 0 8px !important;
+              background: linear-gradient(135deg, rgba(0, 255, 255, 0.9), rgba(157, 0, 255, 0.9)) !important;
+              border: 3px solid #00FFFF !important;
+              box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(0, 255, 255, 0.8), inset 0 0 30px rgba(0, 255, 255, 0.5) !important;
+              color: #FFFFFF !important;
+              font-weight: 700 !important;
             "
           >
-            <span class="neon-button-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important;">Next</span>
+            <span class="neon-button-text" style="display: inline-block !important; visibility: visible !important; opacity: 1 !important; color: #FFFFFF !important; text-shadow: 0 0 5px #000000, 0 0 10px #000000 !important; font-weight: 700 !important;">Next</span>
           </button>
         </nav>
       </div>

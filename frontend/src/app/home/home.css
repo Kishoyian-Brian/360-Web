@@ -251,7 +251,7 @@ main {
 /* Pagination Container */
 .pagination-container {
   position: relative !important;
-  z-index: 100 !important;
+  z-index: 1000 !important;
   width: 100% !important;
   display: flex !important;
   visibility: visible !important;
@@ -259,7 +259,11 @@ main {
   background: transparent !important;
   background-color: transparent !important;
   margin: 2rem 0 !important;
-  padding: 1rem 0 !important;
+  padding: 2rem 0 !important;
+  clear: both !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 60px !important;
 }
 
 .pagination-container nav {
@@ -285,8 +289,11 @@ main {
   opacity: 1 !important;
   outline: none !important;
   position: relative !important;
-  z-index: 102 !important;
-  margin: 2px !important;
+  z-index: 1001 !important;
+  margin: 4px 8px !important;
+  min-height: 48px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
 }
 
 /* Pagination button specific classes */
@@ -297,7 +304,9 @@ main {
   visibility: visible !important;
   opacity: 1 !important;
   position: relative !important;
-  z-index: 102 !important;
+  z-index: 1001 !important;
+  min-height: 48px !important;
+  font-weight: 700 !important;
 }
 
 /* Make sure neon-button class applies correctly */
