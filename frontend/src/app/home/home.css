@@ -250,34 +250,61 @@ main {
 
 /* Pagination Container */
 .pagination-container {
-  position: relative;
-  z-index: 10;
-  width: 100%;
+  position: relative !important;
+  z-index: 100 !important;
+  width: 100% !important;
   display: flex !important;
   visibility: visible !important;
+  opacity: 1 !important;
   background: transparent !important;
   background-color: transparent !important;
+  margin: 2rem 0 !important;
+  padding: 1rem 0 !important;
 }
 
 .pagination-container nav {
   display: flex !important;
   visibility: visible !important;
+  opacity: 1 !important;
   background: transparent !important;
   background-color: transparent !important;
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
 }
 
 /* Override any default button styles */
 .pagination-container button {
-  display: inline-block !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   visibility: visible !important;
   opacity: 1 !important;
-  /* Background and border are set by neon-button class - don't override here */
   outline: none !important;
+  position: relative !important;
+  z-index: 102 !important;
+  margin: 2px !important;
+}
+
+/* Pagination button specific classes */
+.neon-button-pagination-prev,
+.neon-button-pagination-next,
+.neon-button-pagination-page {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 102 !important;
 }
 
 /* Make sure neon-button class applies correctly */
-.pagination-container .neon-button {
+.pagination-container .neon-button,
+.neon-button-pagination-prev,
+.neon-button-pagination-next,
+.neon-button-pagination-page:not(.neon-button-active):not(.neon-ellipsis) {
   background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(157, 0, 255, 0.8)) !important;
   border: 3px solid #00FFFF !important;
   box-shadow: 
@@ -291,6 +318,9 @@ main {
 .pagination-container nav > div {
   background: transparent !important;
   background-color: transparent !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Don't override button backgrounds - they need their gradients */
@@ -299,6 +329,13 @@ main {
 .pagination-container *:not(button):not(span) {
   background-color: transparent !important;
   background: transparent !important;
+}
+
+/* Ensure all spans inside pagination are visible */
+.pagination-container span {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Button Text */
@@ -313,6 +350,24 @@ main {
   visibility: visible !important;
   opacity: 1 !important;
   font-size: inherit !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure button text in pagination is visible */
+.pagination-container .neon-button-text {
+  color: #00FFFF !important;
+  text-shadow: 
+    0 0 8px #00FFFF,
+    0 0 15px #00FFFF,
+    0 0 25px #00FFFF !important;
+  font-weight: 600 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: inherit !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
 }
 
 /* Active Page Button Text */
@@ -324,6 +379,21 @@ main {
   visibility: visible !important;
   opacity: 1 !important;
   font-size: inherit !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure active button text in pagination is visible */
+.pagination-container .neon-button-text-active {
+  color: #000000 !important;
+  text-shadow: none !important;
+  font-weight: 700 !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font-size: inherit !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
 }
 
 /* Neon Ellipsis */
@@ -332,8 +402,13 @@ main {
   border: none !important;
   cursor: default !important;
   pointer-events: none !important;
-  min-width: 38px !important;
-  min-height: 38px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Neon Active Page Button */
@@ -347,9 +422,17 @@ main {
     0 0 40px rgba(157, 0, 255, 0.7),
     0 0 60px rgba(0, 255, 255, 0.5),
     inset 0 0 20px rgba(255, 255, 255, 0.3) !important;
-  position: relative;
-  z-index: 2;
+  position: relative !important;
+  z-index: 103 !important;
   text-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+  min-height: 42px !important;
+  min-width: 42px !important;
 }
 
 .neon-button-active:hover {
