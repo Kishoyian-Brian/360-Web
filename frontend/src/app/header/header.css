@@ -1,5 +1,13 @@
 /* Header Component - Neon Cyberpunk Styles */
 
+/* Ensure header connects to content */
+header {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  display: block;
+}
+
 .mobile-menu-enter {
   opacity: 0;
   transform: translateX(-100%);

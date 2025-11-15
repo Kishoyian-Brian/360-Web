@@ -1,5 +1,13 @@
 /* Footer Component - Neon Cyberpunk Styles */
 
+/* Ensure footer connects to content */
+footer {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  display: block;
+}
+
 /* Neon Footer Background */
 .neon-footer-bg {
   background: linear-gradient(135deg, #000000 0%, #0a0010 50%, #000015 100%);
@@ -8,6 +16,9 @@
     0 0 15px rgba(157, 0, 255, 0.4),
     0 0 30px rgba(157, 0, 255, 0.2),
     inset 0 0 20px rgba(0, 0, 0, 0.5);
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
 }
 
 /* Neon Footer Border */

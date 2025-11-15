@@ -2,14 +2,29 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
 }
 
 .app-main-content {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+app-header {
+  flex-shrink: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 app-footer {
   flex-shrink: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
