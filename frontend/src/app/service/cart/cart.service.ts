@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { tap, map, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { ProductUtils } from '../../shared/utils/product.utils';
 import { environment } from '../../../environments/environment';
@@ -149,7 +149,15 @@ export class CartService {
       return this.http.post<Cart>(`${this.API_URL}/cart/add`, request, {
         headers: this.authService.getAuthHeaders()
       }).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(error => {
+          // If the backend says auth is required/invalid, fall back to guest cart
+          if (error?.status === 401 || error?.status === 403) {
+            console.warn('Auth error on addToCart, falling back to guest cart:', error);
+            return this.addToGuestCart(request);
+          }
+          throw error;
+        })
       );
     } else {
       return this.addToGuestCart(request);
