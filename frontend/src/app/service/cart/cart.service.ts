@@ -136,7 +136,15 @@ export class CartService {
         tap(cart => this.cartSubject.next(cart))
       );
     } else {
-      const guestCart = this.getGuestCart() || this.createEmptyCart();
+      // Always load (or create + persist) a guest cart for unauthenticated users
+      const existingGuestCart = this.getGuestCart();
+      const guestCart = existingGuestCart || this.createEmptyCart();
+
+      // If there was no saved guest cart yet, persist the new empty one
+      if (!existingGuestCart) {
+        this.saveGuestCart(guestCart);
+      }
+
       return of(guestCart).pipe(
         tap(cart => this.cartSubject.next(cart))
       );
