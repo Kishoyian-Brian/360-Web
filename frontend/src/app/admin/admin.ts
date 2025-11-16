@@ -1862,6 +1862,13 @@ export class Admin implements OnInit {
       return;
     }
 
+    // Ensure rating is a valid number between 1 and 5
+    const numericRating = Number(this.vouchForm.rating);
+    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+      this.toastService.error('Rating must be a number between 1 and 5');
+      return;
+    }
+
     if (this.vouchImageFile) {
       await this.uploadVouchImage();
     }
@@ -1869,7 +1876,7 @@ export class Admin implements OnInit {
     const createVouchDto: CreateVouchDto = {
       username: this.vouchForm.username,
       avatarSeed: this.vouchForm.avatarSeed || this.vouchForm.username,
-      rating: this.vouchForm.rating,
+      rating: numericRating,
       reviewText: this.vouchForm.reviewText,
       reviewImage: this.vouchForm.reviewImage || undefined,
       isVerified: this.vouchForm.isVerified
@@ -1896,10 +1903,17 @@ export class Admin implements OnInit {
       return;
     }
 
+    // Ensure rating is a valid number between 1 and 5
+    const numericRating = Number(this.vouchForm.rating);
+    if (isNaN(numericRating) || numericRating < 1 || numericRating > 5) {
+      this.toastService.error('Rating must be a number between 1 and 5');
+      return;
+    }
+
     const updateVouchDto: UpdateVouchDto = {
       username: this.vouchForm.username,
       avatarSeed: this.vouchForm.avatarSeed || this.vouchForm.username,
-      rating: this.vouchForm.rating,
+      rating: numericRating,
       reviewText: this.vouchForm.reviewText,
       reviewImage: this.vouchForm.reviewImage || undefined,
       isVerified: this.vouchForm.isVerified
