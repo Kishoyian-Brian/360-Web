@@ -12,6 +12,34 @@
 
 <body>
   <app-root></app-root>
+
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = "https://embed.tawk.to/690c569dc4d2b219586e1e34/default";
+      s1.charset = "UTF-8";
+      s1.setAttribute("crossorigin", "*");
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+
+    // Move Tawk widget up so it sits above the Telegram widget
+    Tawk_API.onLoad = function () {
+      try {
+        var iframe = document.querySelector('iframe[title="chat widget"]');
+        if (iframe) {
+          iframe.style.bottom = "100px"; // adjust if you need more/less space above Telegram
+          iframe.style.right = "20px";
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+  </script>
+  <!--End of Tawk.to Script-->
 </body>
 
 </html>
