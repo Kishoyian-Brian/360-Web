@@ -89,7 +89,8 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         this.products = response.products;
         this.total = response.total;
-        this.totalPages = response.totalPages;
+        // Safely compute totalPages on the frontend in case backend doesn't send it
+        this.totalPages = (response.totalPages ?? Math.ceil(this.total / this.pageSize)) || 0;
         this.loading = false;
         console.log('Loaded products for home:', response.products);
         console.log('Total products:', response.total);
