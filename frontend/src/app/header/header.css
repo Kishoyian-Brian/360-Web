@@ -322,31 +322,6 @@ body.menu-open {
   }
 }
 
-/* Mobile menu compact width adjustments */
-@media (max-width: 1023px) {
-  .fixed.top-0.left-0.h-full.w-1\/6 {
-    width: 15% !important;
-    min-width: 200px;
-    max-width: 250px;
-  }
-}
-
-@media (max-width: 480px) {
-  .fixed.top-0.left-0.h-full.w-1\/6 {
-    width: 18% !important;
-    min-width: 180px;
-    max-width: 220px;
-  }
-}
-
-@media (max-width: 360px) {
-  .fixed.top-0.left-0.h-full.w-1\/6 {
-    width: 20% !important;
-    min-width: 160px;
-    max-width: 200px;
-  }
-}
-
 /* Ensure proper spacing for compact menu */
 .mobile-menu-nav {
   padding: 1rem;
