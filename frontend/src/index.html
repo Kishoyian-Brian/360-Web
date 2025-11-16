@@ -26,12 +26,12 @@
       s0.parentNode.insertBefore(s1, s0);
     })();
 
-    // Move Tawk widget up so it sits above the Telegram widget
+    // Move Tawk widget further up so it sits clearly above the Telegram widget
     Tawk_API.onLoad = function () {
       try {
         var iframe = document.querySelector('iframe[title="chat widget"]');
         if (iframe) {
-          iframe.style.bottom = "100px"; // adjust if you need more/less space above Telegram
+          iframe.style.bottom = "160px"; // increased space above Telegram; tweak if needed
           iframe.style.right = "20px";
         }
       } catch (e) {
