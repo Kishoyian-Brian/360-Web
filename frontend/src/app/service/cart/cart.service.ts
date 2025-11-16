@@ -133,7 +133,25 @@ export class CartService {
       return this.http.get<Cart>(`${this.API_URL}/cart`, {
         headers: this.authService.getAuthHeaders()
       }).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(error => {
+          // If auth fails (e.g. expired/invalid token), fall back to guest cart
+          if (error?.status === 401 || error?.status === 403) {
+            console.warn('Auth error loading cart, falling back to guest cart:', error);
+
+            const existingGuestCart = this.getGuestCart();
+            const guestCart = existingGuestCart || this.createEmptyCart();
+
+            if (!existingGuestCart) {
+              this.saveGuestCart(guestCart);
+            }
+
+            this.cartSubject.next(guestCart);
+            return of(guestCart);
+          }
+
+          throw error;
+        })
       );
     } else {
       // Always load (or create + persist) a guest cart for unauthenticated users
