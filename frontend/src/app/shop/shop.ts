@@ -77,7 +77,8 @@ export class ShopComponent implements OnInit {
         this.products = response.products;
         this.filteredProducts = response.products;
         this.total = response.total;
-        this.totalPages = response.totalPages;
+        // Compute totalPages on the frontend in case backend doesn't send it
+        this.totalPages = (response.totalPages ?? Math.ceil(this.total / this.pageSize)) || 0;
         this.loading = false;
         console.log('Loaded products from backend:', response.products);
         console.log('Total products:', response.total);
