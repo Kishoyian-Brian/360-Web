@@ -90,26 +90,43 @@ export class ProductComponent implements OnInit {
       event.stopImmediatePropagation();
     }
 
-    // Debounce rapid clicks/touches (prevent double-firing on mobile)
+    // Debounce rapid taps/clicks (helps avoid double-firing on mobile)
     const now = Date.now();
     if (now - this.lastClickTime < 500) {
+      console.log('Add to cart debounced in product component');
       return;
     }
     this.lastClickTime = now;
 
-    if (!this.product) return;
+    if (!this.product) {
+      console.error('No product loaded in ProductComponent');
+      this.toastService.error('Product not available');
+      return;
+    }
+
+    if (!this.product.id) {
+      console.error('Product ID is missing:', this.product);
+      this.toastService.error('Invalid product');
+      return;
+    }
 
     if (this.quantity > this.product.stockQuantity) {
       this.toastService.error('Not enough stock available');
       return;
     }
 
-    // Prevent multiple rapid clicks
+    // Prevent multiple concurrent requests
     if (this.addingToCart) {
+      console.log('Add to cart already in progress (product component)');
       return;
     }
 
     this.addingToCart = true;
+
+    console.log('ProductComponent addToCart request:', {
+      productId: this.product.id,
+      quantity: this.quantity
+    });
 
     this.cartService.addToCart({
       productId: this.product.id,
@@ -118,7 +135,7 @@ export class ProductComponent implements OnInit {
       next: (cart) => {
         this.addingToCart = false;
         this.toastService.success(`Added ${this.quantity} ${this.product!.name} to cart`);
-        console.log('Added to cart:', cart);
+        console.log('ProductComponent addToCart success:', cart);
         
         // Update guest cart item details if not authenticated
         if (!this.authService.isAuthenticated && this.product) {
@@ -133,8 +150,16 @@ export class ProductComponent implements OnInit {
       },
       error: (error) => {
         this.addingToCart = false;
-        console.error('Error adding to cart:', error);
-        this.toastService.error('Failed to add item to cart');
+        console.error('ProductComponent addToCart error:', error);
+
+        let errorMessage = 'Failed to add product to cart';
+        if (error?.error?.message) {
+          errorMessage = error.error.message;
+        } else if (error?.message) {
+          errorMessage = error.message;
+        }
+
+        this.toastService.error(errorMessage);
       }
     });
   }
