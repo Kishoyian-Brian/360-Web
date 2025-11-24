@@ -25,6 +25,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private cartSubscription?: Subscription;
   private authSubscription?: Subscription;
 
+  private readonly allowedCategoryRoutes = new Set<string>([
+    '/category/cc-cvv',
+    '/category/bank-logs',
+    '/category/transfers',
+    '/category/clones'
+  ]);
+
+  readonly allCategories = [
+    { name: 'CC & CVV', route: '/category/cc-cvv' },
+    { name: 'BANK LOGS', route: '/category/bank-logs' },
+    { name: 'STEALTH ACCOUNTS', route: '/category/stealth-accounts' },
+    { name: 'FULLZ', route: '/category/fullz' },
+    { name: 'FRAUD GUIDES', route: '/category/fraud-guides' },
+    { name: 'TOOLS', route: '/category/tools' },
+    { name: 'E-GIFT CARDS', route: '/category/e-gift-cards' },
+    { name: 'DEPOSIT CHECKS', route: '/category/deposit-checks' },
+    { name: 'TRANSFERS', route: '/category/transfers' },
+    { name: 'CLONES', route: '/category/clones' },
+    { name: 'CARDED PRODUCTS', route: '/category/carded-products' },
+    { name: 'SPAMMING', route: '/category/spamming' },
+    { name: 'SHAKEPAY LOG', route: '/category/shake' },
+    { name: 'CASHAPP LOG', route: '/category/cashapp-log' },
+    { name: 'PAYPAL LOG', route: '/category/paypal-log' },
+    { name: 'LINKABLES', route: '/category/linkable' },
+    { name: 'BITCOIN LOG', route: '/category/bitcoin-log' }
+  ];
+
+  readonly visibleCategories = this.allCategories.filter(category =>
+    this.allowedCategoryRoutes.has(category.route)
+  );
+
   constructor(
     private router: Router,
     private cartService: CartService,

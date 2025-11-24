@@ -14,7 +14,14 @@ export class SidebarComponent {
 
   constructor(private router: Router) {}
 
-  categories = [
+  private readonly allowedCategoryRoutes = new Set<string>([
+    '/category/cc-cvv',
+    '/category/bank-logs',
+    '/category/transfers',
+    '/category/clones'
+  ]);
+
+  private readonly allCategories = [
     { name: 'CC & CVV', route: '/category/cc-cvv' },
     { name: 'BANK LOGS', route: '/category/bank-logs' },
     { name: 'STEALTH ACCOUNTS', route: '/category/stealth-accounts' },
@@ -33,6 +40,12 @@ export class SidebarComponent {
     { name: 'LINKABLES', route: '/category/linkable' },
     { name: 'BITCOIN LOG', route: '/category/bitcoin-log' }
   ];
+
+  get categories() {
+    return this.allCategories.filter(category =>
+      this.allowedCategoryRoutes.has(category.route)
+    );
+  }
 
   isActiveCategory(route: string): boolean {
     return this.router.url === route;

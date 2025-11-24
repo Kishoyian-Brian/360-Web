@@ -1,17 +1,19 @@
-<div class="neon-sidebar p-4 mt-0 py-4" [ngClass]="{'block': true, 'lg:block': true, 'hidden': false}">
-  <h5 class="font-bold neon-text mb-4" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;">Categories</h5>
-  <ul class="space-y-2">
-    <li *ngFor="let category of categories; let i = index" class="border-b pb-2" [ngClass]="(i % 3 === 0) ? 'sidebar-border-cyan' : (i % 3 === 1) ? 'sidebar-border-pink' : 'sidebar-border-purple'">
-      <a [routerLink]="category.route" 
-         [class]="isActiveCategory(category.route) ? 'neon-sidebar-link-active' : 'neon-sidebar-link'"
-         (click)="onCategoryClick()"
-         class="flex items-center justify-between block cursor-pointer transition-all"
-         style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 44px; display: block;">
-        <span>{{ category.name }}</span>
-        <svg class="w-4 h-4 transition-transform" fill="currentColor" viewBox="0 0 20 20" [ngClass]="isActiveCategory(category.route) ? 'rotate-90' : ''">
-          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-        </svg>
-      </a>
-    </li>
-  </ul>
-</div> 
+<div class="hidden lg:block">
+  <div class="neon-sidebar p-4 mt-0 py-4">
+    <h5 class="font-bold neon-text mb-4" style="text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;">Categories</h5>
+    <ul class="space-y-2">
+      <li *ngFor="let category of categories; let i = index" class="border-b pb-2" [ngClass]="(i % 3 === 0) ? 'sidebar-border-cyan' : (i % 3 === 1) ? 'sidebar-border-pink' : 'sidebar-border-purple'">
+        <a [routerLink]="category.route" 
+           [class]="isActiveCategory(category.route) ? 'neon-sidebar-link-active' : 'neon-sidebar-link'"
+           (click)="onCategoryClick()"
+           class="flex items-center justify-between block cursor-pointer transition-all"
+           style="touch-action: manipulation; -webkit-tap-highlight-color: transparent; min-height: 44px; display: block;">
+          <span>{{ category.name }}</span>
+          <svg class="w-4 h-4 transition-transform" fill="currentColor" viewBox="0 0 20 20" [ngClass]="isActiveCategory(category.route) ? 'rotate-90' : ''">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div> 
+</div>

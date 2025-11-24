@@ -265,54 +265,13 @@
           </button>
           <!-- Categories Dropdown -->
           <ul *ngIf="isCategoriesDropdownOpen" class="ml-6 mt-2 space-y-1">
-            <li>
-              <a routerLink="/category/cc-cvv" (click)="closeMobileMenu()" class="mobile-menu-item flex items-center px-4 py-2 rounded">
-                <span class="font-medium">CC & CVV</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/bank-logs" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Bank Logs</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/stealth-accounts" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Stealth Accounts</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/fullz" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Fullz</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/fraud-guides" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Fraud Guides</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/tools" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Tools</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/e-gift-cards" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">E-Gift Cards</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/deposit-checks" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Deposit Checks</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/transfers" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Transfers</span>
-              </a>
-            </li>
-            <li>
-              <a routerLink="/category/clones" (click)="closeMobileMenu()" class="flex items-center px-4 py-2 mobile-menu-item rounded">
-                <span class="font-medium">Clones</span>
+            <li *ngFor="let category of visibleCategories">
+              <a
+                [routerLink]="category.route"
+                (click)="navigateAndClose(category.route)"
+                class="mobile-menu-item flex items-center px-4 py-2 rounded"
+              >
+                <span class="font-medium">{{ category.name }}</span>
               </a>
             </li>
           </ul>
@@ -544,123 +503,12 @@
               <ul
                 class="neon-dropdown absolute top-full left-0 rounded min-w-48 z-50 hidden group-hover:block"
               >
-                <li>
+                <li *ngFor="let category of visibleCategories">
                   <a
-                    routerLink="/category/cc-cvv"
+                    [routerLink]="category.route"
+                    (click)="navigateAndClose(category.route)"
                     class="neon-dropdown-item block px-4 py-2"
-                    >CC & CVV</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/bank-logs"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >BANK LOGS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/stealth-accounts"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >STEALTH ACCOUNTS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/fullz"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >FULLZ</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/fraud-guides"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >FRAUD GUIDES</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/tools"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >TOOLS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/e-gift-cards"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >E-GIFT CARDS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/deposit-checks"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >DEPOSIT CHECKS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/transfers"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >TRANSFERS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/clones"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >CLONES</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/carded-products"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >CARDED PRODUCTS</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/spamming"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >SPAMMING</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/shake"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >SHAKEPAY LOG</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/cashapp-log"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >CASHAPP LOG</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/paypal-log"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >PAYPAL LOG</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/linkable"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >LINKABLES</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/category/bitcoin-log"
-                    class="neon-dropdown-item block px-4 py-2"
-                    >BITCOIN LOG</a
+                    >{{ category.name }}</a
                   >
                 </li>
               </ul>
