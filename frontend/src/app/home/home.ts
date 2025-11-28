@@ -5,6 +5,7 @@ import { ProductService, Product } from '../service/product/product.service';
 import { CategoryService, Category } from '../service/category/category.service';
 import { CartService } from '../service/cart/cart.service';
 import { ToastService } from '../services/toast.service';
+import { AuthService } from '../service/auth/auth.service';
 import { ProductUtils } from '../shared/utils/product.utils';
 
 @Component({
@@ -47,7 +48,8 @@ export class HomeComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private cartService: CartService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -166,6 +168,16 @@ export class HomeComponent implements OnInit {
       next: (cart) => {
         this.toastService.success('Product added to cart successfully!');
         console.log('Cart updated:', cart);
+        
+        // Update guest cart item details if not authenticated
+        if (!this.authService.isAuthenticated) {
+          this.cartService.updateGuestCartItemDetails(product.id, {
+            name: product.name,
+            price: product.price,
+            image: ProductUtils.getProductImage(product),
+            stockQuantity: product.stockQuantity
+          });
+        }
       },
       error: (error) => {
         console.error('Error adding to cart:', error);

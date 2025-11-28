@@ -215,7 +215,7 @@ export class CartService {
 
     // Recalculate totals
     currentCart.total = currentCart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    currentCart.itemCount = currentCart.items.length;
+    currentCart.itemCount = currentCart.items.reduce((sum, item) => sum + item.quantity, 0);
     currentCart.updatedAt = new Date().toISOString();
 
     this.updateGuestCart(currentCart);
@@ -249,7 +249,7 @@ export class CartService {
       
       // Recalculate totals
       currentCart.total = currentCart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      currentCart.itemCount = currentCart.items.length;
+      currentCart.itemCount = currentCart.items.reduce((sum, item) => sum + item.quantity, 0);
       currentCart.updatedAt = new Date().toISOString();
       
       this.updateGuestCart(currentCart);
@@ -280,7 +280,7 @@ export class CartService {
       
       // Recalculate totals
       currentCart.total = currentCart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      currentCart.itemCount = currentCart.items.length;
+      currentCart.itemCount = currentCart.items.reduce((sum, item) => sum + item.quantity, 0);
       currentCart.updatedAt = new Date().toISOString();
       
       this.updateGuestCart(currentCart);
@@ -390,6 +390,7 @@ export class CartService {
           
           // Recalculate totals
           currentCart.total = currentCart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+          currentCart.itemCount = currentCart.items.reduce((sum, item) => sum + item.quantity, 0);
           currentCart.updatedAt = new Date().toISOString();
           
           this.updateGuestCart(currentCart);

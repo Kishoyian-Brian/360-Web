@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ToastService } from '../services/toast.service';
 import { AuthService } from '../service/auth/auth.service';
 import { CartService, Cart, CartItem } from '../service/cart/cart.service';
@@ -16,6 +17,7 @@ export class CartComponent implements OnInit, OnDestroy {
   cart: Cart | null = null;
   loading: boolean = true;
   isGuest: boolean = false;
+  private cartSubscription?: Subscription;
 
   constructor(
     private router: Router,
@@ -34,13 +36,27 @@ export class CartComponent implements OnInit, OnDestroy {
     }
 
     this.loadCart();
-    // Listen for cart updates
+    
+    // Subscribe to cart updates from the service
+    this.cartSubscription = this.cartService.cart$.subscribe(cart => {
+      if (cart) {
+        this.cart = cart;
+        this.isGuest = !this.authService.isAuthenticated;
+        this.loading = false;
+        console.log('Cart updated via observable:', cart);
+      }
+    });
+    
+    // Listen for cart updates via window events (backup)
     window.addEventListener('cartUpdated', () => {
       this.loadCart();
     });
   }
 
   ngOnDestroy() {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
     window.removeEventListener('cartUpdated', () => {
       this.loadCart();
     });
