@@ -155,6 +155,33 @@
   }
 }
 
+/* Mobile Responsive Styles */
+@media (max-width: 640px) {
+  .neon-card {
+    border-width: 1px;
+  }
+
+  /* Ensure buttons are touch-friendly on mobile */
+  .neon-button,
+  .neon-quantity-button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  /* Better spacing for mobile cart items */
+  .cart-item-neon {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Ensure proper spacing on very small screens */
+@media (max-width: 375px) {
+  .neon-card {
+    margin: 0 -0.5rem;
+    border-radius: 0.5rem;
+  }
+}
+
 /* Neon Loading Spinner */
 .neon-spinner {
   border: 3px solid rgba(0, 255, 255, 0.3);
