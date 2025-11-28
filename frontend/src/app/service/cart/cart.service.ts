@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, forkJoin } from 'rxjs';
 import { tap, map, switchMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { ProductService, Product } from '../product/product.service';
 import { ProductUtils } from '../../shared/utils/product.utils';
 import { environment } from '../../../environments/environment';
 
@@ -46,7 +47,8 @@ export class CartService {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService
+    private authService: AuthService,
+    private productService: ProductService
   ) {
     // Initialize cart based on authentication status
     this.initializeCart();
@@ -87,6 +89,7 @@ export class CartService {
     const guestCart = this.getGuestCart();
     if (guestCart) {
       this.cartSubject.next(guestCart);
+      this.enrichGuestCartItems(guestCart);
     } else {
       this.cartSubject.next(this.createEmptyCart());
     }
@@ -147,6 +150,7 @@ export class CartService {
             }
 
             this.cartSubject.next(guestCart);
+            this.enrichGuestCartItems(guestCart);
             return of(guestCart);
           }
 
@@ -164,7 +168,10 @@ export class CartService {
       }
 
       return of(guestCart).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => {
+          this.cartSubject.next(cart);
+          this.enrichGuestCartItems(cart);
+        })
       );
     }
   }
@@ -228,7 +235,14 @@ export class CartService {
       return this.http.patch<Cart>(`${this.API_URL}/cart/${itemId}`, request, {
         headers: this.authService.getAuthHeaders()
       }).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(error => {
+          if (error?.status === 401 || error?.status === 403) {
+            console.warn('Auth error on updateCartItem, falling back to guest cart:', error);
+            return this.updateGuestCartItem(itemId, request);
+          }
+          throw error;
+        })
       );
     } else {
       return this.updateGuestCartItem(itemId, request);
@@ -264,7 +278,14 @@ export class CartService {
       return this.http.delete<Cart>(`${this.API_URL}/cart/${itemId}`, {
         headers: this.authService.getAuthHeaders()
       }).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(error => {
+          if (error?.status === 401 || error?.status === 403) {
+            console.warn('Auth error on removeFromCart, falling back to guest cart:', error);
+            return this.removeFromGuestCart(itemId);
+          }
+          throw error;
+        })
       );
     } else {
       return this.removeFromGuestCart(itemId);
@@ -295,7 +316,14 @@ export class CartService {
       return this.http.delete<Cart>(`${this.API_URL}/cart`, {
         headers: this.authService.getAuthHeaders()
       }).pipe(
-        tap(cart => this.cartSubject.next(cart))
+        tap(cart => this.cartSubject.next(cart)),
+        catchError(error => {
+          if (error?.status === 401 || error?.status === 403) {
+            console.warn('Auth error on clearCart, falling back to guest cart:', error);
+            return this.clearGuestCart();
+          }
+          throw error;
+        })
       );
     } else {
       return this.clearGuestCart();
@@ -397,5 +425,54 @@ export class CartService {
         }
       }
     }
+  }
+
+  private enrichGuestCartItems(cart: Cart | null) {
+    if (!cart || cart.items.length === 0) {
+      return;
+    }
+
+    const itemsNeedingDetails = cart.items.filter(item =>
+      !item.name ||
+      item.name === 'Product' ||
+      item.price <= 0 ||
+      !item.image
+    );
+
+    if (itemsNeedingDetails.length === 0) {
+      return;
+    }
+
+    const requests = itemsNeedingDetails.map(item =>
+      this.productService.getProduct(item.productId).pipe(
+        catchError(error => {
+          console.warn('Failed to fetch product for guest cart item:', item.productId, error);
+          return of(null);
+        })
+      )
+    );
+
+    forkJoin(requests).subscribe(products => {
+      let updated = false;
+
+      products.forEach(product => {
+        if (!product) return;
+        const cartItem = cart.items.find(i => i.productId === product.id);
+        if (!cartItem) return;
+
+        cartItem.name = product.name;
+        cartItem.price = product.price;
+        cartItem.image = ProductUtils.getProductImage(product as Product);
+        cartItem.stockQuantity = product.stockQuantity;
+        updated = true;
+      });
+
+      if (updated) {
+        cart.total = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        cart.itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        cart.updatedAt = new Date().toISOString();
+        this.updateGuestCart(cart);
+      }
+    });
   }
 }

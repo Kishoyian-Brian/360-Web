@@ -59,7 +59,19 @@ export class AuthService {
   get isAuthenticated(): boolean {
     const token = this.getToken();
     const user = this.getStoredUser();
-    return !!(token && user);
+
+    if (!token || !user) {
+      return false;
+    }
+
+    if (this.isTokenExpired(token)) {
+      console.warn('AuthService: token expired or invalid, clearing session');
+      this.clearAuthData();
+      this.currentUserSubject.next(null);
+      return false;
+    }
+
+    return true;
   }
 
   get isAdmin(): boolean {
@@ -168,6 +180,26 @@ export class AuthService {
   private clearAuthData(): void {
     this.clearToken();
     this.clearUser();
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        return true;
+      }
+
+      const payload = JSON.parse(atob(tokenParts[1]));
+      if (!payload?.exp) {
+        return false;
+      }
+
+      const expiration = payload.exp * 1000;
+      return Date.now() >= expiration;
+    } catch (error) {
+      console.warn('AuthService: failed to decode token for expiration check', error);
+      return true;
+    }
   }
 
   getAuthHeaders(): { [key: string]: string } {
