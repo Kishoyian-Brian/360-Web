@@ -6,6 +6,7 @@ import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../service/auth/auth.service';
 import { CartService, Cart, CartItem } from '../../service/cart/cart.service';
 import { OrderService, Order, CreateOrderRequest } from '../../service/order/order.service';
+import { EmailService } from '../../service/email/email.service';
 import { ProductService } from '../../service/product/product.service';
 import { CryptoService, CryptoAccount } from '../../service/crypto/crypto.service';
 import { ProductUtils } from '../../shared/utils/product.utils';
@@ -53,7 +54,6 @@ export class Checkout implements OnInit, OnDestroy {
   hasUploadedProof: boolean = false;
   isAdminApproved: boolean = true;
   downloadProductInfo: string = '';
-  readonly downloadAdminEmail: string = 'alfredkaizen30@gmail.com';
 
   private readonly ORDER_ID_KEY = 'checkout_order_id';
   private readonly CRYPTO_SYMBOL_KEY = 'checkout_crypto_symbol';
@@ -69,6 +69,7 @@ export class Checkout implements OnInit, OnDestroy {
     private authService: AuthService,
     private cartService: CartService,
     private orderService: OrderService,
+    private emailService: EmailService,
     private productService: ProductService,
     private cryptoService: CryptoService
   ) { }
@@ -569,27 +570,30 @@ export class Checkout implements OnInit, OnDestroy {
   submitDownloadRequest() {
     if (!this.validateDownloadEmail()) return;
 
-    const subject = encodeURIComponent('Download Request');
-    const body = encodeURIComponent(
-      `Hello Admin,\n\n` +
-        `A user has requested a download.\n\n` +
-        `User Email: ${(this.downloadEmail || '').trim()}\n\n` +
-        `Product Info:\n${this.downloadProductInfo || '(none)'}\n\n` +
-        `Time: ${new Date().toISOString()}\n`
-    );
-    const mailtoLink = `mailto:${this.downloadAdminEmail}?subject=${subject}&body=${body}`;
-
     this.closeDownloadModal();
-    window.open(mailtoLink, '_blank');
-
     this.showContactMessage = false;
     this.isDownloadPending = true;
     this.clearDownloadPendingTimer();
-    this.downloadPendingTimeoutId = window.setTimeout(() => {
-      this.isDownloadPending = false;
-      this.showContactMessage = true;
-      this.downloadPendingTimeoutId = null;
-    }, 5000);
+
+    this.emailService.sendDownloadRequest({
+      userEmail: (this.downloadEmail || '').trim(),
+      productInfo: this.downloadProductInfo || '(none)'
+    }).subscribe({
+      next: () => {
+        // Keep pending state for exactly 5 seconds
+        this.downloadPendingTimeoutId = window.setTimeout(() => {
+          this.isDownloadPending = false;
+          this.showContactMessage = true;
+          this.downloadPendingTimeoutId = null;
+        }, 5000);
+      },
+      error: (error) => {
+        console.error('Download request email failed:', error);
+        this.toastService.error('Failed to send download request email');
+        this.isDownloadPending = false;
+        this.showContactMessage = true;
+      }
+    });
   }
 
   private clearDownloadPendingTimer() {

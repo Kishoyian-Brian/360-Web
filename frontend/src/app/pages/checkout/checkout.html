@@ -427,23 +427,66 @@
   </div>
 </div>
 
-<!-- Download Pending State -->
+<!-- Download Pending State (modal-sized) -->
 <div
   *ngIf="isDownloadPending"
-  class="fixed bottom-6 right-6 z-40 rounded-lg border border-cyan-500/30 bg-black/60 p-4"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
 >
-  <div class="flex items-center space-x-3">
-    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-500"></div>
-    <p class="text-sm text-cyan-200">Pending verification...</p>
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
+  >
+    <div
+      class="px-6 py-4 border-b border-cyan-500/30"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-cyan-200">Pending verification</h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <div class="flex items-center space-x-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
+        <div>
+          <p class="text-sm text-cyan-200 font-medium">Please wait</p>
+          <p class="text-xs text-gray-300">We are processing your request.</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- Download Contact Message -->
+<!-- Download Contact Message (modal-sized) -->
 <div
   *ngIf="showContactMessage"
-  class="fixed bottom-6 right-6 z-40 rounded-lg border border-pink-500/30 bg-black/60 p-4"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
 >
-  <p class="text-sm text-pink-200 font-medium">
-    Contact the admin for further assistance
-  </p>
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-pink-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(255, 51, 204, 0.25);"
+  >
+    <div
+      class="px-6 py-4 border-b border-pink-500/30"
+      style="background: linear-gradient(135deg, rgba(255, 51, 204, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-pink-200">Next steps</h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <p class="text-sm text-pink-200 font-medium">
+        Contact the admin for further assistance
+      </p>
+    </div>
+  </div>
 </div>

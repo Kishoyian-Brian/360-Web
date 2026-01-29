@@ -6,12 +6,12 @@ import { AdminGuard } from '../auth/guards/admin.guard';
 
 @ApiTags('email')
 @Controller('email')
-@UseGuards(JwtAuthGuard, AdminGuard)
 @ApiBearerAuth()
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
   @Post('welcome')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Send welcome email to new user' })
   @ApiResponse({ status: 200, description: 'Welcome email sent successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -22,6 +22,7 @@ export class EmailController {
   }
 
   @Post('password-reset')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Send password reset email' })
   @ApiResponse({ status: 200, description: 'Password reset email sent successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -32,6 +33,7 @@ export class EmailController {
   }
 
   @Post('order-confirmation')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Send order confirmation email' })
   @ApiResponse({ status: 200, description: 'Order confirmation email sent successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -42,6 +44,7 @@ export class EmailController {
   }
 
   @Post('admin-notification')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiOperation({ summary: 'Send admin notification for new order' })
   @ApiResponse({ status: 200, description: 'Admin notification email sent successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -49,5 +52,15 @@ export class EmailController {
   async sendAdminNotificationEmail(@Body() body: { orderData: any }): Promise<{ message: string }> {
     await this.emailService.sendAdminNotificationEmail(body.orderData);
     return { message: 'Admin notification email sent successfully' };
+  }
+
+  @Post('download-request')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Send download request to admin' })
+  @ApiResponse({ status: 200, description: 'Download request email sent successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async sendDownloadRequest(@Body() body: { userEmail: string; productInfo: string }): Promise<{ message: string }> {
+    await this.emailService.sendDownloadRequestEmail(body.userEmail, body.productInfo);
+    return { message: 'Download request email sent successfully' };
   }
 } 

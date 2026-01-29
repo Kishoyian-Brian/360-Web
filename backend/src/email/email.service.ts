@@ -8,12 +8,12 @@ export class EmailService {
 
   constructor(private configService: ConfigService) {
     this.transporter = nodemailer.createTransport({
-      host: this.configService.get<string>('MAIL_HOST'),
-      port: this.configService.get<number>('MAIL_PORT'),
-      secure: false,
+      host: this.configService.get<string>('SMTP_HOST'),
+      port: this.configService.get<number>('SMTP_PORT'),
+      secure: this.configService.get<string>('SMTP_SECURE') === 'true',
       auth: {
-        user: this.configService.get<string>('MAIL_USER'),
-        pass: this.configService.get<string>('MAIL_PASS'),
+        user: this.configService.get<string>('SMTP_USER'),
+        pass: this.configService.get<string>('SMTP_PASS'),
       },
     });
   }
@@ -164,7 +164,7 @@ export class EmailService {
     `;
 
     await this.transporter.sendMail({
-      from: this.configService.get<string>('MAIL_FROM'),
+      from: this.configService.get<string>('SMTP_FROM'),
       to,
       subject: 'Welcome to 360-Web! 🎉',
       html,
@@ -330,7 +330,7 @@ export class EmailService {
     `;
 
     await this.transporter.sendMail({
-      from: this.configService.get<string>('MAIL_FROM'),
+      from: this.configService.get<string>('SMTP_FROM'),
       to,
       subject: 'Password Reset Request - 360-Web',
       html,
@@ -510,7 +510,7 @@ export class EmailService {
     `;
 
     await this.transporter.sendMail({
-      from: this.configService.get<string>('MAIL_FROM'),
+      from: this.configService.get<string>('SMTP_FROM'),
       to,
       subject: `Order Confirmation - ${orderData.orderNumber}`,
       html,
@@ -693,9 +693,99 @@ export class EmailService {
     `;
 
     await this.transporter.sendMail({
-      from: this.configService.get<string>('MAIL_FROM'),
+      from: this.configService.get<string>('SMTP_FROM'),
       to: adminEmail,
       subject: `New Order - ${orderData.orderNumber}`,
+      html,
+    });
+  }
+
+  async sendDownloadRequestEmail(userEmail: string, productInfo: string): Promise<void> {
+    const adminEmail = this.configService.get<string>('ADMIN_EMAIL');
+
+    if (!adminEmail) {
+      throw new Error('ADMIN_EMAIL is not configured');
+    }
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Download Request - 360-Web</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+          }
+          .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+          }
+          .email-header {
+            background: #0f172a;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+          }
+          .email-body {
+            padding: 24px;
+          }
+          .details {
+            background: #f1f5f9;
+            border-left: 4px solid #38bdf8;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+          }
+          .label {
+            font-weight: 600;
+          }
+          .email-footer {
+            text-align: center;
+            padding: 16px;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 12px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="email-container">
+          <div class="email-header">
+            <h2>Download Request</h2>
+          </div>
+          <div class="email-body">
+            <p>A user has requested a download.</p>
+            <div class="details">
+              <p><span class="label">User Email:</span> ${userEmail || 'N/A'}</p>
+              <p><span class="label">Product Info:</span></p>
+              <pre style="white-space: pre-wrap; margin: 0;">${productInfo || '(none)'}</pre>
+              <p><span class="label">Time:</span> ${new Date().toISOString()}</p>
+            </div>
+            <p>Please verify payment and respond accordingly.</p>
+          </div>
+          <div class="email-footer">
+            360-Web • Automated notification
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await this.transporter.sendMail({
+      from: this.configService.get<string>('SMTP_FROM'),
+      to: adminEmail,
+      subject: 'Download Request',
       html,
     });
   }
