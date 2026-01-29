@@ -951,6 +951,9 @@ export class Admin implements OnInit {
     this.adminService.updatePaymentStatus(orderId, paymentStatus).subscribe({
       next: (response) => {
         this.toastService.success('Payment status updated successfully');
+        if (this.showPaymentProofModal && this.selectedOrderForProof?.id === orderId) {
+          this.closePaymentProofModal();
+        }
         this.loadOrders();
       },
       error: (error) => {
