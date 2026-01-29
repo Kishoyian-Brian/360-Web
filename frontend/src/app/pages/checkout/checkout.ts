@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { FakeDownloadFlowComponent } from '../../shared/components/fake-download
   templateUrl: './checkout.html',
   styleUrl: './checkout.css'
 })
-export class Checkout implements OnInit {
+export class Checkout implements OnInit, OnDestroy {
   cart: Cart | null = null;
   order: Order | null = null;
   isLoading = false;
@@ -27,6 +27,7 @@ export class Checkout implements OnInit {
   paymentProofPreview: string | null = null;
   isSubmittingPayment = false;
   showApprovalModal = false;
+  approvalModalState: 'submitting' | 'pending' | 'error' = 'submitting';
 
   // Cryptocurrency payment options (loaded from backend)
   cryptoPayments: CryptoAccount[] = [];
@@ -49,6 +50,7 @@ export class Checkout implements OnInit {
   private readonly HAS_PAID_KEY = 'checkout_has_paid';
   private orderChecked = false;
   private pendingCryptoSymbol: string | null = null;
+  private orderPollId: number | null = null;
 
   constructor(
     private router: Router,
@@ -72,6 +74,10 @@ export class Checkout implements OnInit {
     this.restoreCheckoutState();
     this.loadCart();
     this.loadCryptoAccounts();
+  }
+
+  ngOnDestroy() {
+    this.stopOrderPolling();
   }
 
   private cartLoaded = false;
@@ -328,6 +334,8 @@ export class Checkout implements OnInit {
     }
 
     this.isSubmittingPayment = true;
+    this.showApprovalModal = true;
+    this.approvalModalState = 'submitting';
     console.log('Submitting payment proof for order:', this.order.id);
 
     this.orderService.submitPaymentProof(this.order.id, this.paymentProofFile).subscribe({
@@ -337,18 +345,18 @@ export class Checkout implements OnInit {
         this.toastService.success('Payment proof submitted successfully! We will verify your payment shortly.');
         console.log('Payment proof submitted successfully:', updatedOrder);
 
-        // Simulated flags for fake download flow
-        this.hasUploadedProof = true;
-        this.hasPaid = true;
-        localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, 'true');
-        localStorage.setItem(this.HAS_PAID_KEY, 'true');
+        this.syncFlagsFromOrder(updatedOrder);
+        localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, this.hasUploadedProof ? 'true' : 'false');
+        localStorage.setItem(this.HAS_PAID_KEY, this.hasPaid ? 'true' : 'false');
 
-        this.showApprovalModal = true;
+        this.approvalModalState = 'pending';
+        this.startOrderPolling(updatedOrder.id);
       },
       error: (error) => {
         console.error('Error submitting payment proof:', error);
         this.toastService.error('Failed to submit payment proof. Please try again.');
         this.isSubmittingPayment = false;
+        this.approvalModalState = 'error';
       }
     });
   }
@@ -430,6 +438,7 @@ export class Checkout implements OnInit {
         this.syncFlagsFromOrder(order);
         this.orderChecked = true;
         this.checkIfReadyToCreateOrder();
+        this.startOrderPolling(order.id);
       },
       error: (error) => {
         console.warn('Failed to restore order from storage, creating new order.', error);
@@ -452,10 +461,39 @@ export class Checkout implements OnInit {
   }
 
   private syncFlagsFromOrder(order: Order) {
-    const paidStatuses = ['paid', 'processing', 'completed'];
-    const orderPaid = paidStatuses.includes(order.status);
+    const orderPaid = order.paymentStatus === 'PAID';
     const orderProof = !!order.paymentProof || orderPaid;
-    this.hasPaid = this.hasPaid || orderPaid;
-    this.hasUploadedProof = this.hasUploadedProof || orderProof;
+    this.hasPaid = orderPaid;
+    this.hasUploadedProof = orderProof;
+    localStorage.setItem(this.HAS_PAID_KEY, orderPaid ? 'true' : 'false');
+    localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, orderProof ? 'true' : 'false');
+
+    if (orderPaid) {
+      this.stopOrderPolling();
+    }
+  }
+
+  private startOrderPolling(orderId: string) {
+    if (!orderId) return;
+    if (this.orderPollId !== null) return;
+
+    this.orderPollId = window.setInterval(() => {
+      this.orderService.getOrder(orderId).subscribe({
+        next: (order) => {
+          this.order = order;
+          this.syncFlagsFromOrder(order);
+        },
+        error: (error) => {
+          console.warn('Order polling failed:', error);
+        }
+      });
+    }, 15000);
+  }
+
+  private stopOrderPolling() {
+    if (this.orderPollId !== null) {
+      window.clearInterval(this.orderPollId);
+      this.orderPollId = null;
+    }
   }
 }

@@ -19,6 +19,7 @@ export interface Order {
   items: OrderItem[];
   total: number;
   status: 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled';
+  paymentStatus?: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
   bitcoinAddress: string;
   paymentProof?: string;
   notes?: string;
