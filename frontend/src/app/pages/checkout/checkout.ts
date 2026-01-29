@@ -461,14 +461,21 @@ export class Checkout implements OnInit, OnDestroy {
   }
 
   private syncFlagsFromOrder(order: Order) {
-    const orderPaid = order.paymentStatus === 'PAID';
-    const orderProof = !!order.paymentProof || orderPaid;
-    this.hasPaid = orderPaid;
+    const paymentStatus = (order.paymentStatus || '').toString().toUpperCase();
+    const orderStatus = (order.status || '').toString().toUpperCase();
+    const isApproved =
+      paymentStatus === 'PAID' ||
+      orderStatus === 'PAID' ||
+      orderStatus === 'PROCESSING' ||
+      orderStatus === 'COMPLETED';
+    const orderProof = !!order.paymentProof || isApproved;
+
+    this.hasPaid = isApproved;
     this.hasUploadedProof = orderProof;
-    localStorage.setItem(this.HAS_PAID_KEY, orderPaid ? 'true' : 'false');
+    localStorage.setItem(this.HAS_PAID_KEY, isApproved ? 'true' : 'false');
     localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, orderProof ? 'true' : 'false');
 
-    if (orderPaid) {
+    if (isApproved) {
       this.stopOrderPolling();
     }
   }
