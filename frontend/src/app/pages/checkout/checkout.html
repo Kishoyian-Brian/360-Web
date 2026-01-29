@@ -282,3 +282,54 @@
     </div>
   </div>
 </main>
+
+<!-- Approval Pending Modal -->
+<div
+  *ngIf="showApprovalModal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+    (click)="showApprovalModal = false"
+  ></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
+  >
+    <div
+      class="px-6 py-4 border-b border-cyan-500/30"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-cyan-200">Payment Proof Submitted</h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <div class="flex items-center space-x-4">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-500"></div>
+        <div>
+          <p class="text-sm text-cyan-200 font-medium">Wait for approval</p>
+          <p class="text-xs text-gray-300">We are verifying your payment proof.</p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="px-6 py-4 border-t border-cyan-500/30 flex justify-end"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));"
+    >
+      <button
+        type="button"
+        class="neon-button px-5 py-2 rounded-lg font-medium"
+        style="min-height: 44px;"
+        (click)="showApprovalModal = false"
+      >
+        OK
+      </button>
+    </div>
+  </div>
+</div>

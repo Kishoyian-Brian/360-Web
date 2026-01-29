@@ -26,6 +26,7 @@ export class Checkout implements OnInit {
   paymentProofFile: File | null = null;
   paymentProofPreview: string | null = null;
   isSubmittingPayment = false;
+  showApprovalModal = false;
 
   // Cryptocurrency payment options (loaded from backend)
   cryptoPayments: CryptoAccount[] = [];
@@ -217,6 +218,8 @@ export class Checkout implements OnInit {
               console.error('Error generating QR code for default crypto:', error);
             }
           }
+        } else if (accounts.length === 0) {
+          this.selectedCrypto = null;
         }
         console.log('Loaded crypto accounts:', accounts);
         this.cryptoLoaded = true;
@@ -339,6 +342,8 @@ export class Checkout implements OnInit {
         this.hasPaid = true;
         localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, 'true');
         localStorage.setItem(this.HAS_PAID_KEY, 'true');
+
+        this.showApprovalModal = true;
       },
       error: (error) => {
         console.error('Error submitting payment proof:', error);
