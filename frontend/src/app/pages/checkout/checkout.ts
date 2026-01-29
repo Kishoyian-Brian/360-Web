@@ -471,6 +471,10 @@ export class Checkout implements OnInit, OnDestroy {
       orderStatus === 'COMPLETED';
     const orderProof = !!order.paymentProof || isApproved;
 
+    if (isApproved && this.showApprovalModal) {
+      this.closeApprovalModal();
+    }
+
     this.hasPaid = isApproved && this.approvalModalClosed;
     this.hasUploadedProof = orderProof;
     localStorage.setItem(this.HAS_PAID_KEY, isApproved ? 'true' : 'false');
