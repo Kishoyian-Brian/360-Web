@@ -28,6 +28,7 @@ export class Checkout implements OnInit, OnDestroy {
   isSubmittingPayment = false;
   showApprovalModal = false;
   approvalModalState: 'submitting' | 'pending' | 'error' = 'submitting';
+  approvalModalClosed = false;
 
   // Cryptocurrency payment options (loaded from backend)
   cryptoPayments: CryptoAccount[] = [];
@@ -470,7 +471,7 @@ export class Checkout implements OnInit, OnDestroy {
       orderStatus === 'COMPLETED';
     const orderProof = !!order.paymentProof || isApproved;
 
-    this.hasPaid = isApproved;
+    this.hasPaid = isApproved && this.approvalModalClosed;
     this.hasUploadedProof = orderProof;
     localStorage.setItem(this.HAS_PAID_KEY, isApproved ? 'true' : 'false');
     localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, orderProof ? 'true' : 'false');
@@ -501,6 +502,15 @@ export class Checkout implements OnInit, OnDestroy {
     if (this.orderPollId !== null) {
       window.clearInterval(this.orderPollId);
       this.orderPollId = null;
+    }
+  }
+
+  closeApprovalModal() {
+    this.showApprovalModal = false;
+    this.approvalModalClosed = true;
+
+    if (this.order) {
+      this.syncFlagsFromOrder(this.order);
     }
   }
 }

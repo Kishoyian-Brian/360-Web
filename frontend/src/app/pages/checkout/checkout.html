@@ -293,7 +293,7 @@
   <!-- Backdrop -->
   <div
     class="absolute inset-0 bg-black/70 backdrop-blur-sm"
-    (click)="showApprovalModal = false"
+    (click)="closeApprovalModal()"
   ></div>
 
   <!-- Modal Panel -->
@@ -342,7 +342,7 @@
         type="button"
         class="neon-button px-5 py-2 rounded-lg font-medium"
         style="min-height: 44px;"
-        (click)="showApprovalModal = false"
+        (click)="closeApprovalModal()"
       >
         OK
       </button>
