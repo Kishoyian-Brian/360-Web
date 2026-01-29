@@ -252,6 +252,15 @@
               class="neon-button w-full py-2 px-4 rounded-lg">
               View Order History
             </button>
+
+            <!-- Fake download flow (frontend-only, no direct download) -->
+            <app-fake-download-flow
+              [hasPaid]="hasPaid"
+              [hasUploadedProof]="hasUploadedProof"
+              [isAdminApproved]="isAdminApproved"
+              [adminEmail]="downloadAdminEmail"
+              [productInfo]="downloadProductInfo"
+            />
           </div>
         </div>
 

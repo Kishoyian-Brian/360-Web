@@ -1,5 +1,4 @@
-/* Import Karla Font */
-@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+/* Karla font is loaded via <link> in index.html (avoids build-time network fetch) */
 
 /* Tailwind CSS Directives */
 @tailwind base;

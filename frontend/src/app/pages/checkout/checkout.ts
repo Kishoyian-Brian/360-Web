@@ -9,12 +9,13 @@ import { OrderService, Order, CreateOrderRequest } from '../../service/order/ord
 import { ProductService } from '../../service/product/product.service';
 import { CryptoService, CryptoAccount } from '../../service/crypto/crypto.service';
 import { ProductUtils } from '../../shared/utils/product.utils';
+import { FakeDownloadFlowComponent } from '../../shared/components/fake-download-flow/fake-download-flow.component';
 
 // Remove the old interface as we now use CryptoAccount from the service
 
 @Component({
   selector: 'app-checkout',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, FakeDownloadFlowComponent],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css'
 })
@@ -33,6 +34,13 @@ export class Checkout implements OnInit {
 
   cryptoAmount = 0;
   orderId = '';
+
+  // Simulated "admin approval" + gating flags for fake download
+  hasPaid: boolean = false;
+  hasUploadedProof: boolean = false;
+  isAdminApproved: boolean = true;
+  downloadProductInfo: string = '';
+  readonly downloadAdminEmail: string = 'alfredkaizen30@gmail.com';
 
   constructor(
     private router: Router,
@@ -73,6 +81,7 @@ export class Checkout implements OnInit {
       next: (cart) => {
         this.cart = cart;
         this.cryptoAmount = cart.total;
+        this.downloadProductInfo = this.buildProductInfo(cart);
         console.log('Loaded cart from backend:', cart);
         
         // For guest carts, ensure product details are loaded
@@ -305,6 +314,10 @@ export class Checkout implements OnInit {
         this.isSubmittingPayment = false;
         this.toastService.success('Payment proof submitted successfully! We will verify your payment shortly.');
         console.log('Payment proof submitted successfully:', updatedOrder);
+
+        // Simulated flags for fake download flow
+        this.hasUploadedProof = true;
+        this.hasPaid = true;
       },
       error: (error) => {
         console.error('Error submitting payment proof:', error);
@@ -350,5 +363,20 @@ export class Checkout implements OnInit {
       return ProductUtils.ensureHttps(item.image);
     }
     return 'https://via.placeholder.com/64x64/cccccc/666666?text=No+Image';
+  }
+
+  private buildProductInfo(cart: Cart): string {
+    try {
+      return cart.items
+        .map(item => {
+          const name = item.name || 'Product';
+          const qty = item.quantity ?? 1;
+          const price = typeof item.price === 'number' ? item.price.toFixed(2) : '0.00';
+          return `- ${name} (x${qty}) @ $${price}`;
+        })
+        .join('\n');
+    } catch {
+      return '';
+    }
   }
 }

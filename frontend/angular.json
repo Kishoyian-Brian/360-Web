@@ -25,6 +25,9 @@
                 "input": "public"
               }
             ],
+            "allowedCommonJsDependencies": [
+              "qrcode"
+            ],
             "styles": [
               "src/styles.css"
             ]
