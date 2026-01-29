@@ -42,6 +42,11 @@ export class Checkout implements OnInit {
   downloadProductInfo: string = '';
   readonly downloadAdminEmail: string = 'alfredkaizen30@gmail.com';
 
+  private readonly ORDER_ID_KEY = 'checkout_order_id';
+  private readonly CRYPTO_SYMBOL_KEY = 'checkout_crypto_symbol';
+  private orderChecked = false;
+  private pendingCryptoSymbol: string | null = null;
+
   constructor(
     private router: Router,
     private toastService: ToastService,
@@ -61,6 +66,7 @@ export class Checkout implements OnInit {
       return;
     }
 
+    this.restoreCheckoutState();
     this.loadCart();
     this.loadCryptoAccounts();
   }
@@ -69,6 +75,14 @@ export class Checkout implements OnInit {
   private cryptoLoaded = false;
 
   private checkIfReadyToCreateOrder() {
+    if (!this.orderChecked) {
+      return;
+    }
+
+    if (this.order) {
+      return;
+    }
+
     if (this.cartLoaded && this.cryptoLoaded && this.cart && this.cryptoPayments.length > 0) {
       console.log('Both cart and crypto accounts loaded, creating order...');
       this.createOrder();
@@ -128,6 +142,7 @@ export class Checkout implements OnInit {
           next: (updatedCart) => {
             this.cart = updatedCart;
             this.cryptoAmount = updatedCart.total;
+            this.downloadProductInfo = this.buildProductInfo(updatedCart);
             this.isLoading = false;
             console.log('Updated cart with product details:', updatedCart);
             this.cartLoaded = true;
@@ -173,6 +188,7 @@ export class Checkout implements OnInit {
       next: (order) => {
         this.order = order;
         this.orderId = order.id;
+        localStorage.setItem(this.ORDER_ID_KEY, order.id);
         this.isLoading = false;
         this.toastService.success('Order created successfully!');
         console.log('Order created:', order);
@@ -190,7 +206,7 @@ export class Checkout implements OnInit {
       next: async (accounts) => {
         this.cryptoPayments = accounts;
         if (accounts.length > 0 && !this.selectedCrypto) {
-          this.selectedCrypto = accounts[0]; // Default to first account
+          this.selectedCrypto = this.resolveSelectedCrypto(accounts);
           // Ensure QR code is generated for default selected crypto
           if (this.selectedCrypto.address && !this.selectedCrypto.qrCode) {
             try {
@@ -215,6 +231,7 @@ export class Checkout implements OnInit {
 
   async selectCryptoPayment(crypto: CryptoAccount) {
     this.selectedCrypto = crypto;
+    localStorage.setItem(this.CRYPTO_SYMBOL_KEY, crypto.symbol);
     // Ensure QR code is generated for selected crypto
     if (crypto.address && !crypto.qrCode) {
       try {
@@ -378,5 +395,51 @@ export class Checkout implements OnInit {
     } catch {
       return '';
     }
+  }
+
+  private restoreCheckoutState() {
+    const storedOrderId = localStorage.getItem(this.ORDER_ID_KEY);
+    if (storedOrderId) {
+      this.loadExistingOrder(storedOrderId);
+    } else {
+      this.orderChecked = true;
+    }
+
+    this.pendingCryptoSymbol = localStorage.getItem(this.CRYPTO_SYMBOL_KEY);
+  }
+
+  private loadExistingOrder(orderId: string) {
+    this.orderService.getOrder(orderId).subscribe({
+      next: (order) => {
+        this.order = order;
+        this.orderId = order.id;
+        this.syncFlagsFromOrder(order);
+        this.orderChecked = true;
+        this.checkIfReadyToCreateOrder();
+      },
+      error: (error) => {
+        console.warn('Failed to restore order from storage, creating new order.', error);
+        localStorage.removeItem(this.ORDER_ID_KEY);
+        this.orderChecked = true;
+        this.checkIfReadyToCreateOrder();
+      }
+    });
+  }
+
+  private resolveSelectedCrypto(accounts: CryptoAccount[]): CryptoAccount {
+    if (this.pendingCryptoSymbol) {
+      const match = accounts.find(a => a.symbol === this.pendingCryptoSymbol);
+      if (match) {
+        return match;
+      }
+    }
+
+    return accounts[0];
+  }
+
+  private syncFlagsFromOrder(order: Order) {
+    const paidStatuses = ['paid', 'processing', 'completed'];
+    this.hasPaid = paidStatuses.includes(order.status);
+    this.hasUploadedProof = !!order.paymentProof || paidStatuses.includes(order.status);
   }
 }
