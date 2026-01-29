@@ -253,14 +253,14 @@
               View Order History
             </button>
 
-            <!-- Fake download flow (frontend-only, no direct download) -->
-            <app-fake-download-flow
-              [hasPaid]="hasPaid"
-              [hasUploadedProof]="hasUploadedProof"
-              [isAdminApproved]="isAdminApproved"
-              [adminEmail]="downloadAdminEmail"
-              [productInfo]="downloadProductInfo"
-            />
+            <!-- Download button (opens modal) -->
+            <button
+              *ngIf="shouldShowDownloadButton"
+              (click)="openDownloadModal()"
+              class="neon-button w-full py-2 px-4 rounded-lg"
+            >
+              Download Product
+            </button>
           </div>
         </div>
 
@@ -348,4 +348,102 @@
       </button>
     </div>
   </div>
+</div>
+
+<!-- Download Request Modal -->
+<div
+  *ngIf="showDownloadModal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+    (click)="closeDownloadModal()"
+  ></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
+  >
+    <div
+      class="px-6 py-4 border-b border-cyan-500/30"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-cyan-200">Verify Email for Download</h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <p class="text-sm text-gray-300 mb-4">
+        Please enter your email address to receive the download link.
+      </p>
+      <div class="mb-4">
+        <label for="downloadEmail" class="block text-sm font-medium text-cyan-200 mb-2">
+          Email Address
+        </label>
+        <input
+          id="downloadEmail"
+          type="email"
+          [(ngModel)]="downloadEmail"
+          (input)="validateDownloadEmail()"
+          (blur)="validateDownloadEmail()"
+          placeholder="your.email@example.com"
+          class="w-full px-4 py-3 bg-gray-800 border rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-300"
+          [class.border-red-500]="downloadEmailError"
+          [class.border-cyan-500]="!downloadEmailError"
+          style="min-height: 44px;"
+        />
+        <p *ngIf="downloadEmailError" class="mt-2 text-sm text-red-400" style="text-shadow: 0 0 5px #ef4444;">
+          {{ downloadEmailError }}
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="px-6 py-4 border-t border-cyan-500/30 flex justify-end space-x-3"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));"
+    >
+      <button
+        type="button"
+        (click)="closeDownloadModal()"
+        class="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+        style="min-height: 44px; min-width: 80px;"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        (click)="submitDownloadRequest()"
+        class="neon-button px-6 py-2 rounded-lg font-medium"
+        [disabled]="!!downloadEmailError || !downloadEmail"
+        style="min-height: 44px; min-width: 100px;"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Download Pending State -->
+<div
+  *ngIf="isDownloadPending"
+  class="fixed bottom-6 right-6 z-40 rounded-lg border border-cyan-500/30 bg-black/60 p-4"
+>
+  <div class="flex items-center space-x-3">
+    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-500"></div>
+    <p class="text-sm text-cyan-200">Pending verification...</p>
+  </div>
+</div>
+
+<!-- Download Contact Message -->
+<div
+  *ngIf="showContactMessage"
+  class="fixed bottom-6 right-6 z-40 rounded-lg border border-pink-500/30 bg-black/60 p-4"
+>
+  <p class="text-sm text-pink-200 font-medium">
+    Contact the admin for further assistance
+  </p>
 </div>

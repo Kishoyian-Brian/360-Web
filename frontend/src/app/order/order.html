@@ -376,14 +376,6 @@
 
         <!-- Actions -->
         <div class="flex flex-wrap justify-end gap-3 pt-6 border-t" style="border-color: rgba(0, 255, 255, 0.3);">
-          <!-- Download Button for Completed Orders -->
-          <app-download-button
-            *ngIf="selectedOrder.status === 'completed'"
-            [showDownloadButton]="true"
-            [productName]="getDownloadableProductName(selectedOrder)"
-            (downloadRequested)="onDownloadRequested($event)">
-          </app-download-button>
-          
           <button
             (click)="downloadInvoice(selectedOrder)"
             class="neon-button px-4 py-2 rounded-md transition-colors"

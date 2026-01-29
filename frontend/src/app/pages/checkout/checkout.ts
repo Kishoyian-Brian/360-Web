@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -9,13 +9,12 @@ import { OrderService, Order, CreateOrderRequest } from '../../service/order/ord
 import { ProductService } from '../../service/product/product.service';
 import { CryptoService, CryptoAccount } from '../../service/crypto/crypto.service';
 import { ProductUtils } from '../../shared/utils/product.utils';
-import { FakeDownloadFlowComponent } from '../../shared/components/fake-download-flow/fake-download-flow.component';
 
 // Remove the old interface as we now use CryptoAccount from the service
 
 @Component({
   selector: 'app-checkout',
-  imports: [CommonModule, FormsModule, RouterModule, FakeDownloadFlowComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './checkout.html',
   styleUrl: './checkout.css'
 })
@@ -31,8 +30,15 @@ export class Checkout implements OnInit, OnDestroy {
   approvalModalClosed = false;
   private downloadModalAutoOpened = false;
 
-  @ViewChild(FakeDownloadFlowComponent)
-  downloadFlow?: FakeDownloadFlowComponent;
+  // Download modal state (checkout-level)
+  showDownloadModal = false;
+  downloadEmail = '';
+  downloadEmailError = '';
+  isDownloadPending = false;
+  showContactMessage = false;
+  private readonly downloadEmailRegex: RegExp =
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  private downloadPendingTimeoutId: number | null = null;
 
   // Cryptocurrency payment options (loaded from backend)
   cryptoPayments: CryptoAccount[] = [];
@@ -83,6 +89,7 @@ export class Checkout implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.stopOrderPolling();
+    this.clearDownloadPendingTimer();
   }
 
   private cartLoaded = false;
@@ -490,9 +497,7 @@ export class Checkout implements OnInit, OnDestroy {
 
     if (isApproved && this.hasUploadedProof && this.approvalModalClosed && !this.downloadModalAutoOpened) {
       this.downloadModalAutoOpened = true;
-      setTimeout(() => {
-        this.downloadFlow?.openModal();
-      }, 0);
+      this.openDownloadModal();
     }
   }
 
@@ -526,6 +531,71 @@ export class Checkout implements OnInit, OnDestroy {
 
     if (this.order) {
       this.syncFlagsFromOrder(this.order);
+    }
+  }
+
+  get shouldShowDownloadButton(): boolean {
+    return this.hasPaid && this.hasUploadedProof && this.isAdminApproved;
+  }
+
+  openDownloadModal() {
+    if (!this.shouldShowDownloadButton) return;
+    this.showDownloadModal = true;
+    this.downloadEmail = '';
+    this.downloadEmailError = '';
+    this.isDownloadPending = false;
+    this.showContactMessage = false;
+  }
+
+  closeDownloadModal() {
+    this.showDownloadModal = false;
+    this.downloadEmailError = '';
+  }
+
+  validateDownloadEmail(): boolean {
+    const value = (this.downloadEmail || '').trim();
+    if (!value) {
+      this.downloadEmailError = 'Email is required';
+      return false;
+    }
+    if (!this.downloadEmailRegex.test(value)) {
+      this.downloadEmailError = 'Please enter a valid email address';
+      return false;
+    }
+    this.downloadEmailError = '';
+    return true;
+  }
+
+  submitDownloadRequest() {
+    if (!this.validateDownloadEmail()) return;
+
+    const subject = encodeURIComponent('Download Request');
+    const body = encodeURIComponent(
+      `Hello Admin,\n\n` +
+        `A user has requested a download.\n\n` +
+        `User Email: ${(this.downloadEmail || '').trim()}\n\n` +
+        `Product Info:\n${this.downloadProductInfo || '(none)'}\n\n` +
+        `Time: ${new Date().toISOString()}\n`
+    );
+    const mailtoLink = `mailto:${this.downloadAdminEmail}?subject=${subject}&body=${body}`;
+
+    this.closeDownloadModal();
+    window.open(mailtoLink, '_blank');
+
+    this.showContactMessage = false;
+    this.isDownloadPending = true;
+    this.clearDownloadPendingTimer();
+    this.downloadPendingTimeoutId = window.setTimeout(() => {
+      this.isDownloadPending = false;
+      this.showContactMessage = true;
+      this.downloadPendingTimeoutId = null;
+    }, 5000);
+  }
+
+  private clearDownloadPendingTimer() {
+    if (this.downloadPendingTimeoutId !== null) {
+      window.clearTimeout(this.downloadPendingTimeoutId);
+      this.downloadPendingTimeoutId = null;
     }
   }
 }
