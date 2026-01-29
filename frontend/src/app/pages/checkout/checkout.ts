@@ -44,6 +44,8 @@ export class Checkout implements OnInit {
 
   private readonly ORDER_ID_KEY = 'checkout_order_id';
   private readonly CRYPTO_SYMBOL_KEY = 'checkout_crypto_symbol';
+  private readonly HAS_UPLOADED_PROOF_KEY = 'checkout_has_uploaded_proof';
+  private readonly HAS_PAID_KEY = 'checkout_has_paid';
   private orderChecked = false;
   private pendingCryptoSymbol: string | null = null;
 
@@ -335,6 +337,8 @@ export class Checkout implements OnInit {
         // Simulated flags for fake download flow
         this.hasUploadedProof = true;
         this.hasPaid = true;
+        localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, 'true');
+        localStorage.setItem(this.HAS_PAID_KEY, 'true');
       },
       error: (error) => {
         console.error('Error submitting payment proof:', error);
@@ -406,6 +410,11 @@ export class Checkout implements OnInit {
     }
 
     this.pendingCryptoSymbol = localStorage.getItem(this.CRYPTO_SYMBOL_KEY);
+
+    const storedHasUploaded = localStorage.getItem(this.HAS_UPLOADED_PROOF_KEY);
+    const storedHasPaid = localStorage.getItem(this.HAS_PAID_KEY);
+    this.hasUploadedProof = storedHasUploaded === 'true';
+    this.hasPaid = storedHasPaid === 'true';
   }
 
   private loadExistingOrder(orderId: string) {
@@ -439,7 +448,9 @@ export class Checkout implements OnInit {
 
   private syncFlagsFromOrder(order: Order) {
     const paidStatuses = ['paid', 'processing', 'completed'];
-    this.hasPaid = paidStatuses.includes(order.status);
-    this.hasUploadedProof = !!order.paymentProof || paidStatuses.includes(order.status);
+    const orderPaid = paidStatuses.includes(order.status);
+    const orderProof = !!order.paymentProof || orderPaid;
+    this.hasPaid = this.hasPaid || orderPaid;
+    this.hasUploadedProof = this.hasUploadedProof || orderProof;
   }
 }
