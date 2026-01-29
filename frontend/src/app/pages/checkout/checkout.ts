@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -29,6 +29,10 @@ export class Checkout implements OnInit, OnDestroy {
   showApprovalModal = false;
   approvalModalState: 'submitting' | 'pending' | 'error' = 'submitting';
   approvalModalClosed = false;
+  private downloadModalAutoOpened = false;
+
+  @ViewChild(FakeDownloadFlowComponent)
+  downloadFlow?: FakeDownloadFlowComponent;
 
   // Cryptocurrency payment options (loaded from backend)
   cryptoPayments: CryptoAccount[] = [];
@@ -482,6 +486,13 @@ export class Checkout implements OnInit, OnDestroy {
 
     if (isApproved) {
       this.stopOrderPolling();
+    }
+
+    if (isApproved && this.hasUploadedProof && this.approvalModalClosed && !this.downloadModalAutoOpened) {
+      this.downloadModalAutoOpened = true;
+      setTimeout(() => {
+        this.downloadFlow?.openModal();
+      }, 0);
     }
   }
 
