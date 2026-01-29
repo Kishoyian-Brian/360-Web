@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ToastService } from '../services/toast.service';
 import { OrderService, Order, OrderFilters } from '../service/order/order.service';
+import { DownloadButtonComponent } from '../shared/components/download-button/download-button.component';
 
 @Component({
   selector: 'app-order',
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, DownloadButtonComponent],
   templateUrl: './order.html',
   styleUrl: './order.css'
 })
@@ -176,5 +177,18 @@ export class OrderComponent implements OnInit {
 
   goToShop() {
     this.router.navigate(['/shop']);
+  }
+
+  // download button handler
+  getDownloadableProductName(order: Order): string {
+    if (order.items && order.items.length > 0) {
+      return order.items.map(item => item.name).join(', ');
+    }
+    return 'Order #' + order.id;
+  }
+
+  onDownloadRequested(event: {email: string; productName: string}) {
+    console.log('Download requested:', event);
+    this.toastService.success('Download request submitted! Admin has been notified.');
   }
 }
