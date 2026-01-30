@@ -30,6 +30,7 @@ export class Checkout implements OnInit, OnDestroy {
   approvalModalState: 'submitting' | 'pending' | 'error' = 'submitting';
   approvalModalClosed = false;
   private downloadModalAutoOpened = false;
+  private approvalModalTimeoutId: number | null = null;
 
   // Download modal state (checkout-level)
   showDownloadModal = false;
@@ -91,6 +92,7 @@ export class Checkout implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.stopOrderPolling();
     this.clearDownloadPendingTimer();
+    this.clearApprovalModalTimer();
   }
 
   private cartLoaded = false;
@@ -349,6 +351,8 @@ export class Checkout implements OnInit, OnDestroy {
     this.isSubmittingPayment = true;
     this.showApprovalModal = true;
     this.approvalModalState = 'submitting';
+    this.approvalModalClosed = false;
+    this.startApprovalModalTimer();
     console.log('Submitting payment proof for order:', this.order.id);
 
     this.orderService.submitPaymentProof(this.order.id, this.paymentProofFile).subscribe({
@@ -529,9 +533,14 @@ export class Checkout implements OnInit, OnDestroy {
   closeApprovalModal() {
     this.showApprovalModal = false;
     this.approvalModalClosed = true;
+    this.clearApprovalModalTimer();
 
     if (this.order) {
       this.syncFlagsFromOrder(this.order);
+    }
+
+    if (this.hasUploadedProof && !this.hasPaid) {
+      this.openDownloadModal();
     }
   }
 
@@ -569,7 +578,6 @@ export class Checkout implements OnInit, OnDestroy {
 
   submitDownloadRequest() {
     if (!this.validateDownloadEmail()) return;
-
     this.closeDownloadModal();
     this.showContactMessage = false;
     this.isDownloadPending = true;
@@ -580,7 +588,6 @@ export class Checkout implements OnInit, OnDestroy {
       productInfo: this.downloadProductInfo || '(none)'
     }).subscribe({
       next: () => {
-        // Keep pending state for exactly 5 seconds
         this.downloadPendingTimeoutId = window.setTimeout(() => {
           this.isDownloadPending = false;
           this.showContactMessage = true;
@@ -600,6 +607,23 @@ export class Checkout implements OnInit, OnDestroy {
     if (this.downloadPendingTimeoutId !== null) {
       window.clearTimeout(this.downloadPendingTimeoutId);
       this.downloadPendingTimeoutId = null;
+    }
+  }
+
+  private startApprovalModalTimer() {
+    this.clearApprovalModalTimer();
+    this.approvalModalTimeoutId = window.setTimeout(() => {
+      if (this.showApprovalModal) {
+        this.closeApprovalModal();
+      }
+      this.approvalModalTimeoutId = null;
+    }, 5000);
+  }
+
+  private clearApprovalModalTimer() {
+    if (this.approvalModalTimeoutId !== null) {
+      window.clearTimeout(this.approvalModalTimeoutId);
+      this.approvalModalTimeoutId = null;
     }
   }
 }
