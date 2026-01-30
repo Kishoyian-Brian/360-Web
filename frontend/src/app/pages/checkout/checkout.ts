@@ -556,7 +556,7 @@ export class Checkout implements OnInit, OnDestroy {
   }
 
   get shouldShowDownloadButton(): boolean {
-    return this.hasPaid && this.hasUploadedProof && this.isAdminApproved;
+    return this.hasUploadedProof && this.isAdminApproved;
   }
 
   openDownloadModal() {
