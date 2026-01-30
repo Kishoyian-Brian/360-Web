@@ -86,6 +86,7 @@ export class Checkout implements OnInit, OnDestroy {
     }
 
     this.restoreCheckoutState();
+    this.prefillDownloadEmail();
     this.loadCart();
     this.loadCryptoAccounts();
   }
@@ -565,7 +566,7 @@ export class Checkout implements OnInit, OnDestroy {
   openDownloadModal() {
     if (!this.shouldShowDownloadButton) return;
     this.showDownloadModal = true;
-    this.downloadEmail = '';
+    this.prefillDownloadEmail();
     this.downloadEmailError = '';
     this.isDownloadPending = false;
     this.showContactMessage = false;
@@ -588,6 +589,15 @@ export class Checkout implements OnInit, OnDestroy {
     }
     this.downloadEmailError = '';
     return true;
+  }
+
+  private prefillDownloadEmail() {
+    if (!this.downloadEmail) {
+      const userEmail = this.authService.currentUser?.email;
+      if (userEmail) {
+        this.downloadEmail = userEmail;
+      }
+    }
   }
 
   submitDownloadRequest() {
