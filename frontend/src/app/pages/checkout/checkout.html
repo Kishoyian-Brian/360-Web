@@ -367,6 +367,18 @@
     </div>
 
     <div class="px-6 py-6">
+      <div class="flex items-start space-x-4 mb-4">
+        <img
+          [src]="downloadProductImage"
+          alt="Product preview"
+          class="w-20 h-20 rounded-lg object-cover border border-cyan-500/40"
+          style="filter: brightness(0.95) contrast(1.1);"
+        />
+        <div class="text-xs text-gray-300">
+          <p class="text-sm text-cyan-200 font-medium mb-1">Product preview</p>
+          <p class="text-xs text-gray-400">Confirm the product before requesting download.</p>
+        </div>
+      </div>
       <p class="text-sm text-gray-300 mb-4">
         Please enter your email address to receive the download link.
       </p>

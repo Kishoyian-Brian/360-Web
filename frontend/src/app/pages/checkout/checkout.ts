@@ -55,6 +55,7 @@ export class Checkout implements OnInit, OnDestroy {
   hasUploadedProof: boolean = false;
   isAdminApproved: boolean = true;
   downloadProductInfo: string = '';
+  downloadProductImage: string = '';
 
   private readonly ORDER_ID_KEY = 'checkout_order_id';
   private readonly CRYPTO_SYMBOL_KEY = 'checkout_crypto_symbol';
@@ -120,6 +121,7 @@ export class Checkout implements OnInit, OnDestroy {
         this.cart = cart;
         this.cryptoAmount = cart.total;
         this.downloadProductInfo = this.buildProductInfo(cart);
+        this.downloadProductImage = this.buildDownloadProductImage(cart);
         console.log('Loaded cart from backend:', cart);
         
         // For guest carts, ensure product details are loaded
@@ -167,6 +169,7 @@ export class Checkout implements OnInit, OnDestroy {
             this.cart = updatedCart;
             this.cryptoAmount = updatedCart.total;
             this.downloadProductInfo = this.buildProductInfo(updatedCart);
+            this.downloadProductImage = this.buildDownloadProductImage(updatedCart);
             this.isLoading = false;
             console.log('Updated cart with product details:', updatedCart);
             this.cartLoaded = true;
@@ -429,6 +432,14 @@ export class Checkout implements OnInit, OnDestroy {
     } catch {
       return '';
     }
+  }
+
+  private buildDownloadProductImage(cart: Cart): string {
+    const firstItem = cart.items?.[0];
+    if (firstItem?.image) {
+      return ProductUtils.ensureHttps(firstItem.image);
+    }
+    return 'https://via.placeholder.com/200x200/cccccc/666666?text=No+Image';
   }
 
   private restoreCheckoutState() {
