@@ -365,8 +365,11 @@ export class Checkout implements OnInit, OnDestroy {
         this.toastService.success('Payment proof submitted successfully! We will verify your payment shortly.');
         console.log('Payment proof submitted successfully:', updatedOrder);
 
+        // Ensure proof flag is set even if backend response omits it
+        this.hasUploadedProof = true;
+        localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, 'true');
+
         this.syncFlagsFromOrder(updatedOrder);
-        localStorage.setItem(this.HAS_UPLOADED_PROOF_KEY, this.hasUploadedProof ? 'true' : 'false');
         localStorage.setItem(this.HAS_PAID_KEY, this.hasPaid ? 'true' : 'false');
 
         this.approvalModalState = 'pending';
