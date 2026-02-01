@@ -186,6 +186,38 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  buyNow(product: Product, event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+    }
+
+    if (product.stockQuantity <= 0) {
+      this.toastService.error('Product is out of stock');
+      return;
+    }
+
+    this.cartService.addToCart({ productId: product.id, quantity: 1 }).subscribe({
+      next: (cart) => {
+        if (!this.authService.isAuthenticated) {
+          this.cartService.updateGuestCartItemDetails(product.id, {
+            name: product.name,
+            price: product.price,
+            image: ProductUtils.getProductImage(product),
+            stockQuantity: product.stockQuantity
+          });
+        }
+
+        this.router.navigate(['/checkout']);
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this.toastService.error('Failed to add item to cart');
+      }
+    });
+  }
+
   // View product details
   viewProduct(product: Product) {
     console.log('Viewing product:', product);

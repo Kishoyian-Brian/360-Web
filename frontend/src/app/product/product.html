@@ -174,7 +174,7 @@
           </div>
 
           <button
-            (click)="addToCart($event)"
+            (click)="buyNow()"
             [disabled]="product.stockQuantity <= 0 || addingToCart"
             type="button"
             class="neon-button w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center space-x-2"
@@ -226,8 +226,7 @@
               ></path>
             </svg>
             <span
-              >{{ addingToCart ? 'Adding...' : (product.stockQuantity > 0 ? 'Add
-              to Cart' : 'Out of Stock') }}</span
+              >{{ addingToCart ? 'Processing...' : (product.stockQuantity > 0 ? 'Buy Now' : 'Out of Stock') }}</span
             >
           </button>
 

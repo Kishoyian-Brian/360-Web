@@ -105,6 +105,15 @@
                   </span>
                 </div>
 
+                <button
+                  (click)="buyNow(product, $event)"
+                  [disabled]="product.stockQuantity <= 0"
+                  type="button"
+                  class="neon-button w-full py-2 px-3 rounded-lg font-medium flex items-center justify-center"
+                  style="min-height: 44px;"
+                >
+                  {{ product.stockQuantity > 0 ? 'Buy Now' : 'Out of Stock' }}
+                </button>
               </div>
             </div>
           </div>

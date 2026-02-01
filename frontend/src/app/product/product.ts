@@ -167,19 +167,25 @@ export class ProductComponent implements OnInit {
   buyNow() {
     if (!this.product) return;
 
+    // Debounce rapid taps/clicks
+    const now = Date.now();
+    if (now - this.lastClickTime < 500) {
+      console.log('Buy now debounced in product component');
+      return;
+    }
+    this.lastClickTime = now;
+
     if (this.quantity > this.product.stockQuantity) {
       this.toastService.error('Not enough stock available');
       return;
     }
 
-    // Check if user is authenticated for checkout
-    if (!this.authService.isAuthenticated) {
-      this.toastService.error('Please login to proceed to checkout');
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: this.router.url }
-      });
+    if (this.addingToCart) {
+      console.log('Buy now already in progress (product component)');
       return;
     }
+
+    this.addingToCart = true;
 
     // Add to cart and redirect to checkout
     this.cartService.addToCart({
@@ -187,10 +193,22 @@ export class ProductComponent implements OnInit {
       quantity: this.quantity
     }).subscribe({
       next: (cart) => {
+        this.addingToCart = false;
         this.toastService.success(`Added ${this.quantity} ${this.product!.name} to cart`);
+
+        if (!this.authService.isAuthenticated) {
+          this.cartService.updateGuestCartItemDetails(this.product!.id, {
+            name: this.product!.name,
+            price: this.product!.price,
+            image: ProductUtils.getProductImage(this.product!),
+            stockQuantity: this.product!.stockQuantity
+          });
+        }
+
         this.router.navigate(['/checkout']);
       },
       error: (error) => {
+        this.addingToCart = false;
         console.error('Error adding to cart:', error);
         this.toastService.error('Failed to add item to cart');
       }
