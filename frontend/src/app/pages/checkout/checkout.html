@@ -78,140 +78,6 @@
               </button>
             </div>
           </div>
-
-
-
-          <!-- Selected Cryptocurrency Address -->
-          <div *ngIf="selectedCrypto" class="neon-info-box rounded-lg p-4 mb-6">
-            <h3 class="font-medium neon-text mb-4">
-              Send Payment to this {{ selectedCrypto.name }} Address:
-            </h3>
-            
-            <!-- QR Code and Address Display -->
-            <div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-6">
-              <!-- QR Code -->
-              <div class="flex-shrink-0">
-                <div class="neon-qr-container p-4 rounded-lg">
-                  <img *ngIf="selectedCrypto.qrCode" 
-                    [src]="selectedCrypto.qrCode" 
-                    [alt]="selectedCrypto.symbol + ' QR Code'"
-                    class="w-32 h-32 object-contain"
-                    title="Scan to copy {{ selectedCrypto.symbol }} address" />
-                  <div *ngIf="!selectedCrypto.qrCode" 
-                    class="w-32 h-32 rounded flex items-center justify-center">
-                    <i class="fas fa-qrcode neon-text text-2xl"></i>
-                  </div>
-                </div>
-                <p class="text-xs neon-text-purple mt-2 text-center">Scan QR Code</p>
-              </div>
-              
-              <!-- Address and Details -->
-              <div class="flex-1 min-w-0">
-                <div class="space-y-3">
-                  <div>
-                    <label class="text-sm font-medium neon-text-purple">Wallet Address:</label>
-                    <div class="flex items-center space-x-2 mt-1">
-                      <code class="neon-code flex-1 p-3 rounded text-sm font-mono break-all">
-                        {{ selectedCrypto.address }}
-                      </code>
-                      <button (click)="copyCryptoAddress()"
-                        class="neon-copy-button px-4 py-2 rounded whitespace-nowrap">
-                        <i class="fas fa-copy mr-1"></i>Copy
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label class="text-sm font-medium neon-text-purple">Amount to Send:</label>
-                      <p class="text-lg font-semibold text-green-400">
-                        {{ cryptoAmount.toFixed(2) }} USD
-                      </p>
-                    </div>
-                    <div>
-                      <label class="text-sm font-medium neon-text-purple">Cryptocurrency:</label>
-                      <p class="text-lg font-semibold text-blue-400">
-                        {{ selectedCrypto.symbol }}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div *ngIf="selectedCrypto.network" class="text-sm neon-text-purple">
-                    <strong>Network:</strong> {{ selectedCrypto.network }}
-                  </div>
-                  
-                  <p class="text-xs neon-text-purple">
-                    *Please ensure you're sending the correct amount in {{ selectedCrypto.symbol }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Payment Instructions -->
-          <div class="neon-info-box rounded-lg p-4 mb-6">
-            <h3 class="font-medium neon-info-box-text mb-2">
-              Payment Instructions:
-            </h3>
-            <ol class="text-sm neon-info-box-text space-y-1 list-decimal list-inside">
-              <li>Select your preferred cryptocurrency above</li>
-              <li *ngIf="selectedCrypto">Copy the {{ selectedCrypto.name }} address</li>
-              <li *ngIf="selectedCrypto">
-                Send exactly
-                <strong>{{ cryptoAmount.toFixed(2) }} USD</strong> worth of
-                {{ selectedCrypto.symbol }}
-              </li>
-              <li>Take a screenshot of your payment confirmation</li>
-              <li>Upload the screenshot below as proof of payment</li>
-              <li>Click "Submit Payment Proof" to complete your order</li>
-            </ol>
-          </div>
-
-          <!-- Payment Proof Upload -->
-          <div class="border-t border-cyan-500/30 pt-6">
-            <h3 class="font-medium neon-text mb-4">Upload Payment Proof</h3>
-
-            <!-- File Upload -->
-            <div class="mb-4">
-              <label class="block text-sm font-medium neon-text-purple mb-2">
-                Screenshot of Payment Confirmation
-              </label>
-              <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
-                class="neon-file-input block w-full text-sm rounded-lg p-2" />
-              <p class="text-xs neon-text-purple mt-1">
-                Accepted formats: JPG, PNG, GIF (Max 5MB)
-              </p>
-            </div>
-
-            <!-- Preview -->
-            <div *ngIf="paymentProofPreview" class="mb-4">
-              <img [src]="paymentProofPreview" alt="Payment proof preview" class="max-w-md rounded-lg neon-border-cyan" style="filter: brightness(0.95) contrast(1.1);" />
-              <button (click)="removePaymentProof()" class="mt-2 text-sm text-red-500 hover:text-red-700" style="text-shadow: 0 0 5px #ff4444;">
-                Remove
-              </button>
-            </div>
-
-            <!-- Debug Info -->
-            <div *ngIf="paymentProofFile" class="mb-2 text-xs neon-text-purple">
-              Selected file: {{ paymentProofFile.name }} ({{ (paymentProofFile.size / 1024 / 1024).toFixed(2) }}MB)
-            </div>
-            
-            <!-- Submit Button -->
-            <button (click)="submitPaymentProof()" [disabled]="!paymentProofFile || isSubmittingPayment"
-              class="neon-button w-full py-3 px-6 rounded-lg font-medium flex items-center justify-center space-x-2">
-              <span *ngIf="!isSubmittingPayment">Submit Payment Proof</span>
-              <span *ngIf="isSubmittingPayment" class="flex items-center">
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 neon-spinner" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                  </path>
-                </svg>
-                Submitting...
-              </span>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -282,6 +148,167 @@
     </div>
   </div>
 </main>
+
+<!-- Crypto Payment Modal -->
+<div
+  *ngIf="showCryptoPaymentModal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+    (click)="closeCryptoPaymentModal()"
+  ></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
+  >
+    <div
+      class="px-6 py-4 border-b border-cyan-500/30"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-cyan-200">
+        Send Payment to this {{ selectedCrypto?.name || 'Cryptocurrency' }} Address
+      </h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <div class="mb-4 flex flex-col items-center">
+        <div class="neon-qr-container p-4 rounded-lg">
+          <img *ngIf="selectedCrypto?.qrCode"
+            [src]="selectedCrypto?.qrCode"
+            [alt]="selectedCrypto?.symbol + ' QR Code'"
+            class="w-32 h-32 object-contain"
+            title="Scan to copy {{ selectedCrypto?.symbol }} address" />
+          <div *ngIf="!selectedCrypto?.qrCode"
+            class="w-32 h-32 rounded flex items-center justify-center">
+            <i class="fas fa-qrcode neon-text text-2xl"></i>
+          </div>
+        </div>
+        <p class="text-xs neon-text-purple mt-2 text-center">Scan QR Code</p>
+      </div>
+      <div class="mb-4">
+        <label class="text-sm font-medium neon-text-purple">Wallet Address:</label>
+        <div class="flex items-center space-x-2 mt-1">
+          <code class="neon-code flex-1 p-3 rounded text-sm font-mono break-all">
+            {{ selectedCrypto?.address }}
+          </code>
+          <button (click)="copyCryptoAddress()"
+            class="neon-copy-button px-4 py-2 rounded whitespace-nowrap">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="px-6 py-4 border-t border-cyan-500/30 flex justify-end space-x-3"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));"
+    >
+      <button
+        type="button"
+        (click)="closeCryptoPaymentModal()"
+        class="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+        style="min-height: 44px; min-width: 80px;"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        (click)="openProofUploadModal()"
+        class="neon-button px-5 py-2 rounded-lg font-medium"
+        style="min-height: 44px;"
+      >
+        I Have Paid
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Payment Proof Upload Modal -->
+<div
+  *ngIf="showProofUploadModal"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+>
+  <!-- Backdrop -->
+  <div
+    class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+    (click)="closeProofUploadModal()"
+  ></div>
+
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-md rounded-xl border border-cyan-500/40 bg-gray-900 shadow-2xl"
+    style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
+  >
+    <div
+      class="px-6 py-4 border-b border-cyan-500/30"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
+    >
+      <h3 class="text-lg font-semibold text-cyan-200">Upload Payment Proof</h3>
+    </div>
+
+    <div class="px-6 py-6">
+      <div class="mb-4">
+        <label class="block text-sm font-medium neon-text-purple mb-2">
+          Screenshot of Payment Confirmation
+        </label>
+        <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)"
+          class="neon-file-input block w-full text-sm rounded-lg p-2" />
+        <p class="text-xs neon-text-purple mt-1">
+          Accepted formats: JPG, PNG, GIF (Max 5MB)
+        </p>
+      </div>
+
+      <div *ngIf="paymentProofPreview" class="mb-4">
+        <img [src]="paymentProofPreview" alt="Payment proof preview" class="max-w-md rounded-lg neon-border-cyan" style="filter: brightness(0.95) contrast(1.1);" />
+        <button (click)="removePaymentProof()" class="mt-2 text-sm text-red-500 hover:text-red-700" style="text-shadow: 0 0 5px #ff4444;">
+          Remove
+        </button>
+      </div>
+
+      <div *ngIf="paymentProofFile" class="mb-2 text-xs neon-text-purple">
+        Selected file: {{ paymentProofFile.name }} ({{ (paymentProofFile.size / 1024 / 1024).toFixed(2) }}MB)
+      </div>
+    </div>
+
+    <div
+      class="px-6 py-4 border-t border-cyan-500/30 flex justify-end space-x-3"
+      style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(157, 0, 255, 0.05));"
+    >
+      <button
+        type="button"
+        (click)="closeProofUploadModal()"
+        class="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+        style="min-height: 44px; min-width: 80px;"
+      >
+        Close
+      </button>
+
+      <button (click)="submitPaymentProof()" [disabled]="!paymentProofFile || isSubmittingPayment"
+        class="neon-button px-5 py-2 rounded-lg font-medium flex items-center justify-center space-x-2"
+        style="min-height: 44px;">
+        <span *ngIf="!isSubmittingPayment">I Have Paid</span>
+        <span *ngIf="isSubmittingPayment" class="flex items-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 neon-spinner" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          Submitting...
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Approval Pending Modal -->
 <div

@@ -31,6 +31,8 @@ export class Checkout implements OnInit, OnDestroy {
   approvalModalClosed = false;
   private downloadModalAutoOpened = false;
   private approvalModalTimeoutId: number | null = null;
+  showCryptoPaymentModal = false;
+  showProofUploadModal = false;
 
   // Download modal state (checkout-level)
   showDownloadModal = false;
@@ -270,6 +272,24 @@ export class Checkout implements OnInit, OnDestroy {
         console.error('Error generating QR code for selected crypto:', error);
       }
     }
+    this.openCryptoPaymentModal();
+  }
+
+  openCryptoPaymentModal() {
+    this.showCryptoPaymentModal = true;
+  }
+
+  closeCryptoPaymentModal() {
+    this.showCryptoPaymentModal = false;
+  }
+
+  openProofUploadModal() {
+    this.showProofUploadModal = true;
+    this.showCryptoPaymentModal = false;
+  }
+
+  closeProofUploadModal() {
+    this.showProofUploadModal = false;
   }
 
   copyCryptoAddress() {
@@ -354,6 +374,7 @@ export class Checkout implements OnInit, OnDestroy {
 
     this.isSubmittingPayment = true;
     this.showApprovalModal = true;
+    this.showProofUploadModal = false;
     this.approvalModalState = 'submitting';
     this.approvalModalClosed = false;
     this.startApprovalModalTimer();
