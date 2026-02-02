@@ -267,7 +267,12 @@
       </div>
 
       <div *ngIf="paymentProofPreview" class="mb-4">
-        <img [src]="paymentProofPreview" alt="Payment proof preview" class="max-w-md rounded-lg neon-border-cyan" style="filter: brightness(0.95) contrast(1.1);" />
+        <img
+          [src]="paymentProofPreview"
+          alt="Payment proof preview"
+          class="w-full max-h-64 object-cover rounded-lg neon-border-cyan"
+          style="filter: brightness(0.95) contrast(1.1);"
+        />
         <button (click)="removePaymentProof()" class="mt-2 text-sm text-red-500 hover:text-red-700" style="text-shadow: 0 0 5px #ff4444;">
           Remove
         </button>
