@@ -40,6 +40,8 @@ export class Checkout implements OnInit, OnDestroy {
   downloadEmailError = '';
   isDownloadPending = false;
   showContactMessage = false;
+  readonly downloadFileUrl = '/downloads/product.zip';
+  readonly downloadPassword = 'CHANGE_ME';
   private readonly downloadEmailRegex: RegExp =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private downloadPendingTimeoutId: number | null = null;
