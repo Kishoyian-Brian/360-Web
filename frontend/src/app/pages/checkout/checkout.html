@@ -176,12 +176,20 @@
     style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
   >
     <div
-      class="px-6 py-4 border-b border-cyan-500/30"
+      class="px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
     >
       <h3 class="text-lg font-semibold text-cyan-200">
         Send Payment to this {{ selectedCrypto?.name || 'Cryptocurrency' }} Address
       </h3>
+      <button
+        type="button"
+        (click)="closeCryptoPaymentModal()"
+        class="text-cyan-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
     <div class="px-6 py-6">
@@ -256,10 +264,18 @@
     style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
   >
     <div
-      class="px-6 py-4 border-b border-cyan-500/30"
+      class="px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
     >
       <h3 class="text-lg font-semibold text-cyan-200">Upload Payment Proof</h3>
+      <button
+        type="button"
+        (click)="closeProofUploadModal()"
+        class="text-cyan-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
     <div class="px-6 py-6">
@@ -342,10 +358,18 @@
     style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
   >
     <div
-      class="px-6 py-4 border-b border-cyan-500/30"
+      class="px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
     >
       <h3 class="text-lg font-semibold text-cyan-200">Payment Proof Submitted</h3>
+      <button
+        type="button"
+        (click)="closeApprovalModal()"
+        class="text-cyan-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
     <div class="px-6 py-6">
@@ -400,10 +424,18 @@
     style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
   >
     <div
-      class="px-6 py-4 border-b border-cyan-500/30"
+      class="px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
     >
       <h3 class="text-lg font-semibold text-cyan-200">Verify Email for Download</h3>
+      <button
+        type="button"
+        (click)="closeDownloadModal()"
+        class="text-cyan-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
     <div class="px-6 py-6">
@@ -486,10 +518,18 @@
     style="box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);"
   >
     <div
-      class="px-6 py-4 border-b border-cyan-500/30"
+      class="px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(157, 0, 255, 0.1));"
     >
       <h3 class="text-lg font-semibold text-cyan-200">Pending verification</h3>
+      <button
+        type="button"
+        (click)="closeDownloadPendingModal()"
+        class="text-cyan-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
     <div class="px-6 py-6">
@@ -520,9 +560,19 @@
     style="box-shadow: 0 0 30px rgba(255, 51, 204, 0.25);"
   >
     <div
-      class="px-6 py-4 border-b border-pink-500/30"
+      class="px-6 py-4 border-b border-pink-500/30 flex items-center justify-between"
       style="background: linear-gradient(135deg, rgba(255, 51, 204, 0.1), rgba(157, 0, 255, 0.1));"
-    ></div>
+    >
+      <span class="text-lg font-semibold text-pink-200">Download Ready</span>
+      <button
+        type="button"
+        (click)="closeDownloadReadyModal()"
+        class="text-pink-200 hover:text-white transition-colors"
+        aria-label="Close"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
     <div class="px-6 py-6">
       <p class="text-sm text-pink-200 font-medium mb-3">
@@ -554,7 +604,7 @@
       style="background: linear-gradient(135deg, rgba(255, 51, 204, 0.05), rgba(157, 0, 255, 0.05));"
     >
       <a
-        href="https://t.me/Charlie_7O"
+        href="https://t.me/SNOWDENEMPIRE"
         target="_blank"
         class="px-4 py-2 rounded-lg text-sm font-medium text-pink-200 hover:text-white hover:bg-pink-500/20 transition-colors"
         style="min-height: 44px;"

@@ -629,6 +629,17 @@ export class Checkout implements OnInit, OnDestroy {
     this.downloadEmailError = '';
   }
 
+  closeDownloadPendingModal() {
+    this.isDownloadPending = false;
+    this.clearDownloadPendingTimer();
+  }
+
+  closeDownloadReadyModal() {
+    this.showContactMessage = false;
+    this.showDownloadPasswordPrompt = false;
+    this.downloadPasswordInput = '';
+  }
+
   validateDownloadEmail(): boolean {
     const value = (this.downloadEmail || '').trim();
     if (!value) {
