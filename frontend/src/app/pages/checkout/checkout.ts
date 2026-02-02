@@ -90,6 +90,14 @@ export class Checkout implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.authService.isAuthenticated) {
+      this.toastService.error('Please login to proceed to checkout');
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url }
+      });
+      return;
+    }
+
     this.restoreCheckoutState();
     this.prefillDownloadEmail();
     this.loadCart();
@@ -228,7 +236,8 @@ export class Checkout implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Error creating order:', error);
-        this.toastService.error('Failed to create order');
+        const message = error?.error?.message || error?.message || 'Failed to create order';
+        this.toastService.error(message);
         this.isLoading = false;
       }
     });
