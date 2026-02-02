@@ -73,7 +73,15 @@
               <button *ngFor="let crypto of cryptoPayments" (click)="selectCryptoPayment(crypto)"
                 class="neon-crypto-button p-3 rounded-lg text-center"
                 [class.selected]="selectedCrypto?.symbol === crypto.symbol">
-                <div class="font-medium">{{ crypto.symbol }}</div>
+                <div class="flex items-center justify-center space-x-2 font-medium">
+                  <img
+                    *ngIf="getCryptoIconUrl(crypto)"
+                    [src]="getCryptoIconUrl(crypto)"
+                    [alt]="crypto.symbol + ' icon'"
+                    class="w-5 h-5"
+                  />
+                  <span>{{ crypto.symbol }}</span>
+                </div>
                 <div class="text-xs neon-text-purple">{{ getCryptoDisplayName(crypto) }}</div>
               </button>
             </div>

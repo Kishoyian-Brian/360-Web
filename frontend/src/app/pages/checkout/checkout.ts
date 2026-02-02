@@ -309,6 +309,25 @@ export class Checkout implements OnInit, OnDestroy {
     return crypto.name;
   }
 
+  getCryptoIconUrl(crypto: CryptoAccount): string {
+    const symbol = (crypto.symbol || '').toUpperCase();
+    switch (symbol) {
+      case 'BTC':
+      case 'BITCOIN':
+        return '/crypto/btc.svg';
+      case 'ETH':
+      case 'ETHEREUM':
+        return '/crypto/eth.svg';
+      case 'USDT':
+        return '/crypto/usdt.svg';
+      case 'LTC':
+      case 'LITECOIN':
+        return '/crypto/ltc.svg';
+      default:
+        return '';
+    }
+  }
+
 
 
   onFileSelected(event: any) {
