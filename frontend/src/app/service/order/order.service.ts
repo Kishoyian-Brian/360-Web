@@ -22,6 +22,7 @@ export interface Order {
   paymentStatus?: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED';
   bitcoinAddress: string;
   paymentProof?: string;
+  downloadPassword?: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;

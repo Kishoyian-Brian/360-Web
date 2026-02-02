@@ -57,9 +57,9 @@ export class OrderController {
   @ApiQuery({ name: 'orderNumber', required: false, type: String, description: 'Search by order number' })
   @ApiQuery({ name: 'paymentMethod', required: false, type: String, description: 'Filter by payment method' })
   async findAll(@Request() req, @Query() filterDto: OrderFilterDto) {
-    // If user is admin, show all orders. Otherwise, show only user's orders
-    const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;
-    return this.orderService.findAll(filterDto, userId);
+    const isAdminUser = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+    const userId = isAdminUser ? undefined : req.user.id;
+    return this.orderService.findAll(filterDto, userId, isAdminUser);
   }
 
   @Get('stats')
@@ -81,9 +81,9 @@ export class OrderController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'Order not found' })
   async findOne(@Request() req, @Param('id') id: string): Promise<OrderResponseDto> {
-    // If user is admin, allow access to any order. Otherwise, only user's own orders
-    const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;
-    return this.orderService.findOne(id, userId);
+    const isAdminUser = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+    const userId = isAdminUser ? undefined : req.user.id;
+    return this.orderService.findOne(id, userId, isAdminUser);
   }
 
   @Patch(':id/status')
@@ -98,7 +98,7 @@ export class OrderController {
     @Param('id') id: string,
     @Body() body: { status: OrderStatus },
   ): Promise<OrderResponseDto> {
-    return this.orderService.updateOrderStatus(id, body.status);
+    return this.orderService.updateOrderStatus(id, body.status, true);
   }
 
   @Patch(':id/payment-status')
@@ -113,7 +113,7 @@ export class OrderController {
     @Param('id') id: string,
     @Body() body: { paymentStatus: PaymentStatus },
   ): Promise<OrderResponseDto> {
-    return this.orderService.updatePaymentStatus(id, body.paymentStatus);
+    return this.orderService.updatePaymentStatus(id, body.paymentStatus, true);
   }
 
   @Post(':id/payment-proof')
@@ -163,9 +163,10 @@ export class OrderController {
     console.log('Payment proof URL:', paymentProofUrl);
     
     // Update the order with payment proof (only allow user to update their own orders unless admin)
-    const userId = req.user.role === 'ADMIN' ? undefined : req.user.id;
+    const isAdminUser = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+    const userId = isAdminUser ? undefined : req.user.id;
     
-    return this.orderService.uploadPaymentProof(id, paymentProofUrl, userId);
+    return this.orderService.uploadPaymentProof(id, paymentProofUrl, userId, isAdminUser);
   }
 
   @Get('payment-proof/:filename')

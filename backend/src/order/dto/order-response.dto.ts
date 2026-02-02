@@ -56,6 +56,9 @@ export class OrderResponseDto {
   @ApiProperty({ required: false })
   paymentProof?: string;
 
+  @ApiProperty({ required: false })
+  downloadPassword?: string;
+
   @ApiProperty({ type: [OrderItemResponseDto] })
   items: OrderItemResponseDto[];
 

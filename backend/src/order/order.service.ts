@@ -4,6 +4,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderFilterDto } from './dto/order-filter.dto';
 import { OrderResponseDto, OrderItemResponseDto } from './dto/order-response.dto';
 import { OrderStatus, PaymentStatus } from '@prisma/client';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class OrderService {
@@ -62,7 +63,7 @@ export class OrderService {
     return this.mapToOrderResponse(order);
   }
 
-  async findAll(filterDto: OrderFilterDto, userId?: string) {
+  async findAll(filterDto: OrderFilterDto, userId?: string, includeDownloadPassword: boolean = false) {
     const { page = 1, limit = 10, status, paymentStatus, orderNumber, paymentMethod } = filterDto;
     const skip = (page - 1) * limit;
 
@@ -113,7 +114,7 @@ export class OrderService {
     const totalPages = Math.ceil(total / limit);
 
     return {
-      orders: orders.map(order => this.mapToOrderResponse(order)),
+      orders: orders.map(order => this.mapToOrderResponse(order, includeDownloadPassword)),
       pagination: {
         page,
         limit,
@@ -125,7 +126,7 @@ export class OrderService {
     };
   }
 
-  async findOne(id: string, userId?: string): Promise<OrderResponseDto> {
+  async findOne(id: string, userId?: string, includeDownloadPassword: boolean = false): Promise<OrderResponseDto> {
     const where: any = { id };
     if (userId) {
       where.userId = userId;
@@ -149,10 +150,10 @@ export class OrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
 
-    return this.mapToOrderResponse(order);
+    return this.mapToOrderResponse(order, includeDownloadPassword);
   }
 
-  async updateOrderStatus(id: string, status: OrderStatus): Promise<OrderResponseDto> {
+  async updateOrderStatus(id: string, status: OrderStatus, includeDownloadPassword: boolean = false): Promise<OrderResponseDto> {
     const order = await this.prisma.order.findUnique({
       where: { id },
       include: {
@@ -164,18 +165,28 @@ export class OrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
 
+    const shouldGeneratePassword =
+      (status === OrderStatus.PAID || status === OrderStatus.COMPLETED) &&
+      !order.downloadPassword;
+    const downloadPassword = shouldGeneratePassword
+      ? this.generateDownloadPassword()
+      : undefined;
+
     const updatedOrder = await this.prisma.order.update({
       where: { id },
-      data: { status },
+      data: {
+        status,
+        ...(downloadPassword ? { downloadPassword } : {}),
+      },
       include: {
         items: true,
       },
     });
 
-    return this.mapToOrderResponse(updatedOrder);
+    return this.mapToOrderResponse(updatedOrder, includeDownloadPassword);
   }
 
-  async updatePaymentStatus(id: string, paymentStatus: PaymentStatus): Promise<OrderResponseDto> {
+  async updatePaymentStatus(id: string, paymentStatus: PaymentStatus, includeDownloadPassword: boolean = false): Promise<OrderResponseDto> {
     const order = await this.prisma.order.findUnique({
       where: { id },
       include: {
@@ -187,15 +198,24 @@ export class OrderService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
 
+    const shouldGeneratePassword =
+      paymentStatus === PaymentStatus.COMPLETED && !order.downloadPassword;
+    const downloadPassword = shouldGeneratePassword
+      ? this.generateDownloadPassword()
+      : undefined;
+
     const updatedOrder = await this.prisma.order.update({
       where: { id },
-      data: { paymentStatus },
+      data: {
+        paymentStatus,
+        ...(downloadPassword ? { downloadPassword } : {}),
+      },
       include: {
         items: true,
       },
     });
 
-    return this.mapToOrderResponse(updatedOrder);
+    return this.mapToOrderResponse(updatedOrder, includeDownloadPassword);
   }
 
   async getOrderStats() {
@@ -252,7 +272,12 @@ export class OrderService {
     return { message: 'Order deleted successfully' };
   }
 
-  async uploadPaymentProof(orderId: string, paymentProofUrl: string, userId?: string): Promise<OrderResponseDto> {
+  async uploadPaymentProof(
+    orderId: string,
+    paymentProofUrl: string,
+    userId?: string,
+    includeDownloadPassword: boolean = false
+  ): Promise<OrderResponseDto> {
     // Build where clause to include user filtering if provided
     const where: any = { id: orderId };
     if (userId) {
@@ -308,10 +333,10 @@ export class OrderService {
       },
     });
 
-    return this.mapToOrderResponse(updatedOrder);
+    return this.mapToOrderResponse(updatedOrder, includeDownloadPassword);
   }
 
-  private mapToOrderResponse(order: any): OrderResponseDto {
+  private mapToOrderResponse(order: any, includeDownloadPassword: boolean = false): OrderResponseDto {
     return {
       id: order.id,
       orderNumber: order.orderNumber,
@@ -327,6 +352,7 @@ export class OrderService {
       paymentStatus: order.paymentStatus,
       shippingAddress: order.shippingAddress,
       paymentProof: order.paymentProof,
+      downloadPassword: includeDownloadPassword ? order.downloadPassword : undefined,
       items: order.items.map((item: any) => ({
         id: item.id,
         productId: item.productId,
@@ -338,5 +364,10 @@ export class OrderService {
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
     };
+  }
+
+  private generateDownloadPassword(): string {
+    const raw = randomBytes(12).toString('base64').replace(/[^A-Za-z0-9]/g, '');
+    return raw.slice(0, 12) || Math.random().toString(36).slice(2, 10).toUpperCase();
   }
 } 

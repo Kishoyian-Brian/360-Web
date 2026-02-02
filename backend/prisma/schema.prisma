@@ -252,6 +252,7 @@ model Order {
     paymentMethod String?
     paymentStatus PaymentStatus @default(PENDING)
     paymentProof  String?       // URL to uploaded payment proof image
+    downloadPassword String?    // Admin-only download password
 
     // Shipping address
     shippingAddress Json? // Store as JSON object

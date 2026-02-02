@@ -40,8 +40,9 @@ export class Checkout implements OnInit, OnDestroy {
   downloadEmailError = '';
   isDownloadPending = false;
   showContactMessage = false;
+  showDownloadPasswordPrompt = false;
+  downloadPasswordInput = '';
   readonly downloadFileUrl = '/downloads/product.zip';
-  readonly downloadPassword = 'CHANGE_ME';
   private readonly downloadEmailRegex: RegExp =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private downloadPendingTimeoutId: number | null = null;
@@ -646,6 +647,8 @@ export class Checkout implements OnInit, OnDestroy {
     if (!this.validateDownloadEmail()) return;
     this.closeDownloadModal();
     this.showContactMessage = false;
+    this.showDownloadPasswordPrompt = false;
+    this.downloadPasswordInput = '';
     this.isDownloadPending = true;
     this.clearDownloadPendingTimer();
 
@@ -657,6 +660,7 @@ export class Checkout implements OnInit, OnDestroy {
         this.downloadPendingTimeoutId = window.setTimeout(() => {
           this.isDownloadPending = false;
           this.showContactMessage = true;
+          this.showDownloadPasswordPrompt = false;
           this.downloadPendingTimeoutId = null;
         }, 5000);
       },
@@ -665,8 +669,14 @@ export class Checkout implements OnInit, OnDestroy {
         this.toastService.error('Failed to send download request email');
         this.isDownloadPending = false;
         this.showContactMessage = true;
+        this.showDownloadPasswordPrompt = false;
       }
     });
+  }
+
+  showDownloadPasswordField() {
+    this.showDownloadPasswordPrompt = true;
+    this.downloadPasswordInput = '';
   }
 
   private clearDownloadPendingTimer() {

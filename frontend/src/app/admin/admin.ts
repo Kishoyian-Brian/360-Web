@@ -2332,6 +2332,18 @@ export class Admin implements OnInit {
     });
   }
 
+  copyDownloadPassword(password?: string) {
+    if (!password) {
+      this.toastService.error('No password available');
+      return;
+    }
+    navigator.clipboard.writeText(password).then(() => {
+      this.toastService.success('Download password copied');
+    }).catch(() => {
+      this.toastService.error('Failed to copy download password');
+    });
+  }
+
   // Topup Management
   topups: TopupRequest[] = [];
   isLoadingTopups = false;
