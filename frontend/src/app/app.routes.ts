@@ -34,6 +34,7 @@ import { CartAdminGuard } from './guards/cart-admin.guard';
 import { ConnectionTestComponent } from './connection-test/connection-test';
 import { MyAccountComponent } from './my-account/my-account';
 import { TopupComponent } from './topup/topup';
+import { NotFoundComponent } from './pages/not-found/not-found';
 
 // Admin Components
 import { Admin } from './admin/admin';
@@ -68,7 +69,8 @@ import { Applepay as TransferApplepay } from './transfers/applepay/applepay';
 import { Googlepay as TransferGooglepay } from './transfers/googlepay/googlepay';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent }, // Default route - home page
+  { path: '**', component: NotFoundComponent, data: { showLayout: false } }, // Catch-all: show only 404
+  { path: '', component: NotFoundComponent, data: { showLayout: false } }, // Default route - 404 page
   { path: 'home', component: HomeComponent }, // Explicit home route
   { path: 'product/:id', component: ProductComponent }, // Product details route
   { path: 'cart', component: CartComponent }, // Cart page - accessible to all users
@@ -135,5 +137,5 @@ export const routes: Routes = [
   { path: 'blog', component: Blog },
   { path: 'blog/:slug', component: BlogArticle }, // Individual blog article route
   { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuard] },
-  { path: 'topup', component: TopupComponent, canActivate: [AuthGuard] }, // My Account page - protected
+  { path: 'topup', component: TopupComponent, canActivate: [AuthGuard] } // My Account page - protected
 ];
