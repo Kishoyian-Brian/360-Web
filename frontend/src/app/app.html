@@ -1,8 +1,8 @@
 <div class="app-root-layout">
-  <app-header *ngIf="showLayout && !isAdminRoute"></app-header>
+  <app-header *ngIf="!isAdminRoute"></app-header>
   <div class="app-main-content">
     <router-outlet></router-outlet>
   </div>
-  <app-footer *ngIf="showLayout && !isAdminRoute"></app-footer>
+  <app-footer *ngIf="!isAdminRoute"></app-footer>
   <app-toast></app-toast>
 </div>
